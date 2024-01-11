@@ -190,8 +190,6 @@ public class GameBoard {
         Cell cell1 = getCellAt(0, 0); 
         Cell cell2 = getCellAt(1, 0);
         Cell cell3 = getCellAt(2, 0); 
-
-        System.out.println("git update");
         
         Cell dest = getCellAt(2, 0); // destination 
 

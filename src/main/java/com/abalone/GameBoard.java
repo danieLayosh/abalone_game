@@ -187,15 +187,15 @@ public class GameBoard {
     }
 
     public void checkMoveClass() {
-        Cell cell1 = getCellAt(3, 0); 
-        Cell cell2 = getCellAt(4, 0);
-        Cell cell3 = getCellAt(2, 0); 
+        Cell cell1 = getCellAt(2, 2); 
+        Cell cell2 = getCellAt(2, 3);
+        Cell cell3 = getCellAt(2, 4); 
         
         Cell dest = getCellAt(1, 1); // destination 
 
         List<Cell> marbles = Arrays.asList(cell1,cell2,cell3);
 
-        Move move = new Move(marbles, dest, 1); // Player 1 making a move
+        Move move = new Move(marbles, dest, 2); // Player 1 making a move
         move.isValid();
         for (Cell cell : marbles) {
             System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");

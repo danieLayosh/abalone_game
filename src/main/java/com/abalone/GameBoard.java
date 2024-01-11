@@ -187,10 +187,12 @@ public class GameBoard {
     }
 
     public void checkMoveClass() {
-        Cell cell1 = getCellAt(0, 0); // Assuming '1' is the state for player 1
-        Cell cell2 = getCellAt(1, 0); // Adjacent cell
-        Cell cell3 = getCellAt(2, 0); // Adjacent cell
+        Cell cell1 = getCellAt(0, 0); 
+        Cell cell2 = getCellAt(1, 0);
+        Cell cell3 = getCellAt(2, 0); 
 
+        System.out.println("git update");
+        
         Cell dest = getCellAt(2, 0); // destination 
 
         List<Cell> marbles = Arrays.asList(cell1,cell2);

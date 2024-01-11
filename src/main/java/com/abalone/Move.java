@@ -109,13 +109,6 @@ public class Move {
             }
         }
 
-        // if the dest is on one of the ends of the line in both direction
-        // if (dest.getNeighborInDirection(marblesDirection) != null
-        //         || dest.getNeighborInDirection(oppositeDirection(marblesDirection)) != null) {
-        //     return MoveType.INLINE;
-        // }
-
-
         if(selectedMarbles.get(0).getNeighborsMap().containsKey(dest)){
             if(selectedMarbles.get(0).getNeighborsMap().get(dest).compareTo(oppositeDirection(marblesDirection)) == 0){
                 return MoveType.INLINE;
@@ -127,18 +120,6 @@ public class Move {
                 return MoveType.INLINE;
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
 
         // if its peroendicular
         Direction direction = selectedMarbles.get(0).getDirectionOfNeighbor(dest);

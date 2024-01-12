@@ -4,4 +4,5 @@ module com.example {
 
     opens com.abalone to javafx.fxml;
     exports com.abalone;
+    exports com.abalone.enums;
 }

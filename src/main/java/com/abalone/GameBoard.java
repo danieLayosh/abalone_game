@@ -191,29 +191,38 @@ public class GameBoard {
     }
 
     public void checkMoveClass() {
-        Cell cell1 = getCellAt(8, 2);
-        Cell cell2 = getCellAt(8, 0);
-        Cell cell3 = getCellAt(8, 1);
-        Cell dest = getCellAt(8, 3); // Destination
-
-        List<Cell> marbles = Arrays.asList(cell1, cell2, cell3);
+        Cell cell1 = getCellAt(8, 0);
+        Cell cell2 = getCellAt(7, 1);
+        Cell cell3 = getCellAt(6, 2);
+        Cell dest = getCellAt(5, 3); // Destination
+    
+        List<Cell> marbles = Arrays.asList(cell1, cell2,cell3 );
         Move move = new Move(marbles, dest, 1); // Player 2 making a move
-
+    
         try {
             if (move.isValid()) {
                 System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
                 MoveType moveType = move.determineMoveType(marbles, dest);
                 System.out.println("The MoveType is: " + moveType);
+    
+                // If you wish to see the effect of the move, execute it
+                move.executeMove();
+                System.out.println("Move executed.");
+            } else {
+                System.out.println("Move is invalid.");
             }
         } catch (IllegalStateException e) {
             System.out.println("Move is invalid: " + e.getMessage());
         }
-
+    
         System.out.println("Marbles selected for the move:");
         for (Cell cell : marbles) {
             System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");
         }
         System.out.println("\nThe destination cell is: " + formatCoordinate(dest.getX(), dest.getY()));
+    
+        // Optionally, print the board state after the move
+        printBoard();
     }
 
     private String formatCoordinate(int x, int y) {

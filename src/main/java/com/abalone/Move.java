@@ -11,7 +11,6 @@ public class Move {
     private List<Cell> marbles;
     private Direction marblesDirection;
     private Direction directionToDest;
-
     private Cell dest;
     private int player;
     private MoveType moveType;
@@ -60,7 +59,6 @@ public class Move {
             throw new IllegalStateException("Invalid path, the selected marbles can not move in this direction.");
         }
 
-        // System.out.println("The MoveType is: " + determineMoveType(marbles, dest));
         return true;
     }
 
@@ -88,8 +86,6 @@ public class Move {
      * @return true if the marbles can move to thire direction
      */
     private boolean sideStepMove() {
-        // Direction direction = marbles.get(0).getDirectionOfNeighbor(dest);
-
         for (Cell cell : marbles) {
             Cell cellInDirection = cell.getNeighborInDirection(directionToDest);
             if (cellInDirection == null || cellInDirection.getState() != 0) {
@@ -300,5 +296,55 @@ public class Move {
 
     public Direction getDirectionToDest() {
         return directionToDest;
+    }
+
+    public void executeMove() {
+        if (!isValid()) {
+            throw new IllegalStateException("Attempted to execute an invalid move.");
+        }
+
+        // Handle different types of moves
+        switch (moveType) {
+            case SINGLE:
+                marbles.get(0).setState(0);
+                dest.setState(player);
+            case INLINE:
+                executeInlineOrSingleMove();
+                break;
+            case SIDESTEP:
+                executeSideStepMove();
+                break;
+            default:
+                throw new IllegalStateException("Unknown move type.");
+        }
+
+        // Additional logic if needed (e.g., checking for winning conditions)
+    }
+
+    private void executeInlineOrSingleMove() {
+        Cell currentCell, nextCell;
+        for (int i = marbles.size() - 1; i >= 0; i--) {
+            currentCell = marbles.get(i);
+            nextCell = currentCell.getNeighborInDirection(directionToDest);
+    
+            if (nextCell != null) {
+                nextCell.setState(currentCell.getState()); // Move the marble to the next cell
+                currentCell.setState(0); // Set the current cell to empty
+            }
+            // Additional logic for pushing opponent's marbles, if necessary
+        }
+    }
+
+    private void executeSideStepMove() {
+        Cell currentCell, nextCell;
+        for (Cell marble : marbles) {
+            currentCell = marble;
+            nextCell = currentCell.getNeighborInDirection(directionToDest);
+    
+            if (nextCell != null && nextCell.getState() == 0) {
+                nextCell.setState(currentCell.getState()); // Move the marble to the next cell
+                currentCell.setState(0); // Set the current cell to empty
+            }
+        }
     }
 }

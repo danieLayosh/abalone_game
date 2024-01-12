@@ -10,9 +10,11 @@ import com.abalone.enums.MoveType;
 public class Move {
     private List<Cell> marbles;
     private Direction marblesDirection;
+    private Direction directionToDest;
+
     private Cell dest;
     private int player;
-    private MoveType moveType; // You might want to include this if you need to store the move type
+    private MoveType moveType;
 
     public Move(List<Cell> marbles, Cell dest, int player) {
         this.marbles = marbles;
@@ -20,6 +22,7 @@ public class Move {
         this.player = player;
         this.marblesDirection = null;
         this.moveType = null;
+        this.directionToDest = null;
     }
 
     public List<Cell> getMarbles() {
@@ -53,8 +56,97 @@ public class Move {
             throw new IllegalStateException("Invalid move type for the selected marbles and destination.");
         }
 
-        System.out.println("The MoveType is: " + determineMoveType(marbles, dest));
+        if (!isPathValid()) {
+            throw new IllegalStateException("Invalid path, the selected marbles can not move in this direction.");
+        }
+
+        // System.out.println("The MoveType is: " + determineMoveType(marbles, dest));
         return true;
+    }
+
+    /**
+     * Checks if the marbles can move in the direction.
+     * 
+     * @return true if all marbles can move to the right place, false otherwise.
+     */
+    private boolean isPathValid() {
+        switch (moveType) {
+            case SINGLE:
+                return singleMove();
+            case INLINE:
+                return inlineMove();
+            case SIDESTEP:
+                return sideStepMove();
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if all the marbles can move to the dest direction
+     * 
+     * @return true if the marbles can move to thire direction
+     */
+    private boolean sideStepMove() {
+        // Direction direction = marbles.get(0).getDirectionOfNeighbor(dest);
+
+        for (Cell cell : marbles) {
+            Cell cellInDirection = cell.getNeighborInDirection(directionToDest);
+            if (cellInDirection == null || cellInDirection.getState() != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean inlineMove() {
+        // The dest cell is empty, the marbles can move in this direction.
+        if (dest.getState() == 0)
+            return true;
+
+        // The dest cell is your cell, you can not go in this direction.
+        if (dest.getState() == player)
+            return false;
+
+        // The dest is enemy cell, we need to check if he has more marbels inline him
+        return SumoMove();
+    }
+
+    private boolean SumoMove() {
+        int ourForce = marbles.size();
+        int theirForce = 0;
+        Cell currentCell = dest;
+
+        // Keep moving in the direction of marblesDirection and count opponent's marbles
+        while (true) {
+            currentCell = currentCell.getNeighborInDirection(directionToDest);
+
+            // If we reach an empty cell or the end of the board, we can push
+            if (currentCell == null || currentCell.getState() == 0) {
+                return ourForce > theirForce;
+            }
+
+            // If we encounter a marble of our own, we cannot push
+            if (currentCell.getState() == this.player) {
+                return false;
+            }
+
+            theirForce++;
+
+            // If the opponent's force equals or exceeds ours, we cannot push
+            if (theirForce >= ourForce) {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Checks if the single marble can move to the destination cell.
+     * 
+     * @return true if the marble can move to the destination cell.
+     */
+    private boolean singleMove() {
+        return dest.getState() == 0;
     }
 
     private boolean marblesBelongToPlayer() {
@@ -100,34 +192,40 @@ public class Move {
     // cell
     public MoveType determineMoveType(List<Cell> selectedMarbles, Cell dest) {
         // if single marble and dest marble neighbors
+        directionToDest = selectedMarbles.get(0).getDirectionOfNeighbor(dest);
+        if (directionToDest == null) {
+            directionToDest = selectedMarbles.get(marbles.size() - 1).getDirectionOfNeighbor(dest);
+        }
+
         if (selectedMarbles.size() == 1) {
             Direction direction = marbles.get(0).getDirectionOfNeighbor(dest);
             if (direction != null) {
+                moveType = MoveType.SINGLE;
                 return MoveType.SINGLE; // The marble and the destonation marble are not neighbors
             } else {
                 throw new IllegalStateException("The destination cell is not a neighbor");
             }
         }
 
-        if(selectedMarbles.get(0).getNeighborsMap().containsKey(dest)){
-            if(selectedMarbles.get(0).getNeighborsMap().get(dest).compareTo(oppositeDirection(marblesDirection)) == 0){
+        if (selectedMarbles.get(0).getNeighborsMap().containsKey(dest)) {
+            if (selectedMarbles.get(0).getNeighborsMap().get(dest)
+                    .compareTo(oppositeDirection(marblesDirection)) == 0) {
+                moveType = MoveType.INLINE;
                 return MoveType.INLINE;
             }
         }
 
-        if(selectedMarbles.get(selectedMarbles.size() - 1).getNeighborsMap().containsKey(dest)){
-            if(selectedMarbles.get(selectedMarbles.size() - 1).getNeighborsMap().get(dest).compareTo(marblesDirection) == 0){
+        if (selectedMarbles.get(selectedMarbles.size() - 1).getNeighborsMap().containsKey(dest)) {
+            if (selectedMarbles.get(selectedMarbles.size() - 1).getNeighborsMap().get(dest)
+                    .compareTo(marblesDirection) == 0) {
+                moveType = MoveType.INLINE;
                 return MoveType.INLINE;
             }
         }
 
         // if its peroendicular
-        Direction direction = selectedMarbles.get(0).getDirectionOfNeighbor(dest);
-        if (direction == null) {
-            direction = selectedMarbles.get(marbles.size() - 1).getDirectionOfNeighbor(dest);
-        }
-
-        if (isPerpendicular(direction, marblesDirection)) {
+        if (isPerpendicular(directionToDest, marblesDirection)) {
+            moveType = MoveType.SIDESTEP;
             return MoveType.SIDESTEP;
         }
 
@@ -198,5 +296,9 @@ public class Move {
                 }
             }
         });
+    }
+
+    public Direction getDirectionToDest() {
+        return directionToDest;
     }
 }

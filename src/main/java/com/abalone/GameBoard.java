@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.abalone.enums.Direction;
+import com.abalone.enums.MoveType;
 
 public class GameBoard {
     // Adjacency list to represent the board, each cell has a list of neighbors
@@ -15,9 +16,12 @@ public class GameBoard {
 
     // 2D Arrays to represent the six possible directions (neighbors) in a hexagonal
     // grid for the lower, upper and middle rows
-    private final int[][] directionsUpperPart = new int[][] { { 0, 1 }, { 0, -1 }, { -1, 0 }, { -1, -1 }, { 1, 1 }, { 1, 0 } };
-    private final int[][] directionsLowerPart = new int[][] { { 0, 1 }, { 0, -1 }, { -1, 1 }, { -1, 0 }, { 1, 0 }, { 1, -1 } };
-    private final int[][] directionsMiddleRow = new int[][] { { 0, 1 }, { 0, -1 }, { -1, 0 }, { -1, -1 }, { 1, 0 }, { 1, -1 } };
+    private final int[][] directionsUpperPart = new int[][] { { 0, 1 }, { 0, -1 }, { -1, 0 }, { -1, -1 }, { 1, 1 },
+            { 1, 0 } };
+    private final int[][] directionsLowerPart = new int[][] { { 0, 1 }, { 0, -1 }, { -1, 1 }, { -1, 0 }, { 1, 0 },
+            { 1, -1 } };
+    private final int[][] directionsMiddleRow = new int[][] { { 0, 1 }, { 0, -1 }, { -1, 0 }, { -1, -1 }, { 1, 0 },
+            { 1, -1 } };
 
     // Constructor for GameBoard
     public GameBoard() {
@@ -186,21 +190,48 @@ public class GameBoard {
         }
     }
 
+    // public void checkMoveClass() {
+    // Cell cell1 = getCellAt(2, 2);
+    // Cell cell2 = getCellAt(2, 3);
+    // Cell cell3 = getCellAt(2, 4);
+
+    // Cell dest = getCellAt(1, 1); // destination
+
+    // List<Cell> marbles = Arrays.asList(cell1,cell2,cell3);
+
+    // Move move = new Move(marbles, dest, 2); // Player 1 making a move
+    // move.isValid();
+    // for (Cell cell : marbles) {
+    // System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");
+    // }
+    // System.out.println("The destination cell is: " +
+    // formatCoordinate(dest.getX(), dest.getY()) + " ");
+    // }
+
     public void checkMoveClass() {
-        Cell cell1 = getCellAt(2, 2); 
-        Cell cell2 = getCellAt(2, 3);
-        Cell cell3 = getCellAt(2, 4); 
-        
-        Cell dest = getCellAt(1, 1); // destination 
+        Cell cell1 = getCellAt(8, 2);
+        Cell cell2 = getCellAt(8, 0);
+        Cell cell3 = getCellAt(8, 1);
+        Cell dest = getCellAt(8, 3); // Destination
 
-        List<Cell> marbles = Arrays.asList(cell1,cell2,cell3);
+        List<Cell> marbles = Arrays.asList(cell1, cell2, cell3);
+        Move move = new Move(marbles, dest, 1); // Player 2 making a move
 
-        Move move = new Move(marbles, dest, 2); // Player 1 making a move
-        move.isValid();
+        try {
+            if (move.isValid()) {
+                System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
+                MoveType moveType = move.determineMoveType(marbles, dest);
+                System.out.println("The MoveType is: " + moveType);
+            }
+        } catch (IllegalStateException e) {
+            System.out.println("Move is invalid: " + e.getMessage());
+        }
+
+        System.out.println("Marbles selected for the move:");
         for (Cell cell : marbles) {
             System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");
         }
-        System.out.println("The destination cell is: " + formatCoordinate(dest.getX(), dest.getY()) + " ");
+        System.out.println("\nThe destination cell is: " + formatCoordinate(dest.getX(), dest.getY()));
     }
 
     private String formatCoordinate(int x, int y) {

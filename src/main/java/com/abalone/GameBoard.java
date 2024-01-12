@@ -161,9 +161,7 @@ public class GameBoard {
 
             // Print cells in the row along with their coordinates
             for (int y = 0; y < getRowLength(x); y++) {
-                Cell cell = getCellAt(x, y);
                 String coordinate = String.format("(%d,%d)", x, y);
-                // System.out.print(coordinate + ":" + cell.getState() + " ");
                 System.out.print(coordinate + " ");
             }
 

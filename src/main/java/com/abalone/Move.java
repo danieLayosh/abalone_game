@@ -394,45 +394,84 @@ public class Move {
                 }
             }
         } else {
+            if (dest.getState() != player) {
+                executeSumoMove();
+            }
+            // // Determine the order of iteration based on the direction
+            // boolean reverseOrder = directionToDest == Direction.DOWNLEFT ||
+            // directionToDest == Direction.DOWNRIGHT;
 
-            // Determine the order of iteration based on the direction
-            boolean reverseOrder = directionToDest == Direction.DOWNLEFT ||
-                    directionToDest == Direction.DOWNRIGHT;
+            // int start = reverseOrder ? marbles.size() - 1 : 0;
+            // int end = reverseOrder ? -1 : marbles.size();
+            // int step = reverseOrder ? -1 : 1;
 
-            int start = reverseOrder ? marbles.size() - 1 : 0;
-            int end = reverseOrder ? -1 : marbles.size();
-            int step = reverseOrder ? -1 : 1;
+            // for (int i = start; reverseOrder ? i > end : i < end; i += step) {
+            // Cell marble = marbles.get(i);
+            // Cell nextCell = marble.getNeighborInDirection(directionToDest);
 
-            for (int i = start; reverseOrder ? i > end : i < end; i += step) {
-                Cell marble = marbles.get(i);
-                Cell nextCell = marble.getNeighborInDirection(directionToDest);
+            // if (nextCell != null && nextCell.getState() != this.player) {
+            // if (nextCell.getState() == 0 || SumoMove()) {
+            // shiftMarbles(marble, directionToDest);
+            // } else {
+            // System.out.println("Cannot move if path is blocked and cannot push");
+            // // Cannot move if path is blocked and cannot push
+            // break;
+            // }
+            // }
+            // }
+        }
+    }
 
-                if (nextCell != null && nextCell.getState() != this.player) {
-                    if (nextCell.getState() == 0 || SumoMove()) {
-                        shiftMarbles(marble, directionToDest);
-                    } else {
-                        System.out.println("Cannot move if path is blocked and cannot push");
-                        // Cannot move if path is blocked and cannot push
-                        break;
-                    }
-                }
+    // private void shiftMarbles(Cell startCell, Direction direction) {
+    //     Cell currentCell = startCell;
+    //     Cell nextCell = currentCell.getNeighborInDirection(direction);
+
+    //     while (currentCell != null && nextCell != null) {
+    //         nextCell.setState(currentCell.getState()); // Move marble to the next cell
+    //         currentCell.setState(0); // Set the current cell to empty
+
+    //         // Move to the next set of cells
+    //         currentCell = nextCell;
+    //         nextCell = currentCell.getNeighborInDirection(direction);
+    //     }
+    // }
+
+    private void executeSumoMove() {
+        // Check if the push is possible using the SumoMove method
+        if (!SumoMove()) {
+            System.out.println("Cannot execute Sumo move: push not possible.");
+            return;
+        }
+    
+        // Reverse the order of moving marbles if pushing 'down' the board
+        boolean reverseOrder = directionToDest == Direction.DOWNLEFT || 
+                               directionToDest == Direction.DOWNRIGHT;
+        int start = reverseOrder ? marbles.size() - 1 : 0;
+        int end = reverseOrder ? -1 : marbles.size();
+        int step = reverseOrder ? -1 : 1;
+    
+        // Push opponent's marbles first, starting from the destination cell
+        Cell currentCell = dest.getNeighborInDirection(directionToDest);
+        while (currentCell != null && currentCell.getState() == (player == 1 ? 2 : 1)) {
+            Cell nextCell = currentCell.getNeighborInDirection(directionToDest);
+            if (nextCell != null && nextCell.getState() == 0) {
+                nextCell.setState(currentCell.getState());
+                currentCell.setState(0);
+            }
+            currentCell = nextCell;
+        }
+    
+        // Move player's marbles
+        for (int i = start; reverseOrder ? i > end : i < end; i += step) {
+            Cell marble = marbles.get(i);
+            Cell nextCell = marble.getNeighborInDirection(directionToDest);
+            if (nextCell != null) {
+                nextCell.setState(marble.getState());
+                marble.setState(0);
             }
         }
     }
-
-    private void shiftMarbles(Cell startCell, Direction direction) {
-        Cell currentCell = startCell;
-        Cell nextCell = currentCell.getNeighborInDirection(direction);
-
-        while (currentCell != null && nextCell != null) {
-            nextCell.setState(currentCell.getState()); // Move marble to the next cell
-            currentCell.setState(0); // Set the current cell to empty
-
-            // Move to the next set of cells
-            currentCell = nextCell;
-            nextCell = currentCell.getNeighborInDirection(direction);
-        }
-    }
+    
 
     private void executeSideStepMove() {
         Cell currentCell, nextCell;

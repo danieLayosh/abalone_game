@@ -194,7 +194,7 @@ public class GameBoard {
         Cell cell3 = getCellAt(6, 6);
         cell3.setState(2);
         Cell dest = getCellAt(6, 6); // Destination
-
+        
         List<Cell> marbles = Arrays.asList(cell1, cell2 );
         Move move = new Move(marbles, dest, 1); // Player 2 making a move
     

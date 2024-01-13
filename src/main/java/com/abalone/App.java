@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class App extends Application {
 
@@ -33,8 +36,10 @@ public class App extends Application {
         GameBoard gameBoard = new GameBoard();
         gameBoard.printBoard();
         gameBoard.printBoardWithCoordinates();
-        //gameBoard.testAndPrintNeighborFinding();
+        // gameBoard.testAndPrintNeighborFinding();
         gameBoard.checkMoveClass();
+        gameBoard.checkMoveClass2();
+
     }
 
 }

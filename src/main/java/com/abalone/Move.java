@@ -368,7 +368,6 @@ public class Move {
         }
 
         pushOpponentMarbles();
-        //movePlayerMarbles();
         executeInlineOrSingleMove();
     }
 
@@ -403,19 +402,6 @@ public class Move {
         } else if (nextCell.getState() == 0) { // Push marble to next cell
             nextCell.setState(marble.getState());
             marble.setState(0);
-        }
-    }
-    
-
-    private void movePlayerMarbles() {
-        for (int i = marbles.size() - 1; i >= 0; i--) {
-            Cell marble = marbles.get(i);
-            Cell nextCell = marble.getNeighborInDirection(directionToDest);
-    
-            if (nextCell != null && nextCell.getState() == 0) {
-                nextCell.setState(marble.getState());
-                marble.setState(0);
-            }
         }
     }
 

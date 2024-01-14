@@ -9,7 +9,7 @@ import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
 public class GameBoard {
-    // Adjacency list to represent the board, each cell has a list of neighbors
+    // Adjacency map to represent the board, each cell has a list of neighbors
     private Map<Cell, Map<Cell, Direction>> board;
 
     private final int MAX_ROW_LENGTH = 9; // Maximum number of cells in a row
@@ -189,16 +189,20 @@ public class GameBoard {
     }
 
     public void checkMoveClass() {
-        Cell cell1 = getCellAt(6, 2);
-        Cell cell2 = getCellAt(7, 1);
-        Cell cell3 = getCellAt(8, 0);
+        Cell cell1 = getCellAt(0, 0);
+        Cell cell2 = getCellAt(1, 0);
+        Cell cell3 = getCellAt(2, 0);
         cell3.setState(2);
+        Cell cell4 = getCellAt(3, 0);
+        Cell cell5 = getCellAt(4, 0);
+        cell4.setState(1);
+        cell5.setState(1);
 
 
-        Cell dest = getCellAt(8, 0); // Destination
+        Cell dest = getCellAt(3, 0); // Destination
 
-        List<Cell> marbles = Arrays.asList(cell1, cell2);
-        Move move = new Move(marbles, dest, 1); // Player 2 making a move
+        List<Cell> marbles = Arrays.asList(cell1, cell2, cell3);
+        Move move = new Move(marbles, dest, 2); // Player 2 making a move
         printBoard();
         try {
             if (move.isValid()) {

@@ -336,7 +336,7 @@ public class Move {
         if (dest.getState() == 0) {
 
             boolean reverseOrder = directionToDest == Direction.DOWNLEFT ||
-                    directionToDest == Direction.DOWNRIGHT;
+                    directionToDest == Direction.DOWNRIGHT || directionToDest == Direction.RIGHT;
 
             int start = reverseOrder ? marbles.size() - 1 : 0;
             int end = reverseOrder ? -1 : marbles.size();
@@ -361,71 +361,59 @@ public class Move {
         }
     }
 
-    private void executeSumoMove2() {
-        if (!SumoMove()) {
-            System.out.println("Cannot execute Sumo move: push not possible.");
-            return;
-        }
-
-        // finds the last marble of the opponents marble
-        Cell currentCell = dest;
-        Cell lastOpponentMarble = null;
-        while (currentCell != null) {
-            if (currentCell.getState() == (player == 1 ? 2 : 1)) {
-                lastOpponentMarble = currentCell;
-            }
-            currentCell = currentCell.getNeighborInDirection(directionToDest);
-        }
-
-        currentCell = lastOpponentMarble;
-        while (currentCell != null && currentCell.getState() == (player == 1 ? 2 : 1)) {
-            Cell nextCell = currentCell.getNeighborInDirection(directionToDest);
-            if (nextCell != null && nextCell.getState() == 0) {
-                nextCell.setState(currentCell.getState());
-                currentCell.setState(0);
-            }
-            // Move backward toward the destination
-            currentCell = marbles.contains(currentCell) ? null
-                    : currentCell.getNeighborInDirection(oppositeDirection(directionToDest));
-        }
-    }
-
     private void executeSumoMove() {
         if (!SumoMove()) {
             System.out.println("Cannot execute Sumo move: push not possible.");
             return;
         }
 
-        // Find the last opponent's marble in the line of push
+        pushOpponentMarbles();
+        //movePlayerMarbles();
+        executeInlineOrSingleMove();
+    }
+
+    private void pushOpponentMarbles() {
+        Cell firstOpponentMarble = null;
+        Cell secondOpponentMarble = null;
+    
+        // Find the first and possibly second opponent marbles in the line of push
         Cell currentCell = dest;
-        Cell lastOpponentMarble = null;
-        while (currentCell != null) {
-            if (currentCell.getState() == (player == 1 ? 2 : 1)) {
-                lastOpponentMarble = currentCell;
+        while (currentCell != null && currentCell.getState() == (player == 1 ? 2 : 1)) {
+            if (firstOpponentMarble == null) {
+                firstOpponentMarble = currentCell;
+            } else if (secondOpponentMarble == null) {
+                secondOpponentMarble = currentCell;
             }
             currentCell = currentCell.getNeighborInDirection(directionToDest);
         }
-
-        // Push opponent's marbles starting from the last one
-        currentCell = lastOpponentMarble;
-        while (currentCell != null && currentCell.getState() == (player == 1 ? 2 : 1)) {
-            Cell nextCell = currentCell.getNeighborInDirection(directionToDest);
-            if (nextCell == null) {
-                currentCell.setState(0);
-            } else if (nextCell != null && nextCell.getState() == 0) {
-                nextCell.setState(currentCell.getState());
-                currentCell.setState(0);
-            }
-            // Move backward toward the destination
-            currentCell = marbles.contains(currentCell) ? null
-                    : currentCell.getNeighborInDirection(oppositeDirection(directionToDest));
+    
+        // Push the opponent marbles
+        if (secondOpponentMarble != null) {
+            pushMarble(secondOpponentMarble);
         }
+        if (firstOpponentMarble != null) {
+            pushMarble(firstOpponentMarble);
+        }
+    }
+    
+    private void pushMarble(Cell marble) {
+        Cell nextCell = marble.getNeighborInDirection(directionToDest);
+        if (nextCell == null) { // Push marble off the board
+            marble.setState(0);
+        } else if (nextCell.getState() == 0) { // Push marble to next cell
+            nextCell.setState(marble.getState());
+            marble.setState(0);
+        }
+    }
+    
 
-        // Move player's marbles
-        for (Cell marble : marbles) {
+    private void movePlayerMarbles() {
+        for (int i = marbles.size() - 1; i >= 0; i--) {
+            Cell marble = marbles.get(i);
             Cell nextCell = marble.getNeighborInDirection(directionToDest);
+    
             if (nextCell != null && nextCell.getState() == 0) {
-                nextCell.setState(player);
+                nextCell.setState(marble.getState());
                 marble.setState(0);
             }
         }

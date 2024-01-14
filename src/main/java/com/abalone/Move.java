@@ -87,7 +87,7 @@ public class Move {
     /**
      * Checks if all the marbles can move to the dest direction
      * 
-     * @return true if the marbles can move to thire direction
+     * @return true if the marbles can move to there direction
      */
     private boolean sideStepMove() {
         for (Cell cell : marbles) {
@@ -111,7 +111,7 @@ public class Move {
         if (dest.getState() == player)
             return false;
 
-        // The dest is enemy cell, we need to check if he has more marbels inline him
+        // The dest is enemy cell, we need to check if he has more marbles inline him
         return SumoMove();
     }
 
@@ -208,7 +208,7 @@ public class Move {
             Direction direction = marbles.get(0).getDirectionOfNeighbor(dest);
             if (direction != null) {
                 moveType = MoveType.SINGLE;
-                return MoveType.SINGLE; // The marble and the destonation marble are not neighbors
+                return MoveType.SINGLE; // The marble and the destination marble are not neighbors
             } else {
                 throw new IllegalStateException("The destination cell is not a neighbor");
             }
@@ -230,7 +230,7 @@ public class Move {
             }
         }
 
-        // if its peroendicular
+        // if its perpendicular
         if (isPerpendicular(directionToDest, marblesDirection)) {
             moveType = MoveType.SIDESTEP;
             return MoveType.SIDESTEP;

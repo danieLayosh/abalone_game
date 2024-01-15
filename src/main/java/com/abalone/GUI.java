@@ -16,6 +16,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 public class GUI {
@@ -33,6 +34,12 @@ public class GUI {
         this.blue_score = new SimpleIntegerProperty(0);
         this.red_score = new SimpleIntegerProperty(0);
     }
+
+    @FXML
+    private HBox blueHBox;
+
+    @FXML
+    private HBox redHBox;
 
     @FXML
     private Label playerTurn;
@@ -57,6 +64,7 @@ public class GUI {
     public void initialize() {
         redPoint.textProperty().bind(red_score.asString());
         bluePoint.textProperty().bind(blue_score.asString());
+
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
             try {
@@ -91,8 +99,7 @@ public class GUI {
         }
         ImageView imageView = new ImageView(image);
 
-        // imageView.setFitHeight(50); // Set the height of the image
-        imageView.setFitWidth(35); // Set the width of the image
+        imageView.setFitWidth(35);
         imageView.setPreserveRatio(true);
         cell.getBt().setGraphic(imageView);
 
@@ -142,8 +149,18 @@ public class GUI {
                     if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                         if (player == 1) {
                             red_score.set(red_score.get() + 1);
+                            Image image = new Image("abalone2.gif");
+                            ImageView imageView = new ImageView(image);
+                            imageView.setFitHeight(40); // Set height
+                            imageView.setPreserveRatio(true);
+                            redHBox.getChildren().add(imageView);
                         } else {
                             blue_score.set(blue_score.get() + 1);
+                            Image image = new Image("abalone1.gif");
+                            ImageView imageView = new ImageView(image);
+                            imageView.setFitHeight(40); // Set height
+                            imageView.setPreserveRatio(true);
+                            blueHBox.getChildren().add(imageView);
                         }
                         if (red_score.get() == 6 || blue_score.get() == 6) {
                             endGame();
@@ -192,8 +209,6 @@ public class GUI {
     }
 
     private void restartGame() {
-        // Reset all necessary variables and UI components to start a new game
-        // Example:
         this.player = 2;
         this.blue_score = new SimpleIntegerProperty(0);
         this.red_score = new SimpleIntegerProperty(0);

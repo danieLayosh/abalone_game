@@ -20,7 +20,7 @@
    <children>
       <HBox alignment="CENTER_LEFT" style="-fx-border-color: black;">
          <children>
-            <VBox alignment="CENTER_LEFT" prefHeight="70.0" style="-fx-border-color: black;">
+            <VBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="198.0" style="-fx-border-color: black;">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black;">
                      <children>
@@ -41,7 +41,7 @@
                         </Label>
                         <Label fx:id="redPoint" textFill="RED">
                            <font>
-                              <Font name="System Bold Italic" size="23.0" />
+                              <Font name="System Bold Italic" size="26.0" />
                            </font>
                            <effect>
                               <Lighting>
@@ -75,7 +75,7 @@
                         </Label>
                         <Label fx:id="bluePoint" textFill="#1100ff">
                            <font>
-                              <Font name="System Bold Italic" size="23.0" />
+                              <Font name="System Bold Italic" size="26.0" />
                            </font>
                            <effect>
                               <Lighting>
@@ -92,7 +92,13 @@
                   </HBox>
                </children>
             </VBox>
-            <Label fx:id="playerTurn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="82.0" prefWidth="390.0" text="Red Turn" textAlignment="JUSTIFY" textFill="RED">
+            <VBox prefHeight="82.0" prefWidth="131.0">
+               <children>
+                  <HBox fx:id="redHBox" prefHeight="42.0" prefWidth="131.0" />
+                  <HBox fx:id="blueHBox" prefHeight="42.0" prefWidth="131.0" />
+               </children>
+            </VBox>
+            <Label fx:id="playerTurn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Red Turn" textAlignment="JUSTIFY" textFill="RED" wrapText="true">
                <font>
                   <Font name="Calibri Bold" size="65.0" />
                </font>
@@ -111,7 +117,7 @@
                <children>
                   <ImageView blendMode="SRC_ATOP" fitHeight="568.0" fitWidth="609.0">
                      <image>
-                        <Image url="@/board_background.gif" />
+                        <Image url="@board_background.gif" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />

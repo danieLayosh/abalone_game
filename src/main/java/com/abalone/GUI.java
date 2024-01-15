@@ -7,13 +7,16 @@ import java.util.List;
 import com.abalone.enums.MoveType;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class GUI {
-    private GameBoard gameBoard = new GameBoard();
+    private GameBoard gameBoard;
     private int player;
     private List<Cell> marbles;
     private Cell dest;
@@ -25,6 +28,7 @@ public class GUI {
         this.player = 1;
         this.blue_score = 0;
         this.red_score = 0;
+        this.gameBoard = new GameBoard();
     }
 
     @FXML
@@ -122,31 +126,16 @@ public class GUI {
                     System.out.println("The MoveType is: " + moveType);
 
                     move.executeMove();
+                    updateBoard(cell);
                     if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
-                        System.out.println("pushed");
-                        System.out.println("red_score:" + red_score);
-                        System.out.println("blue_score:" + blue_score);
-
                         if (player == 1) {
                             red_score++;
                         } else {
                             blue_score++;
                         }
-                        System.out.println("pushed");
-                        System.out.println("red_score:" + red_score);
-                        System.out.println("blue_score:" + blue_score);
-                        if (red_score == 6 || blue_score == 6) {
-                            if (red_score == 6) {
-                                playerTurn.setText("THE RED PLAYER WON!!!!!!!");
-                                
-                            } else {
-                                playerTurn.setText("THE BLUE PLAYER WON!!!!!!!");
-                                
-                            }
-                        }
+                        if (red_score == 6 || blue_score == 6)
+                            endGame();
                     }
-
-                    updateBoard(cell);
                     changePlayer();
                     for (Cell cell2 : marbles) {
                         updateCellGUI(cell2);
@@ -163,6 +152,42 @@ public class GUI {
             }
         }
 
+    }
+
+    private void endGame() {
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Game Over");
+        if (player == 1) {
+            alert.setHeaderText("THE RED PLAYER WON!!!!");
+        } else
+            alert.setHeaderText("THE BLUE PLAYER WON!!!!");
+
+        alert.setContentText("Do you want to play another game?");
+
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No, exit");
+
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == buttonTypeYes) {
+                restartGame();
+            } else if (response == buttonTypeNo) {
+                System.exit(0); // or close the window
+            }
+        });
+    }
+
+    private void restartGame() {
+        // Reset all necessary variables and UI components to start a new game
+        // Example:
+        this.player = 2;
+        this.blue_score = 0;
+        this.red_score = 0;
+        this.gameBoard = new GameBoard();
+        this.marbles.clear();
+
+        initialize();
     }
 
     private void changePlayer() {

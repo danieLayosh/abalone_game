@@ -1,6 +1,7 @@
 package com.abalone;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class GameBoard {
     // Adjacency map to represent the board, each cell has a list of neighbors
     private Map<Cell, Map<Cell, Direction>> board;
 
-    private final int MAX_ROW_LENGTH = 9; // Maximum number of cells in a row
+    public final static int MAX_ROW_LENGTH = 9; // Maximum number of cells in a row
 
     // 2D Arrays to represent the six possible directions (neighbors) in a hexagonal
     // grid for the lower, upper and middle rows
@@ -141,7 +142,7 @@ public class GameBoard {
         }
     }
 
-    private int getRowLength(int x) {
+    public static int getRowLength(int x) {
         if (x < 4) {
             return 5 + x; // Rows 0 to 3 increase in length
         } else if (x < 5) {
@@ -198,7 +199,6 @@ public class GameBoard {
         cell4.setState(1);
         cell5.setState(1);
 
-
         Cell dest = getCellAt(3, 0); // Destination
 
         List<Cell> marbles = Arrays.asList(cell1, cell2, cell3);
@@ -232,6 +232,14 @@ public class GameBoard {
 
     private String formatCoordinate(int x, int y) {
         return "(" + x + "," + y + ")";
+    }
+
+    public static String getCellId(int x, int y) {
+        return "bt" + x + "_" + y;
+    }
+
+    public Collection<Cell> getCells() {
+        return board.keySet();
     }
 
 }

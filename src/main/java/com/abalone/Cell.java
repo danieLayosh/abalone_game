@@ -5,10 +5,13 @@ import java.util.Objects;
 
 import com.abalone.enums.Direction;
 
+import javafx.scene.control.Button;
+
 public class Cell {
     private int x, y; // Coordinates on the board
     private int State; // 0 for empty, 1 for player 1 and 2 for player 2
     private Map<Cell, Direction> neighborsMap;
+    private Button bt;
 
     public Cell(int x, int y, int State) {
         this.x = x;
@@ -88,6 +91,14 @@ public class Cell {
     @Override
     public int hashCode() {
         return Objects.hash(x, y);
+    }
+
+    public Button getBt() {
+        return bt;
+    }
+
+    public void setBt(Button bt) {
+        this.bt = bt;
     }
 
 }

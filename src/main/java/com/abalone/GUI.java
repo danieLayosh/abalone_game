@@ -54,12 +54,6 @@ public class GUI {
         }
     }
 
-    private void handleCellClick(Cell cell) {
-        // Implement your logic here, for example:
-        System.out.println("Clicked on cell " + cell.formatCoordinate());
-
-    }
-
     public void updateCellGUI(Cell cell) {
         Image image = new Image("abalone0.gif");
 
@@ -75,8 +69,8 @@ public class GUI {
         }
         ImageView imageView = new ImageView(image);
 
-        imageView.setFitHeight(40); // Set the height of the image
-        imageView.setFitWidth(40); // Set the width of the image
+        // imageView.setFitHeight(50); // Set the height of the image
+        imageView.setFitWidth(35); // Set the width of the image
         imageView.setPreserveRatio(true);
         cell.getBt().setGraphic(imageView);
     }
@@ -100,7 +94,7 @@ public class GUI {
                 }
             }
         } else {
-            if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1)) {
+            if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1) && !marbles.isEmpty()) {
                 dest = cell;
                 Move move = new Move(marbles, cell, player);
                 if (move.isValid()) {

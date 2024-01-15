@@ -5,13 +5,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abalone.PrimaryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abalone.PrimaryController">
    <children>
       <Button fx:id="bt0_0" layoutX="170.0" layoutY="15.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -20,7 +19,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -29,7 +27,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -38,7 +35,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -47,7 +43,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -56,7 +51,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -65,7 +59,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -74,7 +67,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -83,7 +75,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -92,7 +83,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -101,7 +91,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -110,7 +99,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -119,7 +107,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -128,7 +115,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -137,7 +123,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -146,7 +131,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -155,7 +139,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -164,7 +147,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -173,7 +155,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -182,7 +163,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -191,7 +171,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -200,7 +179,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -209,7 +187,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -218,7 +195,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -227,7 +203,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -236,7 +211,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -245,7 +219,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -254,7 +227,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -263,7 +235,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -272,7 +243,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -281,7 +251,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -290,7 +259,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -299,7 +267,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -308,7 +275,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -317,7 +283,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -326,7 +291,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -335,7 +299,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -344,7 +307,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -353,7 +315,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -362,7 +323,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -371,7 +331,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -380,7 +339,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -389,7 +347,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -398,7 +355,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -407,7 +363,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -416,7 +371,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -425,7 +379,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -434,7 +387,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -443,7 +395,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -452,7 +403,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -461,7 +411,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -470,7 +419,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -479,7 +427,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -488,7 +435,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -497,7 +443,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -506,7 +451,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -515,7 +459,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -524,7 +467,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -533,7 +475,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -542,7 +483,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>
@@ -551,7 +491,6 @@
          <graphic>
             <ImageView>
                <image>
-                  <Image url="@abalone0.gif" />
                </image>
             </ImageView>
          </graphic>

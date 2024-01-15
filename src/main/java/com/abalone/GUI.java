@@ -8,6 +8,7 @@ import com.abalone.enums.MoveType;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -23,6 +24,9 @@ public class GUI {
     }
 
     @FXML
+    private Label playerTurn;
+
+    @FXML
     private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
             bt1_0, bt1_1, bt1_2, bt1_3, bt1_4, bt1_5,
             bt2_0, bt2_1, bt2_2, bt2_3, bt2_4, bt2_5, bt2_6,
@@ -34,7 +38,6 @@ public class GUI {
             bt8_0, bt8_1, bt8_2, bt8_3, bt8_4;
 
     public void initialize() {
-
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
             try {
@@ -85,11 +88,16 @@ public class GUI {
         if (cell.getState() == player) {
             if (marbles.isEmpty()) {
                 marbles.add(cell);
+                cellPushed(cell);
             } else {
                 if (marbles.size() < 4) {
                     marbles.add(cell);
+                    cellPushed(cell);
                 } else {
                     System.out.println("To much marbles");
+                    for (Cell cell2 : marbles) {
+                        updateCellGUI(cell2);
+                    }
                     marbles.clear();
                 }
             }
@@ -102,10 +110,12 @@ public class GUI {
                     MoveType moveType = move.getMoveType();
                     System.out.println("The MoveType is: " + moveType);
 
-                    // If you wish to see the effect of the move, execute it
                     move.executeMove();
                     updateBoard(cell);
                     changePlayer();
+                    for (Cell cell2 : marbles) {
+                        updateCellGUI(cell2);
+                    }
                     marbles.clear();
                     System.out.println("Move executed.");
                 } else {
@@ -117,5 +127,28 @@ public class GUI {
 
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
+        if (player == 2) {
+            playerTurn.setText("Blue Turn");
+        }
+        if (player == 1) {
+            playerTurn.setText("Red Turn");
+        }
+    }
+
+    private void cellPushed(Cell cell) {
+        Image image = null;
+        switch (cell.getState()) {
+            case 1:
+                image = new Image("abalone_red_pushed.gif");
+                break;
+            case 2:
+                image = new Image("abalone_blue_pushed.gif");
+                break;
+        }
+        ImageView imageView = new ImageView(image);
+
+        imageView.setFitWidth(35);
+        imageView.setPreserveRatio(true);
+        cell.getBt().setGraphic(imageView);
     }
 }

@@ -1,13 +1,10 @@
 package com.abalone;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.abalone.enums.Direction;
-import com.abalone.enums.MoveType;
 
 public class GameBoard {
     // Adjacency map to represent the board, each cell has a list of neighbors
@@ -123,116 +120,124 @@ public class GameBoard {
         return 0;
     }
 
-    public void printBoard() {
-        // Iterate through each row
-        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
-            // Print leading spaces for hexagonal alignment
-            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
-                System.out.print(" ");
-            }
-
-            // Print cells in the row
-            for (int y = 0; y < getRowLength(x); y++) {
-                Cell cell = getCellAt(x, y);
-                System.out.print(cell.getState() + " ");
-            }
-
-            // Move to the next line after printing each row
-            System.out.println();
-        }
-    }
-
-    public static int getRowLength(int x) {
-        if (x < 4) {
-            return 5 + x; // Rows 0 to 3 increase in length
-        } else if (x < 5) {
-            return MAX_ROW_LENGTH; // Middle row has the maximum length
-        } else {
-            return 13 - x; // Rows 5 to 8 decrease in length
-        }
-    }
-
-    public void printBoardWithCoordinates() {
-        // Iterate through each row
-        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
-            // Print leading spaces for hexagonal alignment
-            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
-                System.out.print("   "); // Adjust the number of spaces based on your coordinate format
-            }
-
-            // Print cells in the row along with their coordinates
-            for (int y = 0; y < getRowLength(x); y++) {
-                String coordinate = String.format("(%d,%d)", x, y);
-                System.out.print(coordinate + " ");
-            }
-
-            // Move to the next line after printing each row
-            System.out.println();
-        }
-    }
-
-    public void testAndPrintNeighborFinding() {
-        int[][] testCoordinates = new int[][] { { 0, 0 }, { 4, 4 }, { 8, 4 }, { 2, 3 }, { 6, 3 }, { 1, 3 } };
-
-        for (int[] coord : testCoordinates) {
-            Cell testCell = getCellAt(coord[0], coord[1]);
-            if (testCell != null) {
-                Map<Cell, Direction> neighborsWithDirection = testCell.getNeighborsMap();
-                System.out.println("Neighbors of Cell " + formatCoordinate(coord[0], coord[1]) + ":");
-                for (Map.Entry<Cell, Direction> entry : neighborsWithDirection.entrySet()) {
-                    Cell neighbor = entry.getKey();
-                    Direction direction = entry.getValue();
-                    System.out.println(" Neighbor at " + formatCoordinate(neighbor.getX(), neighbor.getY())
-                            + " in direction " + direction);
-                }
-            }
-        }
-    }
-
-    public void checkMoveClass() {
-        Cell cell1 = getCellAt(0, 0);
-        Cell cell2 = getCellAt(1, 0);
-        Cell cell3 = getCellAt(2, 0);
-        cell3.setState(2);
-        Cell cell4 = getCellAt(3, 0);
-        Cell cell5 = getCellAt(4, 0);
-        cell4.setState(1);
-        cell5.setState(1);
-
-        Cell dest = getCellAt(3, 0); // Destination
-
-        List<Cell> marbles = Arrays.asList(cell1, cell2, cell3);
-        Move move = new Move(marbles, dest, 2); // Player 2 making a move
-        printBoard();
-        try {
-            if (move.isValid()) {
-                System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
-                MoveType moveType = move.getMoveType();
-                System.out.println("The MoveType is: " + moveType);
-
-                // If you wish to see the effect of the move, execute it
-                move.executeMove();
-                System.out.println("Move executed.");
-            } else {
-                System.out.println("Move is invalid.");
-            }
-        } catch (IllegalStateException e) {
-            System.out.println("Move is invalid: " + e.getMessage());
-        }
-
-        System.out.println("Marbles selected for the move:");
-        for (Cell cell : marbles) {
-            System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");
-        }
-        System.out.println("\nThe destination cell is: " + formatCoordinate(dest.getX(), dest.getY()));
-
-        // Optionally, print the board state after the move
-        printBoard();
-    }
-
-    private String formatCoordinate(int x, int y) {
-        return "(" + x + "," + y + ")";
-    }
+    /*
+     * public void printBoard() {
+     * // Iterate through each row
+     * for (int x = 0; x < MAX_ROW_LENGTH; x++) {
+     * // Print leading spaces for hexagonal alignment
+     * for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
+     * System.out.print(" ");
+     * }
+     * 
+     * // Print cells in the row
+     * for (int y = 0; y < getRowLength(x); y++) {
+     * Cell cell = getCellAt(x, y);
+     * System.out.print(cell.getState() + " ");
+     * }
+     * 
+     * // Move to the next line after printing each row
+     * System.out.println();
+     * }
+     * }
+     * 
+     * public static int getRowLength(int x) {
+     * if (x < 4) {
+     * return 5 + x; // Rows 0 to 3 increase in length
+     * } else if (x < 5) {
+     * return MAX_ROW_LENGTH; // Middle row has the maximum length
+     * } else {
+     * return 13 - x; // Rows 5 to 8 decrease in length
+     * }
+     * }
+     * 
+     * public void printBoardWithCoordinates() {
+     * // Iterate through each row
+     * for (int x = 0; x < MAX_ROW_LENGTH; x++) {
+     * // Print leading spaces for hexagonal alignment
+     * for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
+     * System.out.print("   "); // Adjust the number of spaces based on your
+     * coordinate format
+     * }
+     * 
+     * // Print cells in the row along with their coordinates
+     * for (int y = 0; y < getRowLength(x); y++) {
+     * String coordinate = String.format("(%d,%d)", x, y);
+     * System.out.print(coordinate + " ");
+     * }
+     * 
+     * // Move to the next line after printing each row
+     * System.out.println();
+     * }
+     * }
+     * 
+     * public void testAndPrintNeighborFinding() {
+     * int[][] testCoordinates = new int[][] { { 0, 0 }, { 4, 4 }, { 8, 4 }, { 2, 3
+     * }, { 6, 3 }, { 1, 3 } };
+     * 
+     * for (int[] coord : testCoordinates) {
+     * Cell testCell = getCellAt(coord[0], coord[1]);
+     * if (testCell != null) {
+     * Map<Cell, Direction> neighborsWithDirection = testCell.getNeighborsMap();
+     * System.out.println("Neighbors of Cell " + formatCoordinate(coord[0],
+     * coord[1]) + ":");
+     * for (Map.Entry<Cell, Direction> entry : neighborsWithDirection.entrySet()) {
+     * Cell neighbor = entry.getKey();
+     * Direction direction = entry.getValue();
+     * System.out.println(" Neighbor at " + formatCoordinate(neighbor.getX(),
+     * neighbor.getY())
+     * + " in direction " + direction);
+     * }
+     * }
+     * }
+     * }
+     * 
+     * public void checkMoveClass() {
+     * Cell cell1 = getCellAt(0, 0);
+     * Cell cell2 = getCellAt(1, 0);
+     * Cell cell3 = getCellAt(2, 0);
+     * cell3.setState(2);
+     * Cell cell4 = getCellAt(3, 0);
+     * Cell cell5 = getCellAt(4, 0);
+     * cell4.setState(1);
+     * cell5.setState(1);
+     * 
+     * Cell dest = getCellAt(3, 0); // Destination
+     * 
+     * List<Cell> marbles = Arrays.asList(cell1, cell2, cell3);
+     * Move move = new Move(marbles, dest, 2); // Player 2 making a move
+     * printBoard();
+     * try {
+     * if (move.isValid()) {
+     * System.out.println("Move to " + move.getDirectionToDest() +
+     * " direction is valid.");
+     * MoveType moveType = move.getMoveType();
+     * System.out.println("The MoveType is: " + moveType);
+     * 
+     * // If you wish to see the effect of the move, execute it
+     * move.executeMove();
+     * System.out.println("Move executed.");
+     * } else {
+     * System.out.println("Move is invalid.");
+     * }
+     * } catch (IllegalStateException e) {
+     * System.out.println("Move is invalid: " + e.getMessage());
+     * }
+     * 
+     * System.out.println("Marbles selected for the move:");
+     * for (Cell cell : marbles) {
+     * System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");
+     * }
+     * System.out.println("\nThe destination cell is: " +
+     * formatCoordinate(dest.getX(), dest.getY()));
+     * 
+     * // Optionally, print the board state after the move
+     * printBoard();
+     * }
+     * 
+     * private String formatCoordinate(int x, int y) {
+     * return "(" + x + "," + y + ")";
+     * }
+     */
 
     public static String getCellId(int x, int y) {
         return "bt" + x + "_" + y;

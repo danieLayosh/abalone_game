@@ -38,11 +38,6 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
-        GameBoard gameBoard = new GameBoard();
-        // gameBoard.printBoard();
-        // gameBoard.printBoardWithCoordinates();
-        // gameBoard.testAndPrintNeighborFinding();
-        // gameBoard.checkMoveClass();
     }
 
 }

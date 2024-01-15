@@ -5,9 +5,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/13" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abalone.PrimaryController">
    <children>
-      <Button layoutX="170.0" layoutY="15.0" mnemonicParsing="false">
+      <Button fx:id="bt1" layoutX="170.0" layoutY="15.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -16,7 +16,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="220.0" layoutY="15.0" mnemonicParsing="false">
+      <Button fx:id="bt2" layoutX="220.0" layoutY="15.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -25,7 +25,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="270.0" layoutY="15.0" mnemonicParsing="false">
+      <Button fx:id="bt3" layoutX="270.0" layoutY="15.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -34,7 +34,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="320.0" layoutY="15.0" mnemonicParsing="false">
+      <Button fx:id="bt4" layoutX="320.0" layoutY="15.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -43,7 +43,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="370.0" layoutY="15.0" mnemonicParsing="false">
+      <Button fx:id="bt5" layoutX="370.0" layoutY="15.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -52,7 +52,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="150.0" layoutY="55.0" mnemonicParsing="false">
+      <Button fx:id="bt6" layoutX="150.0" layoutY="55.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -61,7 +61,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="200.0" layoutY="55.0" mnemonicParsing="false">
+      <Button fx:id="bt7" layoutX="200.0" layoutY="55.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -70,7 +70,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="250.0" layoutY="55.0" mnemonicParsing="false">
+      <Button fx:id="bt8" layoutX="250.0" layoutY="55.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -79,7 +79,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="300.0" layoutY="55.0" mnemonicParsing="false">
+      <Button fx:id="bt9" layoutX="300.0" layoutY="55.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -88,7 +88,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="350.0" layoutY="55.0" mnemonicParsing="false">
+      <Button fx:id="bt10" layoutX="350.0" layoutY="55.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -97,7 +97,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="400.0" layoutY="55.0" mnemonicParsing="false">
+      <Button fx:id="bt11" layoutX="400.0" layoutY="55.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -106,7 +106,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="130.0" layoutY="95.0" mnemonicParsing="false">
+      <Button fx:id="bt12" layoutX="130.0" layoutY="95.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -115,7 +115,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="180.0" layoutY="95.0" mnemonicParsing="false">
+      <Button fx:id="bt13" layoutX="180.0" layoutY="95.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -124,7 +124,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="230.0" layoutY="95.0" mnemonicParsing="false">
+      <Button fx:id="bt14" layoutX="230.0" layoutY="95.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -133,7 +133,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="280.0" layoutY="95.0" mnemonicParsing="false">
+      <Button fx:id="bt15" layoutX="280.0" layoutY="95.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -142,7 +142,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="330.0" layoutY="95.0" mnemonicParsing="false">
+      <Button fx:id="bt16" layoutX="330.0" layoutY="95.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -151,7 +151,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="380.0" layoutY="95.0" mnemonicParsing="false">
+      <Button fx:id="bt17" layoutX="380.0" layoutY="95.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -160,7 +160,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="430.0" layoutY="95.0" mnemonicParsing="false">
+      <Button fx:id="bt18" layoutX="430.0" layoutY="95.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -169,7 +169,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="110.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt19" layoutX="110.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -178,7 +178,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="160.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt20" layoutX="160.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -187,7 +187,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="210.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt21" layoutX="210.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -196,7 +196,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="260.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt22" layoutX="260.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -205,7 +205,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="310.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt23" layoutX="310.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -214,7 +214,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="360.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt24" layoutX="360.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -223,7 +223,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="410.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt25" layoutX="410.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -232,7 +232,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="460.0" layoutY="134.0" mnemonicParsing="false">
+      <Button fx:id="bt26" layoutX="460.0" layoutY="134.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -241,7 +241,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="89.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt27" layoutX="89.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -250,7 +250,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="139.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt28" layoutX="139.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -259,7 +259,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="189.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt29" layoutX="189.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -268,7 +268,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="239.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt30" layoutX="239.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -277,7 +277,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="289.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt31" layoutX="289.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -286,7 +286,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="339.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt32" layoutX="339.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -295,7 +295,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="389.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt33" layoutX="389.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -304,7 +304,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="439.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt34" layoutX="439.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -313,7 +313,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="489.0" layoutY="171.0" mnemonicParsing="false">
+      <Button fx:id="bt35" layoutX="489.0" layoutY="171.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -322,7 +322,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="400.0" layoutY="329.0" mnemonicParsing="false">
+      <Button fx:id="bt36" layoutX="400.0" layoutY="329.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -331,7 +331,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="350.0" layoutY="329.0" mnemonicParsing="false">
+      <Button fx:id="bt37" layoutX="350.0" layoutY="329.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -340,7 +340,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="300.0" layoutY="329.0" mnemonicParsing="false">
+      <Button fx:id="bt38" layoutX="300.0" layoutY="329.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -349,7 +349,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="250.0" layoutY="329.0" mnemonicParsing="false">
+      <Button fx:id="bt39" layoutX="250.0" layoutY="329.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -358,7 +358,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="200.0" layoutY="329.0" mnemonicParsing="false">
+      <Button fx:id="bt40" layoutX="200.0" layoutY="329.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -367,7 +367,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="420.0" layoutY="289.0" mnemonicParsing="false">
+      <Button fx:id="bt41" layoutX="420.0" layoutY="289.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -376,7 +376,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="370.0" layoutY="289.0" mnemonicParsing="false">
+      <Button fx:id="bt42" layoutX="370.0" layoutY="289.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -385,7 +385,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="320.0" layoutY="289.0" mnemonicParsing="false">
+      <Button fx:id="bt43" layoutX="320.0" layoutY="289.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -394,7 +394,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="270.0" layoutY="289.0" mnemonicParsing="false">
+      <Button fx:id="bt44" layoutX="270.0" layoutY="289.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -403,7 +403,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="220.0" layoutY="289.0" mnemonicParsing="false">
+      <Button fx:id="bt45" layoutX="220.0" layoutY="289.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -412,7 +412,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="170.0" layoutY="289.0" mnemonicParsing="false">
+      <Button fx:id="bt46" layoutX="170.0" layoutY="289.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -421,7 +421,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="440.0" layoutY="249.0" mnemonicParsing="false">
+      <Button fx:id="bt47" layoutX="440.0" layoutY="249.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -430,7 +430,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="390.0" layoutY="249.0" mnemonicParsing="false">
+      <Button fx:id="bt48" layoutX="390.0" layoutY="249.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -439,7 +439,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="340.0" layoutY="249.0" mnemonicParsing="false">
+      <Button fx:id="bt49" layoutX="340.0" layoutY="249.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -448,7 +448,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="290.0" layoutY="249.0" mnemonicParsing="false">
+      <Button fx:id="bt50" layoutX="290.0" layoutY="249.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -457,7 +457,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="240.0" layoutY="249.0" mnemonicParsing="false">
+      <Button fx:id="bt51" layoutX="240.0" layoutY="249.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -466,7 +466,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="190.0" layoutY="249.0" mnemonicParsing="false">
+      <Button fx:id="bt52" layoutX="190.0" layoutY="249.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -475,7 +475,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="140.0" layoutY="249.0" mnemonicParsing="false">
+      <Button fx:id="bt53" layoutX="140.0" layoutY="249.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -484,7 +484,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="460.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt54" layoutX="460.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -493,7 +493,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="410.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt55" layoutX="410.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -502,7 +502,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="360.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt56" layoutX="360.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -511,7 +511,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="310.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt57" layoutX="310.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -520,7 +520,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="260.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt58" layoutX="260.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -529,7 +529,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="210.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt59" layoutX="210.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -538,7 +538,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="160.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt60" layoutX="160.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>
@@ -547,7 +547,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button layoutX="110.0" layoutY="210.0" mnemonicParsing="false">
+      <Button fx:id="bt61" layoutX="110.0" layoutY="210.0" mnemonicParsing="false">
          <graphic>
             <ImageView>
                <image>

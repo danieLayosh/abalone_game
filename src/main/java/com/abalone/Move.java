@@ -156,7 +156,7 @@ public class Move {
         return dest.getState() == 0;
     }
 
-    private boolean marblesBelongToPlayer() {
+    public boolean marblesBelongToPlayer() {
         for (Cell marble : this.marbles) {
             if (marble.getState() != this.player) {
                 return false;

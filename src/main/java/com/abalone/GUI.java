@@ -14,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 
 public class GUI {
     private GameBoard gameBoard;
@@ -194,9 +195,11 @@ public class GUI {
         player = (player == 1 ? 2 : 1);
         if (player == 2) {
             playerTurn.setText("Blue Turn");
+            playerTurn.setTextFill(Color.BLUE);
         }
         if (player == 1) {
             playerTurn.setText("Red Turn");
+            playerTurn.setTextFill(Color.RED);
         }
     }
 

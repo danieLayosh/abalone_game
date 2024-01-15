@@ -151,14 +151,14 @@ public class GUI {
                             red_score.set(red_score.get() + 1);
                             Image image = new Image("abalone2.gif");
                             ImageView imageView = new ImageView(image);
-                            imageView.setFitHeight(40); // Set height
+                            imageView.setFitHeight(35); // Set height
                             imageView.setPreserveRatio(true);
                             redHBox.getChildren().add(imageView);
                         } else {
                             blue_score.set(blue_score.get() + 1);
                             Image image = new Image("abalone1.gif");
                             ImageView imageView = new ImageView(image);
-                            imageView.setFitHeight(40); // Set height
+                            imageView.setFitHeight(35); // Set height
                             imageView.setPreserveRatio(true);
                             blueHBox.getChildren().add(imageView);
                         }

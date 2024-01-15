@@ -41,6 +41,7 @@ public class Cell {
 
     public void setState(int State) {
         this.State = State;
+        
     }
 
     public Map<Cell, Direction> getNeighborsMap() {

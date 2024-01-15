@@ -1,8 +1,10 @@
 package com.abalone;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.abalone.enums.MoveType;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,11 +12,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class GUI {
-    private Map<String, Button> buttonsMap = new HashMap<>();
     private GameBoard gameBoard = new GameBoard();
+    private int player;
+    private List<Cell> marbles;
+    private Cell dest;
+
+    public GUI() {
+        this.marbles = new ArrayList<>(); // Initialize the list here
+        this.player = 1;
+    }
+
     @FXML
-    private Button 
-            bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
+    private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
             bt1_0, bt1_1, bt1_2, bt1_3, bt1_4, bt1_5,
             bt2_0, bt2_1, bt2_2, bt2_3, bt2_4, bt2_5, bt2_6,
             bt3_0, bt3_1, bt3_2, bt3_3, bt3_4, bt3_5, bt3_6, bt3_7,
@@ -35,28 +44,8 @@ public class GUI {
                 Button cellButton = (Button) field.get(this);
                 if (cellButton != null) {
                     cell.setBt(cellButton);
-                    buttonsMap.put(cellId, cellButton);
-
-                    Image image = new Image("abalone0.gif");
-
-                    switch (cell.getState()) {
-                        case 1:
-                            image = new Image("abalone1.gif");
-                            break;
-                        case 2:
-                            image = new Image("abalone2.gif");
-                            break;
-                        default:
-                            break;
-                    }
-                    ImageView imageView = new ImageView(image);
-
-                    imageView.setFitHeight(40); // Set the height of the image
-                    imageView.setFitWidth(40); // Set the width of the image
-                    imageView.setPreserveRatio(true);
-                    cellButton.setGraphic(imageView);
-
-                    cellButton.setOnAction(event -> handleCellClick(cell));
+                    updateCellGUI(cell);
+                    cellButton.setOnAction(event -> turn(cell));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Error linking cell to button: " + e.getMessage());
@@ -68,9 +57,71 @@ public class GUI {
     private void handleCellClick(Cell cell) {
         // Implement your logic here, for example:
         System.out.println("Clicked on cell " + cell.formatCoordinate());
-        
+
     }
 
+    public void updateCellGUI(Cell cell) {
+        Image image = new Image("abalone0.gif");
 
+        switch (cell.getState()) {
+            case 1:
+                image = new Image("abalone1.gif");
+                break;
+            case 2:
+                image = new Image("abalone2.gif");
+                break;
+            default:
+                break;
+        }
+        ImageView imageView = new ImageView(image);
 
+        imageView.setFitHeight(40); // Set the height of the image
+        imageView.setFitWidth(40); // Set the width of the image
+        imageView.setPreserveRatio(true);
+        cell.getBt().setGraphic(imageView);
+    }
+
+    public void updateBoard(Cell cell) {
+        for (Cell cell2 : gameBoard.getCells()) {
+            updateCellGUI(cell2);
+        }
+    }
+
+    public void turn(Cell cell) {
+        if (cell.getState() == player) {
+            if (marbles.isEmpty()) {
+                marbles.add(cell);
+            } else {
+                if (marbles.size() < 4) {
+                    marbles.add(cell);
+                } else {
+                    System.out.println("To much marbles");
+                    marbles.clear();
+                }
+            }
+        } else {
+            if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1)) {
+                dest = cell;
+                Move move = new Move(marbles, cell, player);
+                if (move.isValid()) {
+                    System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
+                    MoveType moveType = move.getMoveType();
+                    System.out.println("The MoveType is: " + moveType);
+
+                    // If you wish to see the effect of the move, execute it
+                    move.executeMove();
+                    updateBoard(cell);
+                    changePlayer();
+                    marbles.clear();
+                    System.out.println("Move executed.");
+                } else {
+                    System.out.println("Move is invalid.");
+                }
+            }
+        }
+    }
+
+    private void changePlayer() {
+        player = (player == 1 ? 2 : 1);
+    }
 }

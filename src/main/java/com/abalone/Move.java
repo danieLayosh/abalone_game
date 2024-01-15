@@ -202,8 +202,10 @@ public class Move {
             Direction direction = currentMarble.getDirectionOfNeighbor(nextMarble);
 
             if (direction != initialDirection || direction == null) {
-                throw new IllegalStateException("Marbles are not neighbors: " + currentMarble.formatCoordinate()
-                        + " and " + nextMarble.formatCoordinate());
+                System.out.println("\"Marbles are not neighbors: \" + currentMarble.formatCoordinate()\r\n and \" + nextMarble.formatCoordinate()");
+                return false;
+                // throw new IllegalStateException("Marbles are not neighbors: " + currentMarble.formatCoordinate()
+                //         + " and " + nextMarble.formatCoordinate());
             }
 
         }

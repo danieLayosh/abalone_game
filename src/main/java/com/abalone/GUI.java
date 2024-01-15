@@ -95,6 +95,7 @@ public class GUI {
         imageView.setFitWidth(35); // Set the width of the image
         imageView.setPreserveRatio(true);
         cell.getBt().setGraphic(imageView);
+
     }
 
     public void updateBoard(Cell cell) {
@@ -167,39 +168,39 @@ public class GUI {
     }
 
     private void endGame() {
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    alert.setTitle("Game Over");
-    if (player == 1) {
-    alert.setHeaderText("THE RED PLAYER WON!!!!");
-    } else
-    alert.setHeaderText("THE BLUE PLAYER WON!!!!");
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Game Over");
+        if (player == 1) {
+            alert.setHeaderText("THE RED PLAYER WON!!!!");
+        } else
+            alert.setHeaderText("THE BLUE PLAYER WON!!!!");
 
-    alert.setContentText("Do you want to play another game?");
+        alert.setContentText("Do you want to play another game?");
 
-    ButtonType buttonTypeYes = new ButtonType("Yes");
-    ButtonType buttonTypeNo = new ButtonType("No, exit");
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No, exit");
 
-    alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
-    alert.showAndWait().ifPresent(response -> {
-    if (response == buttonTypeYes) {
-    restartGame();
-    } else if (response == buttonTypeNo) {
-    System.exit(0); // or close the window
-    }
-    });
+        alert.showAndWait().ifPresent(response -> {
+            if (response == buttonTypeYes) {
+                restartGame();
+            } else if (response == buttonTypeNo) {
+                System.exit(0); // or close the window
+            }
+        });
     }
 
     private void restartGame() {
-    // Reset all necessary variables and UI components to start a new game
-    // Example:
-    this.player = 2;
-    this.blue_score = new SimpleIntegerProperty(0);
-    this.red_score = new SimpleIntegerProperty(0);
-    this.gameBoard = new GameBoard();
-    this.marbles.clear();
+        // Reset all necessary variables and UI components to start a new game
+        // Example:
+        this.player = 2;
+        this.blue_score = new SimpleIntegerProperty(0);
+        this.red_score = new SimpleIntegerProperty(0);
+        this.gameBoard = new GameBoard();
+        this.marbles.clear();
 
-    initialize();
+        initialize();
     }
 
     private void changePlayer() {

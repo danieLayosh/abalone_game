@@ -20,13 +20,13 @@
    <children>
       <HBox alignment="CENTER_LEFT" style="-fx-border-color: black;">
          <children>
-            <VBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="308.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="70.0" style="-fx-border-color: black;">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black;">
                      <children>
                         <Label text="Red's points: " textFill="RED">
                            <font>
-                              <Font name="System Bold Italic" size="23.0" />
+                              <Font name="System Bold Italic" size="26.0" />
                            </font>
                            <effect>
                               <Lighting>
@@ -56,11 +56,11 @@
                         </Label>
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black;">
                      <children>
                         <Label text="Blue's points: " textFill="#1100ff">
                            <font>
-                              <Font name="System Bold Italic" size="23.0" />
+                              <Font name="System Bold Italic" size="26.0" />
                            </font>
                            <effect>
                               <Lighting>
@@ -92,9 +92,9 @@
                   </HBox>
                </children>
             </VBox>
-            <Label fx:id="playerTurn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Red Turn" textAlignment="JUSTIFY" textFill="RED">
+            <Label fx:id="playerTurn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="82.0" prefWidth="390.0" text="Red Turn" textAlignment="JUSTIFY" textFill="RED">
                <font>
-                  <Font name="Calibri Bold" size="60.0" />
+                  <Font name="Calibri Bold" size="65.0" />
                </font>
                <HBox.margin>
                   <Insets left="200.0" />
@@ -111,7 +111,7 @@
                <children>
                   <ImageView blendMode="SRC_ATOP" fitHeight="568.0" fitWidth="609.0">
                      <image>
-                        <Image url="@board_background.gif" />
+                        <Image url="@/board_background.gif" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />
@@ -122,7 +122,7 @@
                   </ImageView>
                   <Group layoutX="61.0" layoutY="84.0">
                      <children>
-                        <Button fx:id="bt0_0" alignment="CENTER" layoutX="100.0" mnemonicParsing="false">
+                        <Button fx:id="bt0_0" alignment="CENTER" layoutX="100.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -130,7 +130,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt0_1" layoutX="150.0" mnemonicParsing="false">
+                        <Button fx:id="bt0_1" layoutX="150.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -138,7 +138,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt0_2" layoutX="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt0_2" layoutX="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -146,7 +146,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt0_3" layoutX="250.0" mnemonicParsing="false">
+                        <Button fx:id="bt0_3" layoutX="250.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -154,7 +154,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt0_4" layoutX="300.0" mnemonicParsing="false">
+                        <Button fx:id="bt0_4" layoutX="300.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -162,7 +162,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt1_0" layoutX="75.0" layoutY="40.0" mnemonicParsing="false">
+                        <Button fx:id="bt1_0" layoutX="75.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -170,7 +170,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt1_1" layoutX="125.0" layoutY="40.0" mnemonicParsing="false">
+                        <Button fx:id="bt1_1" layoutX="125.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -178,7 +178,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt1_2" layoutX="175.0" layoutY="40.0" mnemonicParsing="false">
+                        <Button fx:id="bt1_2" layoutX="175.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -186,7 +186,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt1_3" layoutX="225.0" layoutY="40.0" mnemonicParsing="false">
+                        <Button fx:id="bt1_3" layoutX="225.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -194,7 +194,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt1_4" layoutX="275.0" layoutY="40.0" mnemonicParsing="false">
+                        <Button fx:id="bt1_4" layoutX="275.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -202,7 +202,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt1_5" layoutX="325.0" layoutY="40.0" mnemonicParsing="false">
+                        <Button fx:id="bt1_5" layoutX="325.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -210,7 +210,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt2_0" layoutX="50.0" layoutY="80.0" mnemonicParsing="false">
+                        <Button fx:id="bt2_0" layoutX="50.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -218,7 +218,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt2_1" layoutX="100.0" layoutY="80.0" mnemonicParsing="false">
+                        <Button fx:id="bt2_1" layoutX="100.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -226,7 +226,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt2_2" layoutX="150.0" layoutY="80.0" mnemonicParsing="false">
+                        <Button fx:id="bt2_2" layoutX="150.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -234,7 +234,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt2_3" layoutX="200.0" layoutY="80.0" mnemonicParsing="false">
+                        <Button fx:id="bt2_3" layoutX="200.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -242,7 +242,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt2_4" layoutX="250.0" layoutY="80.0" mnemonicParsing="false">
+                        <Button fx:id="bt2_4" layoutX="250.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -250,7 +250,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt2_5" layoutX="300.0" layoutY="80.0" mnemonicParsing="false">
+                        <Button fx:id="bt2_5" layoutX="300.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -258,7 +258,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt2_6" layoutX="350.0" layoutY="80.0" mnemonicParsing="false">
+                        <Button fx:id="bt2_6" layoutX="350.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -266,7 +266,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_0" layoutX="25.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_0" layoutX="25.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -274,7 +274,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_1" layoutX="75.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_1" layoutX="75.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -282,7 +282,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_2" layoutX="125.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_2" layoutX="125.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -290,7 +290,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_3" layoutX="175.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_3" layoutX="175.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -298,7 +298,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_4" layoutX="225.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_4" layoutX="225.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -306,7 +306,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_5" layoutX="275.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_5" layoutX="275.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -314,7 +314,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_6" layoutX="325.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_6" layoutX="325.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -322,7 +322,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt3_7" layoutX="375.0" layoutY="120.0" mnemonicParsing="false">
+                        <Button fx:id="bt3_7" layoutX="375.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -330,7 +330,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -338,7 +338,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_1" layoutX="50.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_1" layoutX="50.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -346,7 +346,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_2" layoutX="100.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_2" layoutX="100.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -354,7 +354,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_3" layoutX="150.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_3" layoutX="150.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -362,7 +362,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_4" layoutX="200.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_4" layoutX="200.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -370,7 +370,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_5" layoutX="250.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_5" layoutX="250.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -378,7 +378,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_6" layoutX="300.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_6" layoutX="300.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -386,7 +386,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_7" layoutX="350.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_7" layoutX="350.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -394,7 +394,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt4_8" layoutX="400.0" layoutY="160.0" mnemonicParsing="false">
+                        <Button fx:id="bt4_8" layoutX="400.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -402,7 +402,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt8_4" layoutX="300.0" layoutY="320.0" mnemonicParsing="false">
+                        <Button fx:id="bt8_4" layoutX="300.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -410,7 +410,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt8_3" layoutX="250.0" layoutY="320.0" mnemonicParsing="false">
+                        <Button fx:id="bt8_3" layoutX="250.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -418,7 +418,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt8_2" layoutX="200.0" layoutY="320.0" mnemonicParsing="false">
+                        <Button fx:id="bt8_2" layoutX="200.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -426,7 +426,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt8_1" layoutX="150.0" layoutY="320.0" mnemonicParsing="false">
+                        <Button fx:id="bt8_1" layoutX="150.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -434,7 +434,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt8_0" layoutX="100.0" layoutY="320.0" mnemonicParsing="false">
+                        <Button fx:id="bt8_0" layoutX="100.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -442,7 +442,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt7_5" layoutX="325.0" layoutY="280.0" mnemonicParsing="false">
+                        <Button fx:id="bt7_5" layoutX="325.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -450,7 +450,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt7_4" layoutX="275.0" layoutY="280.0" mnemonicParsing="false">
+                        <Button fx:id="bt7_4" layoutX="275.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -458,7 +458,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt7_3" layoutX="225.0" layoutY="280.0" mnemonicParsing="false">
+                        <Button fx:id="bt7_3" layoutX="225.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -466,7 +466,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt7_2" layoutX="175.0" layoutY="280.0" mnemonicParsing="false">
+                        <Button fx:id="bt7_2" layoutX="175.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -474,7 +474,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt7_1" layoutX="125.0" layoutY="280.0" mnemonicParsing="false">
+                        <Button fx:id="bt7_1" layoutX="125.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -482,7 +482,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt7_0" layoutX="75.0" layoutY="280.0" mnemonicParsing="false">
+                        <Button fx:id="bt7_0" layoutX="75.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -490,7 +490,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt6_6" layoutX="350.0" layoutY="240.0" mnemonicParsing="false">
+                        <Button fx:id="bt6_6" layoutX="350.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -498,7 +498,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt6_5" layoutX="300.0" layoutY="240.0" mnemonicParsing="false">
+                        <Button fx:id="bt6_5" layoutX="300.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -506,7 +506,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt6_4" layoutX="250.0" layoutY="240.0" mnemonicParsing="false">
+                        <Button fx:id="bt6_4" layoutX="250.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -514,7 +514,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt6_3" layoutX="200.0" layoutY="240.0" mnemonicParsing="false">
+                        <Button fx:id="bt6_3" layoutX="200.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -522,7 +522,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt6_2" layoutX="150.0" layoutY="240.0" mnemonicParsing="false">
+                        <Button fx:id="bt6_2" layoutX="150.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -530,7 +530,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt6_1" layoutX="100.0" layoutY="240.0" mnemonicParsing="false">
+                        <Button fx:id="bt6_1" layoutX="100.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -538,7 +538,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt6_0" layoutX="50.0" layoutY="240.0" mnemonicParsing="false">
+                        <Button fx:id="bt6_0" layoutX="50.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -546,7 +546,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_7" layoutX="375.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_7" layoutX="375.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -554,7 +554,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_6" layoutX="325.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_6" layoutX="325.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -562,7 +562,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_5" layoutX="275.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_5" layoutX="275.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -570,7 +570,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_4" layoutX="225.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_4" layoutX="225.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -578,7 +578,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_3" layoutX="175.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_3" layoutX="175.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -586,7 +586,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_2" layoutX="125.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_2" layoutX="125.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -594,7 +594,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_1" layoutX="75.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_1" layoutX="75.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -602,7 +602,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Button fx:id="bt5_0" layoutX="25.0" layoutY="200.0" mnemonicParsing="false">
+                        <Button fx:id="bt5_0" layoutX="25.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
                            <graphic>
                               <ImageView>
                                  <image>
@@ -611,16 +611,6 @@
                            </graphic>
                         </Button>
                      </children>
-                     <effect>
-                        <Lighting>
-                           <bumpInput>
-                              <Shadow />
-                           </bumpInput>
-                           <light>
-                              <Light.Distant />
-                           </light>
-                        </Lighting>
-                     </effect>
                   </Group>
                </children>
             </Group>

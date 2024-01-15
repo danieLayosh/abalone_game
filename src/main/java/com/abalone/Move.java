@@ -40,23 +40,37 @@ public class Move {
         sortMarbles(); // Ensure marbles are sorted before validation
 
         if (marbles.size() < 1 || marbles.size() > 3) {
-            throw new IllegalStateException("Invalid number of marbles selected.");
+            System.out.println("Invalid number of marbles selected.");
+            return false;
+            // throw new IllegalStateException("Invalid number of marbles selected.");
         }
 
         if (!marblesBelongToPlayer()) {
-            throw new IllegalStateException("One or more of the marbles do not belong to the player.");
+            System.out.println("One or more of the marbles do not belong to the player.");
+            return false;
+            // throw new IllegalStateException("One or more of the marbles do not belong to
+            // the player.");
         }
 
         if (!areMarblesInlineAndAdjacent()) {
-            throw new IllegalStateException("The marbles are not in an inline formation and/or not adjacent.");
+            System.out.println("The marbles are not in an inline formation and/or not adjacent.");
+            return false;
+            // throw new IllegalStateException("The marbles are not in an inline formation
+            // and/or not adjacent.");
         }
 
         if (determineMoveType(marbles, dest) == null) {
-            throw new IllegalStateException("Invalid move type for the selected marbles and destination.");
+            System.out.println("Invalid move type for the selected marbles and destination.");
+            return false;
+            // throw new IllegalStateException("Invalid move type for the selected marbles
+            // and destination.");
         }
 
         if (!isPathValid()) {
-            throw new IllegalStateException("Invalid path, the selected marbles can not move in this direction.");
+            System.out.println("Invalid path, the selected marbles can not move in this direction.");
+            return false;
+            // throw new IllegalStateException("Invalid path, the selected marbles can not
+            // move in this direction.");
         }
 
         return true;
@@ -177,7 +191,9 @@ public class Move {
 
         Direction initialDirection = marbles.get(0).getDirectionOfNeighbor(marbles.get(1));
         if (initialDirection == null) {
-            throw new IllegalStateException("The first two Marbles are not neighbors.");
+            System.out.println("The first two Marbles are not neighbors.");
+            return false;
+            // throw new IllegalStateException("The first two Marbles are not neighbors.");
         }
 
         for (int i = 0; i < marbles.size() - 1; i++) {
@@ -210,7 +226,9 @@ public class Move {
                 moveType = MoveType.SINGLE;
                 return MoveType.SINGLE; // The marble and the destination marble are not neighbors
             } else {
-                throw new IllegalStateException("The destination cell is not a neighbor");
+                System.out.println("The destination cell is not a neighbor");
+                return null;
+                // throw new IllegalStateException("The destination cell is not a neighbor");
             }
         }
 
@@ -284,7 +302,9 @@ public class Move {
             case DOWNLEFT:
                 return Direction.UPRIGHT;
             default:
-                throw new IllegalArgumentException("Invalid direction: " + direction);
+                System.out.println("Invalid direction: " + direction);
+                return null;
+            // throw new IllegalArgumentException("Invalid direction: " + direction);
         }
     }
 
@@ -311,7 +331,9 @@ public class Move {
 
     public void executeMove() {
         if (!isValid()) {
-            throw new IllegalStateException("Attempted to execute an invalid move.");
+            System.out.println("Attempted to execute an invalid move.");
+            return;
+            // throw new IllegalStateException("Attempted to execute an invalid move.");
         }
 
         // Handle different types of moves
@@ -326,7 +348,9 @@ public class Move {
                 executeSideStepMove();
                 break;
             default:
-                throw new IllegalStateException("Unknown move type.");
+                System.out.println("Attempted to execute an invalid move.");
+                return;
+            // throw new IllegalStateException("Unknown move type.");
         }
 
         // Additional logic if needed (e.g., checking for winning conditions)
@@ -374,7 +398,7 @@ public class Move {
     private void pushOpponentMarbles() {
         Cell firstOpponentMarble = null;
         Cell secondOpponentMarble = null;
-    
+
         // Find the first and possibly second opponent marbles in the line of push
         Cell currentCell = dest;
         while (currentCell != null && currentCell.getState() == (player == 1 ? 2 : 1)) {
@@ -385,7 +409,7 @@ public class Move {
             }
             currentCell = currentCell.getNeighborInDirection(directionToDest);
         }
-    
+
         // Push the opponent marbles
         if (secondOpponentMarble != null) {
             pushMarble(secondOpponentMarble);
@@ -394,7 +418,7 @@ public class Move {
             pushMarble(firstOpponentMarble);
         }
     }
-    
+
     private void pushMarble(Cell marble) {
         Cell nextCell = marble.getNeighborInDirection(directionToDest);
         if (nextCell == null) { // Push marble off the board

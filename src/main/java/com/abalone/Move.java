@@ -131,7 +131,7 @@ public class Move {
 
     private boolean SumoMove() {
         int ourForce = marbles.size();
-        int theirForce = 0;
+        int theirForce = 1;
         // Start checking from the cell next to the destination in the direction of the
         // move
         Cell currentCell = dest.getNeighborInDirection(directionToDest);
@@ -417,12 +417,14 @@ public class Move {
         if (firstOpponentMarble != null) {
             pushMarble(firstOpponentMarble);
         }
+
     }
 
     private void pushMarble(Cell marble) {
         Cell nextCell = marble.getNeighborInDirection(directionToDest);
         if (nextCell == null) { // Push marble off the board
             marble.setState(0);
+            moveType = moveType.OUT_OF_THE_BOARD;
         } else if (nextCell.getState() == 0) { // Push marble to next cell
             nextCell.setState(marble.getState());
             marble.setState(0);

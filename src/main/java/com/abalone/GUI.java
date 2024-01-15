@@ -17,10 +17,14 @@ public class GUI {
     private int player;
     private List<Cell> marbles;
     private Cell dest;
+    private int blue_score;
+    private int red_score;
 
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
         this.player = 1;
+        this.blue_score = 0;
+        this.red_score = 0;
     }
 
     @FXML
@@ -85,12 +89,16 @@ public class GUI {
     }
 
     public void turn(Cell cell) {
-        if (cell.getState() == player) {
+        // if the marble is already pushed remove her
+        if (marbles.contains(cell)) {
+            marbles.remove(cell);
+            updateBoard(cell);
+        } else if (cell.getState() == player) {
             if (marbles.isEmpty()) {
                 marbles.add(cell);
                 cellPushed(cell);
             } else {
-                if (marbles.size() < 4) {
+                if (marbles.size() < 3) {
                     marbles.add(cell);
                     cellPushed(cell);
                 } else {
@@ -99,6 +107,9 @@ public class GUI {
                         updateCellGUI(cell2);
                     }
                     marbles.clear();
+                    marbles.add(cell);
+                    cellPushed(cell);
+                    System.out.println("Choose again please");
                 }
             }
         } else {
@@ -111,6 +122,30 @@ public class GUI {
                     System.out.println("The MoveType is: " + moveType);
 
                     move.executeMove();
+                    if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
+                        System.out.println("pushed");
+                        System.out.println("red_score:" + red_score);
+                        System.out.println("blue_score:" + blue_score);
+
+                        if (player == 1) {
+                            red_score++;
+                        } else {
+                            blue_score++;
+                        }
+                        System.out.println("pushed");
+                        System.out.println("red_score:" + red_score);
+                        System.out.println("blue_score:" + blue_score);
+                        if (red_score == 6 || blue_score == 6) {
+                            if (red_score == 6) {
+                                playerTurn.setText("THE RED PLAYER WON!!!!!!!");
+                                
+                            } else {
+                                playerTurn.setText("THE BLUE PLAYER WON!!!!!!!");
+                                
+                            }
+                        }
+                    }
+
                     updateBoard(cell);
                     changePlayer();
                     for (Cell cell2 : marbles) {
@@ -118,11 +153,16 @@ public class GUI {
                     }
                     marbles.clear();
                     System.out.println("Move executed.");
-                } else {
-                    System.out.println("Move is invalid.");
                 }
+            } else {
+                for (Cell cell2 : marbles)
+                    updateCellGUI(cell2);
+
+                marbles.clear();
+                System.out.println("Move is invalid.");
             }
         }
+
     }
 
     private void changePlayer() {

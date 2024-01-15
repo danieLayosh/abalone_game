@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.abalone.enums.MoveType;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -17,23 +19,29 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class GUI {
-    private GameBoard gameBoard;
+    private GameBoard gameBoard = new GameBoard();;
     private int player;
     private List<Cell> marbles;
     private Cell dest;
-    private int blue_score;
-    private int red_score;
+    private IntegerProperty blue_score;
+    private IntegerProperty red_score;
 
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
+        this.dest = null;
         this.player = 1;
-        this.blue_score = 0;
-        this.red_score = 0;
-        this.gameBoard = new GameBoard();
+        this.blue_score = new SimpleIntegerProperty(0);
+        this.red_score = new SimpleIntegerProperty(0);
     }
 
     @FXML
     private Label playerTurn;
+
+    @FXML
+    private Label redPoint;
+
+    @FXML
+    private Label bluePoint;
 
     @FXML
     private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
@@ -47,6 +55,8 @@ public class GUI {
             bt8_0, bt8_1, bt8_2, bt8_3, bt8_4;
 
     public void initialize() {
+        redPoint.textProperty().bind(red_score.asString());
+        bluePoint.textProperty().bind(blue_score.asString());
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
             try {
@@ -130,12 +140,13 @@ public class GUI {
                     updateBoard(cell);
                     if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                         if (player == 1) {
-                            red_score++;
+                            red_score.set(red_score.get() + 1);
                         } else {
-                            blue_score++;
+                            blue_score.set(blue_score.get() + 1);
                         }
-                        if (red_score == 6 || blue_score == 6)
+                        if (red_score.get() == 6 || blue_score.get() == 6) {
                             endGame();
+                        }
                     }
                     changePlayer();
                     for (Cell cell2 : marbles) {
@@ -156,39 +167,39 @@ public class GUI {
     }
 
     private void endGame() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Game Over");
-        if (player == 1) {
-            alert.setHeaderText("THE RED PLAYER WON!!!!");
-        } else
-            alert.setHeaderText("THE BLUE PLAYER WON!!!!");
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle("Game Over");
+    if (player == 1) {
+    alert.setHeaderText("THE RED PLAYER WON!!!!");
+    } else
+    alert.setHeaderText("THE BLUE PLAYER WON!!!!");
 
-        alert.setContentText("Do you want to play another game?");
+    alert.setContentText("Do you want to play another game?");
 
-        ButtonType buttonTypeYes = new ButtonType("Yes");
-        ButtonType buttonTypeNo = new ButtonType("No, exit");
+    ButtonType buttonTypeYes = new ButtonType("Yes");
+    ButtonType buttonTypeNo = new ButtonType("No, exit");
 
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+    alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
-        alert.showAndWait().ifPresent(response -> {
-            if (response == buttonTypeYes) {
-                restartGame();
-            } else if (response == buttonTypeNo) {
-                System.exit(0); // or close the window
-            }
-        });
+    alert.showAndWait().ifPresent(response -> {
+    if (response == buttonTypeYes) {
+    restartGame();
+    } else if (response == buttonTypeNo) {
+    System.exit(0); // or close the window
+    }
+    });
     }
 
     private void restartGame() {
-        // Reset all necessary variables and UI components to start a new game
-        // Example:
-        this.player = 2;
-        this.blue_score = 0;
-        this.red_score = 0;
-        this.gameBoard = new GameBoard();
-        this.marbles.clear();
+    // Reset all necessary variables and UI components to start a new game
+    // Example:
+    this.player = 2;
+    this.blue_score = new SimpleIntegerProperty(0);
+    this.red_score = new SimpleIntegerProperty(0);
+    this.gameBoard = new GameBoard();
+    this.marbles.clear();
 
-        initialize();
+    initialize();
     }
 
     private void changePlayer() {

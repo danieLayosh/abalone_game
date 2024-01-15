@@ -246,5 +246,9 @@ public class GameBoard {
     public Collection<Cell> getCells() {
         return board.keySet();
     }
+    
+    public Map<Cell, Map<Cell, Direction>> getBoard() {
+        return board;
+    }
 
 }

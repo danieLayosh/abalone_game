@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Set;
 
 public class App extends Application {
 
@@ -37,11 +38,14 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
-        // GameBoard gameBoard = new GameBoard();
-        // gameBoard.printBoardWithCoordinates();
-        // Computer computer = new Computer(gameBoard, 1);
-        // computer.calculateCenterDistances();
+        // launch();
+        GameBoard gameBoard = new GameBoard();
+        gameBoard.printBoardWithCoordinates();
+        Computer computer = new Computer(gameBoard, 1);
+        System.out.println("");
+        for (Cell cell : computer.myCells) {
+            System.out.print(cell.formatCoordinate() + ", ");
+        }
     }
 
 }

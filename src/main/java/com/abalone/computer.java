@@ -17,30 +17,35 @@ public class Computer {
         this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
         this.myCells = board.keySet();
-        // myCells();
         this.player = player;
+        myCells();
     }
 
-    // gets all the player marbles in a set
-    // private void myCells() {
-    //     Iterator<Cell> iterator = myCells.iterator();
-    //     while (iterator.hasNext()) {
-    //         Cell cell = iterator.next();
-    //         if (cell.getState() != player) {
-    //             iterator.remove(); // Use iterator's remove method
-    //         }
-    //     }
-    // }
-
-    public void calculateCenterDistances() {
-        Cell center = new Cell(4, 4, 0); // Assuming EMPTY is a constant for an empty cell
-        center.convertToCube();
-
-        for (Cell cell : board.keySet()) {
-            cell.convertToCube();
-            int distance = cell.distanceFrom(center);
-            System.out.println(cell.formatCoordinate() + " = " + distance);
+    // gets all the player marbles that are neighbors to at least one of the
+    // player's cells
+    private void myCells() {
+        Iterator<Cell> iterator = myCells.iterator();
+        while (iterator.hasNext()) {
+            Cell cell = iterator.next();
+            // Keep the cell if it's a neighbor of a player's cell and is either empty or
+            // belongs to the opponent
+            if (!isNeighborOfPlayerCell(cell)) {
+                iterator.remove();
+            }
         }
+    }
+
+    // Check if a cell is a neighbor of at least one of the player's cells and is
+    // either empty or belongs to the opponent
+    private boolean isNeighborOfPlayerCell(Cell cell) {
+        for (Cell neighbor : cell.getNeighbors()) {
+            if (neighbor.getState() == player) {
+                // For each neighbor of the cell, check if it is empty or belongs to the
+                // opponent
+                return cell.getState() == 0 || cell.getState() != player;
+            }
+        }
+        return false;
     }
 
 }

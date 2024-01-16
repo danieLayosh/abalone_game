@@ -1,7 +1,9 @@
 package com.abalone;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import com.abalone.enums.Direction;
 
@@ -111,20 +113,12 @@ public class Cell {
         this.score = score;
     }
 
-    public void convertToCube() {
-        this.z = -this.x - this.y;
-    }
-
-    public int distanceFrom(Cell other) {
-        int x1 = this.x;
-        int z1 = this.y;
-        int y1 = -x1 - z1;
-
-        int x2 = other.x;
-        int z2 = other.y;
-        int y2 = -x2 - z2;
-
-        return (Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(z1 - z2)) / 2;
+    // Method to get neighbor cells
+    public Set<Cell> getNeighbors() {
+        if (neighborsMap == null) {
+            return new HashSet<>(); // Return an empty set if neighborsMap is null
+        }
+        return new HashSet<>(neighborsMap.keySet());
     }
 
 }

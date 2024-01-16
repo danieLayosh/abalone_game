@@ -37,11 +37,11 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        // launch();
-        GameBoard gameBoard = new GameBoard();
-        gameBoard.printBoardWithCoordinates();
-        Computer computer = new Computer(gameBoard, 1);
-        computer.calculateCenterDistances();
+        launch();
+        // GameBoard gameBoard = new GameBoard();
+        // gameBoard.printBoardWithCoordinates();
+        // Computer computer = new Computer(gameBoard, 1);
+        // computer.calculateCenterDistances();
     }
 
 }

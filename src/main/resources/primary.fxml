@@ -117,7 +117,7 @@
                <children>
                   <ImageView blendMode="SRC_ATOP" fitHeight="568.0" fitWidth="609.0">
                      <image>
-                        <Image url="@board_background.gif" />
+                        <Image url="@/board_background.gif" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />

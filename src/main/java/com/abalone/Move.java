@@ -32,6 +32,10 @@ public class Move {
         this.marblesUsed = new HashMap<>();
     }
 
+    public Map<Cell, Integer> getMarblesUsed() {
+        return marblesUsed;
+    }
+
     public List<Cell> getMarbles() {
         return marbles;
     }
@@ -122,14 +126,12 @@ public class Move {
                 return false;
             }
         }
-        System.out.println("sideStepMoveValid");
         return true;
     }
 
     private boolean inlineMove() {
         // The dest cell is empty, the marbles can move in this direction.
         if (dest.getState() == 0) {
-            System.out.println("Inline to empty space");
             return true;
         }
 
@@ -373,12 +375,12 @@ public class Move {
 
     private void executeInlineOrSingleMove() {
         for (Cell cell : marbles) {
-            if(!marblesUsed.containsKey(cell))
-            marblesUsed.put(cell, cell.getState());// for the undo function
+            if (!marblesUsed.containsKey(cell))
+                marblesUsed.put(cell, cell.getState());// for the undo function
         }
-        if(!marblesUsed.containsKey(dest))
-        marblesUsed.put(dest, dest.getState());// for the undo function
-        
+        if (!marblesUsed.containsKey(dest))
+            marblesUsed.put(dest, dest.getState());// for the undo function
+
         if (dest.getState() == 0) {
             boolean reverseOrder = directionToDest == Direction.DOWNLEFT ||
                     directionToDest == Direction.DOWNRIGHT || directionToDest == Direction.RIGHT;
@@ -451,7 +453,7 @@ public class Move {
         if (nextCell == null) { // Push marble off the board
             marblesUsed.put(marble, marble.getState());// for the undo function
             marble.setState(0);
-            moveType = moveType.OUT_OF_THE_BOARD;
+            moveType = MoveType.OUT_OF_THE_BOARD;
         } else if (nextCell.getState() == 0) { // Push marble to next cell
             // marblesUsed.put(nextCell, nextCell.getState());// for the undo function
             nextCell.setState(marble.getState());

@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import com.abalone.enums.Direction;
-import com.abalone.enums.MoveType;
 
 public class Computer {
-    private GameBoard gameBoard;
     private int player;
     private Map<Cell, Map<Cell, Direction>> board;
     private List<Cell> myMarbles; // List to store your marbles
@@ -18,7 +15,6 @@ public class Computer {
     private ArrayList<Move> moves;
 
     public Computer(GameBoard gameBoard, int player) {
-        this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
         this.player = player;
 
@@ -28,7 +24,7 @@ public class Computer {
 
         cellsToMoveTo(); // Filter cells to move to
         updateMyMarbles(); // Update the list of your marbles
-        printDebugInfo(); // Add this for debugging
+        // printDebugInfo(); // Add this for debugging
 
         generateValidMoves(); // Generate all valid moves
     }
@@ -67,7 +63,7 @@ public class Computer {
     }
 
     // Method to generate all valid moves
-    public void generateValidMoves() {
+    private void generateValidMoves() {
         for (int i = 0; i < myMarbles.size(); i++) {
             for (int j = i; j < myMarbles.size(); j++) {
                 for (int k = j; k < myMarbles.size(); k++) {
@@ -99,15 +95,18 @@ public class Computer {
         }
     }
 
-    private void printDebugInfo() {
-        // Print cellsToMoveTo for debugging
-        System.out.println("Cells To Move To: " + cellsToMoveTo.stream()
-                .map(Cell::formatCoordinate)
-                .collect(Collectors.joining(", ")));
-        // Print board cells and their states
-        System.out.println("Board Cells:");
-        board.keySet().forEach(cell -> System.out.println(cell.formatCoordinate() + ": State " + cell.getState()));
-    }
+    /*
+     * private void printDebugInfo() {
+     * // Print cellsToMoveTo for debugging
+     * System.out.println("Cells To Move To: " + cellsToMoveTo.stream()
+     * .map(Cell::formatCoordinate)
+     * .collect(Collectors.joining(", ")));
+     * // Print board cells and their states
+     * System.out.println("Board Cells:");
+     * board.keySet().forEach(cell -> System.out.println(cell.formatCoordinate() +
+     * ": State " + cell.getState()));
+     * }
+     */
 
     public Move computerTurn() {
         if (moves.isEmpty()) {
@@ -115,10 +114,32 @@ public class Computer {
             return null;
         }
 
+        int bestEvaluation = 0;
+        Move bestMove = moves.get(0);
+        for (Move move : moves) {
+            int evaluation = evaluatesBoardState(move);
+            if (evaluation > bestEvaluation) {
+                bestMove = move;
+                bestEvaluation = evaluation;
+            }
+        }
+
         // Choose a random move from the list of possible moves
         Random random = new Random();
         int randomIndex = random.nextInt(moves.size());
-        return moves.get(randomIndex);
+        bestMove = moves.get(randomIndex);
+        return bestMove;
+    }
+
+    private int evaluatesBoardState(Move move) {
+        int distaceScore = evaluateDistanceScoe(); 
+        
+        return 0;
+    }
+
+    private int evaluateDistanceScoe() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'evaluateDistanceScoe'");
     }
 
 }

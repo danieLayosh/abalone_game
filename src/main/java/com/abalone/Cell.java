@@ -10,7 +10,7 @@ import com.abalone.enums.Direction;
 import javafx.scene.control.Button;
 
 public class Cell {
-    private int x, y, z; // Coordinates on the board
+    private int x, y; // Coordinates on the board
     private int State; // 0 for empty, 1 for player 1 and 2 for player 2
     private Map<Cell, Direction> neighborsMap;
     private Button bt;

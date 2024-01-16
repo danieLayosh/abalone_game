@@ -382,7 +382,7 @@ public class GameBoard {
         printBoard();
         try {
             if (move.isValid()) {
-                System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
+                //System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
                 MoveType moveType = move.getMoveType();
                 System.out.println("The MoveType is: " + moveType);
 

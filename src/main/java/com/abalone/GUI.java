@@ -25,13 +25,11 @@ public class GUI {
     private GameBoard gameBoard = new GameBoard();;
     private int player;
     private List<Cell> marbles;
-    private Cell dest;
     private IntegerProperty blue_score;
     private IntegerProperty red_score;
 
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
-        this.dest = null;
         this.player = 1;
         this.blue_score = new SimpleIntegerProperty(0);
         this.red_score = new SimpleIntegerProperty(0);
@@ -179,20 +177,24 @@ public class GUI {
 
     }
 
-    public void updateBoard() {
+    public void updateBoard(Move move) {
         for (Cell cell : gameBoard.getCells()) {
             updateCellGUI(cell);
         }
+
+        // for (Cell cell : move.getMarblesUsed().keySet()) {
+        // updateCellGUI(cell);
+        // }
     }
 
     private void computerPlay() {
         Computer computer = new Computer(gameBoard, player);
-        computer.printAllMoves();
+        // computer.printAllMoves();
         Move move = computer.computerTurn();
         move.executeMove();
 
         if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
-            red_score.set(red_score.get() + 1);
+            blue_score.set(blue_score.get() + 1);
             Image image = new Image("abalone2.gif");
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(35); // Set height
@@ -204,14 +206,15 @@ public class GUI {
             endGame();
         }
 
-        updateBoard();
+        updateBoard(move);
+
         changePlayer();
         marbles.clear();
-        System.out.println("Move executed.");
+        System.out.println("Computer Move executed.");
 
         // move.undoMove();
         // System.out.println("Move undo" + move.toString());
-        // updateBoard();
+        // updateBoard(move);
     }
 
     public void turn(Cell cell) {
@@ -227,7 +230,7 @@ public class GUI {
                     cellPushed(cell);
                 } else {
                     marbles.remove(cell);
-                    System.out.println("The marble is not an inline neighbor");
+                    System.out.println("The marble is not an inline neighbor.");
                 }
             } else {
                 if (marbles.size() < 3) {
@@ -237,64 +240,62 @@ public class GUI {
                         cellPushed(cell);
                     } else {
                         marbles.remove(cell);
-                        System.out.println("The marble is not an inline neighbor");
+                        System.out.println("The marble is not an inline neighbor.");
                     }
                 } else {
-                    System.out.println("To much marbles");
-                    for (Cell cell2 : marbles) {
-                        updateCellGUI(cell2);
-                    }
+                    System.out.println("To much marbles, Choose again please.");
                     marbles.clear();
                     marbles.add(cell);
                     cellPushed(cell);
-                    System.out.println("Choose again please");
                 }
             }
         } else {
             if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1) && !marbles.isEmpty()) {
-                dest = cell;
                 Move move = new Move(marbles, cell, player);
-                if (move.isValid()) {
-                    System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
-                    MoveType moveType = move.getMoveType();
-                    System.out.println("The MoveType is: " + moveType);
-
-                    move.executeMove();
-                    updateBoard();
-                    if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
-                        if (player == 1) {
-                            red_score.set(red_score.get() + 1);
-                            Image image = new Image("abalone2.gif");
-                            ImageView imageView = new ImageView(image);
-                            imageView.setFitHeight(35); // Set height
-                            imageView.setPreserveRatio(true);
-                            redHBox.getChildren().add(imageView);
-                        } else {
-                            blue_score.set(blue_score.get() + 1);
-                            Image image = new Image("abalone1.gif");
-                            ImageView imageView = new ImageView(image);
-                            imageView.setFitHeight(35); // Set height
-                            imageView.setPreserveRatio(true);
-                            blueHBox.getChildren().add(imageView);
-                        }
-                        if (red_score.get() == 6 || blue_score.get() == 6) {
-                            endGame();
-                        }
-                    }
-                    for (Cell cell2 : marbles) {
-                        updateCellGUI(cell2);
-                    }
-                    changePlayer();
-                    marbles.clear();
-                    System.out.println("Move executed.");
-                }
+                move.executeMove();
+                executeTheTurn(move);
             } else {
-                for (Cell cell2 : marbles)
-                    updateCellGUI(cell2);
-
                 marbles.clear();
                 System.out.println("Move is invalid.");
             }
+        }
+    }
+
+    /**
+     * @param cell
+     */
+    private void executeTheTurn(Move move) {
+        if (move.isValid()) {
+            // System.out.println("Move to " + move.getDirectionToDest() + " direction is
+            // valid.");
+            System.out.println("The MoveType is: " + move.getMoveType());
+            updateBoard(move);
+            if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
+                if (player == 1) {
+                    red_score.set(red_score.get() + 1);
+                    Image image = new Image("abalone2.gif");
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(35); // Set height
+                    imageView.setPreserveRatio(true);
+                    redHBox.getChildren().add(imageView);
+                } else {
+                    blue_score.set(blue_score.get() + 1);
+                    Image image = new Image("abalone1.gif");
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitHeight(35); // Set height
+                    imageView.setPreserveRatio(true);
+                    blueHBox.getChildren().add(imageView);
+                }
+                if (red_score.get() == 6 || blue_score.get() == 6) {
+                    endGame();
+                }
+            }
+            // for (Cell cell2 : marbles) {
+            // updateCellGUI(cell2);
+            // }
+            changePlayer();
+            marbles.clear();
+            System.out.println("Player Move executed.");
         }
     }
 

@@ -52,6 +52,31 @@ public class GameBoard {
             // board.put(cell, neighborsWithDirection);
             cell.setNeighborsMap(neighborsWithDirection);
         }
+        // sets cells scores
+        cellsScore();
+    }
+
+    private void cellsScore() {
+        Direction dir[] = { Direction.DOWNLEFT, Direction.LEFT, Direction.UPLEFT, Direction.UPRIGHT, Direction.RIGHT,
+                Direction.DOWNRIGHT };
+
+        double score = 0;
+        Cell currnt = getCellAt(4, 4);
+        currnt.setScore(score);
+        score++;
+        Cell temp = currnt;
+        for (int i = 1; i <= 4; i++) {
+            temp = temp.getNeighborInDirection(Direction.RIGHT);
+            for (int d = 0; d < 6; d++) {
+                for (int h = 0; h < i; h++) {
+                    temp = temp.getNeighborInDirection(dir[d]);
+                    temp.setScore(score);
+                    if (i > 1 && h != i - 1)
+                        temp.setScore(score + 0.5);
+                }
+            }
+            score++;
+        }
     }
 
     // Finds and returns a list of neighboring cells for a given cell

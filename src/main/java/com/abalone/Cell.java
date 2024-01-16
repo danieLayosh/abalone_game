@@ -12,7 +12,7 @@ public class Cell {
     private int State; // 0 for empty, 1 for player 1 and 2 for player 2
     private Map<Cell, Direction> neighborsMap;
     private Button bt;
-    private int score;
+    private double score;
 
     public Cell(int x, int y, int State) {
         this.x = x;
@@ -103,11 +103,11 @@ public class Cell {
         this.bt = bt;
     }
 
-    public int getScore() {
+    public double getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 

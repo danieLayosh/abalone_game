@@ -3,9 +3,11 @@ package com.abalone;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.abalone.enums.Direction;
+import com.abalone.enums.MoveType;
 
 public class Computer {
     private GameBoard gameBoard;
@@ -105,6 +107,18 @@ public class Computer {
         // Print board cells and their states
         System.out.println("Board Cells:");
         board.keySet().forEach(cell -> System.out.println(cell.formatCoordinate() + ": State " + cell.getState()));
+    }
+
+    public Move computerTurn() {
+        if (moves.isEmpty()) {
+            // No valid moves available, return null or handle this case as needed
+            return null;
+        }
+
+        // Choose a random move from the list of possible moves
+        Random random = new Random();
+        int randomIndex = random.nextInt(moves.size());
+        return moves.get(randomIndex);
     }
 
 }

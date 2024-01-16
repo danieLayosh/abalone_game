@@ -2,6 +2,7 @@ package com.abalone;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +29,7 @@ public class Move {
         this.moveType = null;
         this.directionToDest = null;
         this.sizeInLine = marbles.size();
+        this.marblesUsed = new HashMap<>();
     }
 
     public List<Cell> getMarbles() {
@@ -46,34 +48,38 @@ public class Move {
         sortMarbles(); // Ensure marbles are sorted before validation
 
         if (marbles.size() < 1 || marbles.size() > 3) {
-            System.out.println("Invalid number of marbles selected.");
+            // System.out.println("Invalid number of marbles selected.");
             return false;
             // throw new IllegalStateException("Invalid number of marbles selected.");
         }
 
         if (!marblesBelongToPlayer()) {
-            System.out.println("One or more of the marbles do not belong to the player.");
+            // System.out.println("One or more of the marbles do not belong to the
+            // player.");
             return false;
             // throw new IllegalStateException("One or more of the marbles do not belong to
             // the player.");
         }
 
         if (!areMarblesInlineAndAdjacent()) {
-            System.out.println("The marbles are not in an inline formation and/or not adjacent.");
+            // System.out.println("The marbles are not in an inline formation and/or not
+            // adjacent.");
             return false;
             // throw new IllegalStateException("The marbles are not in an inline formation
             // and/or not adjacent.");
         }
 
         if (determineMoveType(marbles, dest) == null) {
-            System.out.println("Invalid move type for the selected marbles and destination.");
+            // System.out.println("Invalid move type for the selected marbles and
+            // destination.");
             return false;
             // throw new IllegalStateException("Invalid move type for the selected marbles
             // and destination.");
         }
 
         if (!isPathValid()) {
-            System.out.println("Invalid path, the selected marbles can not move in this direction.");
+            // System.out.println("Invalid path, the selected marbles can not move in this
+            // direction.");
             return false;
             // throw new IllegalStateException("Invalid path, the selected marbles can not
             // move in this direction.");
@@ -197,7 +203,7 @@ public class Move {
 
         Direction initialDirection = marbles.get(0).getDirectionOfNeighbor(marbles.get(1));
         if (initialDirection == null) {
-            System.out.println("The first two Marbles are not neighbors.");
+            // System.out.println("The first two Marbles are not neighbors.");
             return false;
             // throw new IllegalStateException("The first two Marbles are not neighbors.");
         }
@@ -208,8 +214,9 @@ public class Move {
             Direction direction = currentMarble.getDirectionOfNeighbor(nextMarble);
 
             if (direction != initialDirection || direction == null) {
-                System.out.println("Marbles are not neighbors: " + currentMarble.formatCoordinate() + " + "
-                        + nextMarble.formatCoordinate());
+                // System.out.println("Marbles are not neighbors: " +
+                // currentMarble.formatCoordinate() + " + "
+                // + nextMarble.formatCoordinate());
                 return false;
             }
 
@@ -233,7 +240,7 @@ public class Move {
                 moveType = MoveType.SINGLE;
                 return MoveType.SINGLE; // The marble and the destination marble are not neighbors
             } else {
-                System.out.println("The destination cell is not a neighbor");
+                // System.out.println("The destination cell is not a neighbor");
                 return null;
                 // throw new IllegalStateException("The destination cell is not a neighbor");
             }
@@ -342,12 +349,12 @@ public class Move {
             return;
             // throw new IllegalStateException("Attempted to execute an invalid move.");
         }
-
+        marblesUsed.clear();
         // Handle different types of moves
         switch (moveType) {
             case SINGLE:
-                marblesUsed.put(marbles.get(0), player);
-                marblesUsed.put(dest, 0);
+                marblesUsed.put(marbles.get(0), marbles.get(0).getState());
+                marblesUsed.put(dest, dest.getState());
                 marbles.get(0).setState(0);
                 dest.setState(player);
             case INLINE:
@@ -365,8 +372,14 @@ public class Move {
     }
 
     private void executeInlineOrSingleMove() {
+        for (Cell cell : marbles) {
+            if(!marblesUsed.containsKey(cell))
+            marblesUsed.put(cell, cell.getState());// for the undo function
+        }
+        if(!marblesUsed.containsKey(dest))
+        marblesUsed.put(dest, dest.getState());// for the undo function
+        
         if (dest.getState() == 0) {
-
             boolean reverseOrder = directionToDest == Direction.DOWNLEFT ||
                     directionToDest == Direction.DOWNRIGHT || directionToDest == Direction.RIGHT;
 
@@ -420,32 +433,44 @@ public class Move {
 
         // Push the opponent marbles
         if (secondOpponentMarble != null) {
+            marblesUsed.put(secondOpponentMarble, secondOpponentMarble.getState());
             pushMarble(secondOpponentMarble);
         }
         if (firstOpponentMarble != null) {
+            marblesUsed.put(firstOpponentMarble, firstOpponentMarble.getState());
             pushMarble(firstOpponentMarble);
         }
 
     }
 
     private void pushMarble(Cell marble) {
+        // marblesUsed.put(marble, marble.getState());// for the undo function
         Cell nextCell = marble.getNeighborInDirection(directionToDest);
+
+        // needs some work for the ubdo here
         if (nextCell == null) { // Push marble off the board
+            marblesUsed.put(marble, marble.getState());// for the undo function
             marble.setState(0);
             moveType = moveType.OUT_OF_THE_BOARD;
         } else if (nextCell.getState() == 0) { // Push marble to next cell
+            // marblesUsed.put(nextCell, nextCell.getState());// for the undo function
             nextCell.setState(marble.getState());
             marble.setState(0);
         }
     }
 
     private void executeSideStepMove() {
+
         Cell currentCell, nextCell;
         for (Cell marble : marbles) {
+            marblesUsed.put(marble, marble.getState());// for the undo function
+
             currentCell = marble;
             nextCell = currentCell.getNeighborInDirection(directionToDest);
 
             if (nextCell != null && nextCell.getState() == 0) {
+                marblesUsed.put(nextCell, nextCell.getState()); // for the undo function
+
                 nextCell.setState(currentCell.getState()); // Move the marble to the next cell
                 currentCell.setState(0); // Set the current cell to empty
             }
@@ -490,7 +515,9 @@ public class Move {
     }
 
     public void undoMove() {
-
+        for (Cell cell : marblesUsed.keySet()) {
+            cell.setState(marblesUsed.get(cell));
+        }
     }
 
 }

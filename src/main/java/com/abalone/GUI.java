@@ -78,20 +78,10 @@ public class GUI {
                     cell.setBt(cellButton);
                     updateCellGUI(cell);
 
-                    // Event handler for mouse entering the button area
+                    // Event handler for mouse entering and exiting the button area
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
-                    // { // Actions to perform when the mouse enters the button
-                    // System.out.println("Mouse entered button");
-                    // // Example: change the button style
-                    // cellButton.setStyle("-fx-background-color: #6699ff; -fx-text-fill: white;");
-                    // });
-                    // Event handler for mouse exiting the button area
                     cellButton.setOnMouseExited(event -> endHover(cell));
-                    // { // Actions to perform when the mouse exits the button
-                    // System.out.println("Mouse exited button");
-                    // // Example: revert the button style to default
-                    // cellButton.setStyle("");
-                    // });
+
                     cellButton.setOnAction(event -> turn(cell));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -102,7 +92,7 @@ public class GUI {
     }
 
     private void hoverOn(Cell cell) {
-        System.out.println("Mouse entered button");
+        // System.out.println("Mouse entered button");
         if (cell.getState() == player) {
             if (marbles.isEmpty()) {
                 cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill: white;");
@@ -164,7 +154,7 @@ public class GUI {
     }
 
     private void endHover(Cell cell) {
-        System.out.println("Mouse exited button");
+        // System.out.println("Mouse exited button");
         cell.getBt().setStyle("");
     }
 
@@ -189,14 +179,42 @@ public class GUI {
 
     }
 
-    public void updateBoard(Cell cell) {
-        for (Cell cell2 : gameBoard.getCells()) {
-            updateCellGUI(cell2);
+    public void updateBoard() {
+        for (Cell cell : gameBoard.getCells()) {
+            updateCellGUI(cell);
         }
     }
 
-    public void turn(Cell cell) {
+    private void computerPlay() {
+        Computer computer = new Computer(gameBoard, player);
+        computer.printAllMoves();
+        Move move = computer.computerTurn();
+        move.executeMove();
 
+        if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
+            red_score.set(red_score.get() + 1);
+            Image image = new Image("abalone2.gif");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(35); // Set height
+            imageView.setPreserveRatio(true);
+            redHBox.getChildren().add(imageView);
+        }
+
+        if (red_score.get() == 6 || blue_score.get() == 6) {
+            endGame();
+        }
+
+        updateBoard();
+        changePlayer();
+        marbles.clear();
+        System.out.println("Move executed.");
+
+        // move.undoMove();
+        // System.out.println("Move undo" + move.toString());
+        // updateBoard();
+    }
+
+    public void turn(Cell cell) {
         // if the marble is already pushed remove her
         if (marbles.contains(cell)) {
             marbles.remove(cell);
@@ -242,7 +260,7 @@ public class GUI {
                     System.out.println("The MoveType is: " + moveType);
 
                     move.executeMove();
-                    updateBoard(cell);
+                    updateBoard();
                     if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                         if (player == 1) {
                             red_score.set(red_score.get() + 1);
@@ -263,10 +281,10 @@ public class GUI {
                             endGame();
                         }
                     }
-                    changePlayer();
                     for (Cell cell2 : marbles) {
                         updateCellGUI(cell2);
                     }
+                    changePlayer();
                     marbles.clear();
                     System.out.println("Move executed.");
                 }
@@ -278,7 +296,6 @@ public class GUI {
                 System.out.println("Move is invalid.");
             }
         }
-
     }
 
     private void endGame() {
@@ -320,6 +337,7 @@ public class GUI {
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
         if (player == 2) {
+            computerPlay();
             playerTurn.setText("Blue Turn");
             playerTurn.setTextFill(Color.BLUE);
         }
@@ -348,4 +366,5 @@ public class GUI {
         imageView.setEffect(colorAdjust);
         cell.getBt().setGraphic(imageView);
     }
+
 }

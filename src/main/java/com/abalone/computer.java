@@ -1,44 +1,35 @@
 package com.abalone;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.abalone.enums.Direction;
 
 public class Computer {
     private GameBoard gameBoard;
     private int player;
-    Map<Cell, Map<Cell, Direction>> board;
-    Set<Cell> myCells;
+    private Map<Cell, Map<Cell, Direction>> board;
+    private List<Cell> myMarbles; // List to store your marbles
+    private List<Cell> cellsToMoveTo;
+    private ArrayList<Move> moves;
 
     public Computer(GameBoard gameBoard, int player) {
         this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
-        this.myCells = board.keySet();
+        this.cellsToMoveTo = new ArrayList<>(board.keySet());
         this.player = player;
-        initializeMyCells(); // Initialize myCells set
-        myCells();
+        this.moves = new ArrayList<>();
+        this.myMarbles = new ArrayList<>(); // Initialize the list of your marbles
+        cellsToMoveTo();
+        updateMyMarbles(); // Update the list of your marbles
     }
 
-    // Initialize myCells set with a copy of the board's key set
-    private void initializeMyCells() {
-        myCells = new HashSet<>(board.keySet());
-    }
-
-    // gets all the player marbles that are neighbors to at least one of the
-    // player's cells
-    private void myCells() {
-        Iterator<Cell> iterator = myCells.iterator();
-        while (iterator.hasNext()) {
-            Cell cell = iterator.next();
-            // Keep the cell if it's a neighbor of a player's cell and is either empty or
-            // belongs to the opponent
-            if (!isNeighborOfPlayerCell(cell)) {
-                iterator.remove();
-            }
-        }
+    private void cellsToMoveTo() {
+        cellsToMoveTo.removeIf(cell -> !isNeighborOfPlayerCell(cell));
     }
 
     // Check if a cell is a neighbor of at least one of the player's cells and is
@@ -52,6 +43,23 @@ public class Computer {
             }
         }
         return false;
+    }
+
+    public void printPotentialCells() {
+        for (Cell cell : cellsToMoveTo) {
+            System.out.print(cell.formatCoordinate() + ": " + cell.getScore() + ", ");
+        }
+    }
+
+    // Update the list of your marbles
+    private void updateMyMarbles() {
+        myMarbles = cellsToMoveTo.stream()
+                .filter(cell -> cell.getState() == player)
+                .collect(Collectors.toList());
+    }
+
+    private void moves() {
+
     }
 
 }

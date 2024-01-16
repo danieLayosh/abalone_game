@@ -14,6 +14,7 @@ public class Move {
     private Cell dest;
     private int player;
     private MoveType moveType;
+    private int sizeInLine;
 
     public Move(List<Cell> marbles, Cell dest, int player) {
         this.marbles = marbles;
@@ -22,6 +23,7 @@ public class Move {
         this.marblesDirection = null;
         this.moveType = null;
         this.directionToDest = null;
+        this.sizeInLine = marbles.size();
     }
 
     public List<Cell> getMarbles() {
@@ -391,7 +393,7 @@ public class Move {
             System.out.println("Cannot execute Sumo move: push not possible.");
             return;
         }
-
+        
         pushOpponentMarbles();
         executeInlineOrSingleMove();
     }
@@ -443,6 +445,10 @@ public class Move {
                 currentCell.setState(0); // Set the current cell to empty
             }
         }
+    }
+
+    public int getSizeInLine() {
+        return sizeInLine;
     }
 
 }

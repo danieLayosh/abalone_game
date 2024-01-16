@@ -354,8 +354,8 @@ public class Move {
         // Handle different types of moves
         switch (moveType) {
             case SINGLE:
-                marblesUsed.put(marbles.get(0), marbles.get(0).getState());
-                marblesUsed.put(dest, dest.getState());
+                marblesUsed.put(marbles.get(0), player);
+                marblesUsed.put(dest, 0);
                 marbles.get(0).setState(0);
                 dest.setState(player);
             case INLINE:
@@ -434,27 +434,32 @@ public class Move {
 
         // Push the opponent marbles
         if (secondOpponentMarble != null) {
-            marblesUsed.put(secondOpponentMarble, secondOpponentMarble.getState());
+            if (!marblesUsed.containsKey(secondOpponentMarble))
+                marblesUsed.put(secondOpponentMarble, secondOpponentMarble.getState());
             pushMarble(secondOpponentMarble);
         }
         if (firstOpponentMarble != null) {
-            marblesUsed.put(firstOpponentMarble, firstOpponentMarble.getState());
+            if (!marblesUsed.containsKey(firstOpponentMarble))
+                marblesUsed.put(firstOpponentMarble, firstOpponentMarble.getState());
             pushMarble(firstOpponentMarble);
         }
 
     }
 
     private void pushMarble(Cell marble) {
-        marblesUsed.put(marble, marble.getState());// for the undo function
+        if (!marblesUsed.containsKey(marble))
+            marblesUsed.put(marble, marble.getState());// for the undo function
         Cell nextCell = marble.getNeighborInDirection(directionToDest);
 
         // needs some work for the ubdo here
         if (nextCell == null) { // Push marble off the board
-            marblesUsed.put(marble, marble.getState());// for the undo function
+            if (!marblesUsed.containsKey(marble))
+                marblesUsed.put(marble, marble.getState());// for the undo function
             marble.setState(0);
             moveType = MoveType.OUT_OF_THE_BOARD;
         } else if (nextCell.getState() == 0) { // Push marble to next cell
-            // marblesUsed.put(nextCell, nextCell.getState());// for the undo function
+            if (!marblesUsed.containsKey(marble))
+                marblesUsed.put(nextCell, nextCell.getState());// for the undo function
             nextCell.setState(marble.getState());
             marble.setState(0);
         }
@@ -516,6 +521,7 @@ public class Move {
     }
 
     public void undoMove() {
+        
         for (Cell cell : marblesUsed.keySet()) {
             cell.setState(marblesUsed.get(cell));
         }

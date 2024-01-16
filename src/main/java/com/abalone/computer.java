@@ -70,6 +70,7 @@ public class Computer {
 
     // Method to generate all valid moves
     private void generateValidMoves() {
+        moves.clear();
         for (int i = 0; i < myMarbles.size(); i++) {
             for (int j = i; j < myMarbles.size(); j++) {
                 for (int k = j; k < myMarbles.size(); k++) {
@@ -122,26 +123,44 @@ public class Computer {
 
         double bestEvaluation = 0;
         Move bestMove = moves.get(0);
-        // for (Move move : moves) {
-        // double evaluation = evaluatesBoardState(move);
-        // if (evaluation > bestEvaluation) {
-        // bestMove = move;
-        // bestEvaluation = evaluation;
-        // }
-        // }
-
-        // System.out.println(bestMove.toString() + "evaluatesBoardState is: " +
-        // evaluatesBoardState(bestMove));
-        ArrayList<Move> moves2 = new ArrayList<>();
         for (Move move : moves) {
-            if (move.getMoveType() == MoveType.INLINE || move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
-                moves2.add(move);
+            double evaluation = evaluatesBoardState(move);
+            if (evaluation > bestEvaluation) {
+                bestMove = move;
+                bestEvaluation = evaluation;
             }
         }
+        System.out.println(bestMove.toString());
+        System.out.println("before");
+
+        for (Cell cell : bestMove.getMarblesUsed().keySet()) {
+            System.out.print(cell.formatCoordinate() + " - ");
+        }
+        System.out.println();
+        System.out.println("after");
+
+        bestMove.executeMove();
+
+        bestMove.undoMove();
+
+        for (Cell cell : bestMove.getMarblesUsed().keySet()) {
+            System.out.print(cell.formatCoordinate() + " - ");
+        }
+        System.out.println();
+
+
+        // ArrayList<Move> moves2 = new ArrayList<>();
+        // for (Move move : moves) {
+        // if (move.getMoveType() == MoveType.INLINE || move.getMoveType() ==
+        // MoveType.OUT_OF_THE_BOARD) {
+        // moves2.add(move);
+        // }
+        // }
         // Choose a random move from the list of possible moves
-        Random random = new Random();
-        int randomIndex = random.nextInt(moves2.size());
-        bestMove = moves2.get(randomIndex);
+        // Random random = new Random();
+        // int randomIndex = random.nextInt(moves2.size());
+        // bestMove = moves2.get(randomIndex);
+
         return bestMove;
     }
 

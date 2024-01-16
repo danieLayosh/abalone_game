@@ -4,12 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -77,6 +77,21 @@ public class GUI {
                 if (cellButton != null) {
                     cell.setBt(cellButton);
                     updateCellGUI(cell);
+
+                    // Event handler for mouse entering the button area
+                    cellButton.setOnMouseEntered(event -> hoverOn(cell));
+                    // { // Actions to perform when the mouse enters the button
+                    // System.out.println("Mouse entered button");
+                    // // Example: change the button style
+                    // cellButton.setStyle("-fx-background-color: #6699ff; -fx-text-fill: white;");
+                    // });
+                    // Event handler for mouse exiting the button area
+                    cellButton.setOnMouseExited(event -> endHover(cell));
+                    // { // Actions to perform when the mouse exits the button
+                    // System.out.println("Mouse exited button");
+                    // // Example: revert the button style to default
+                    // cellButton.setStyle("");
+                    // });
                     cellButton.setOnAction(event -> turn(cell));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -84,6 +99,73 @@ public class GUI {
                 // Handle exception or log error
             }
         }
+    }
+
+    private void hoverOn(Cell cell) {
+        System.out.println("Mouse entered button");
+        if (cell.getState() == player) {
+            if (marbles.isEmpty()) {
+                cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill: white;");
+            } else {
+                marbles.add(cell);
+                Move move = new Move(marbles, cell, player);
+                if (move.areMarblesInlineAndAdjacent()) {
+                    cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill: white;");
+                }
+                marbles.remove(cell);
+            }
+        } else {
+            Move move = new Move(marbles, cell, player);
+            if (move.isValid()) {
+                // show direction on the marbles
+                Direction direction = move.getDirectionToDest();
+                String playerColor = (player == 1) ? "red" : "blue";
+                Image image = null;
+                switch (direction) {
+                    case LEFT:
+                        image = new Image(playerColor + "Left.gif");
+                        setMarblesImageDirection(image);
+                        break;
+                    case RIGHT:
+                        image = new Image(playerColor + "Right.gif");
+                        setMarblesImageDirection(image);
+                        break;
+                    case UPLEFT:
+                        image = new Image(playerColor + "UpLeft.gif");
+                        setMarblesImageDirection(image);
+                        break;
+                    case UPRIGHT:
+                        image = new Image(playerColor + "UpRight.gif");
+                        setMarblesImageDirection(image);
+                        break;
+                    case DOWNLEFT:
+                        image = new Image(playerColor + "DownLeft.gif");
+                        setMarblesImageDirection(image);
+                        break;
+                    case DOWNRIGHT:
+                        image = new Image(playerColor + "DownRight.gif");
+                        setMarblesImageDirection(image);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+    }
+
+    private void setMarblesImageDirection(Image image) {
+        for (Cell cell : marbles) {
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(35);
+            imageView.setPreserveRatio(true);
+            cell.getBt().setGraphic(imageView);
+        }
+    }
+
+    private void endHover(Cell cell) {
+        System.out.println("Mouse exited button");
+        cell.getBt().setStyle("");
     }
 
     public void updateCellGUI(Cell cell) {
@@ -114,18 +196,31 @@ public class GUI {
     }
 
     public void turn(Cell cell) {
+
         // if the marble is already pushed remove her
         if (marbles.contains(cell)) {
             marbles.remove(cell);
-            updateBoard(cell);
+            updateCellGUI(cell);
         } else if (cell.getState() == player) {
             if (marbles.isEmpty()) {
                 marbles.add(cell);
-                cellPushed(cell);
+                Move move = new Move(marbles, cell, player);
+                if (move.areMarblesInlineAndAdjacent()) {
+                    cellPushed(cell);
+                } else {
+                    marbles.remove(cell);
+                    System.out.println("The marble is not an inline neighbor");
+                }
             } else {
                 if (marbles.size() < 3) {
                     marbles.add(cell);
-                    cellPushed(cell);
+                    Move move = new Move(marbles, cell, player);
+                    if (move.areMarblesInlineAndAdjacent()) {
+                        cellPushed(cell);
+                    } else {
+                        marbles.remove(cell);
+                        System.out.println("The marble is not an inline neighbor");
+                    }
                 } else {
                     System.out.println("To much marbles");
                     for (Cell cell2 : marbles) {

@@ -184,7 +184,7 @@ public class Move {
      * 
      * @return true if all marbles are in line, false otherwise.
      */
-    private boolean areMarblesInlineAndAdjacent() {
+    public boolean areMarblesInlineAndAdjacent() {
         if (marbles.size() == 1) {
             return true; // Single marble
         }
@@ -202,10 +202,9 @@ public class Move {
             Direction direction = currentMarble.getDirectionOfNeighbor(nextMarble);
 
             if (direction != initialDirection || direction == null) {
-                System.out.println("\"Marbles are not neighbors: \" + currentMarble.formatCoordinate()\r\n and \" + nextMarble.formatCoordinate()");
+                System.out.println("Marbles are not neighbors: " + currentMarble.formatCoordinate() + " + "
+                        + nextMarble.formatCoordinate());
                 return false;
-                // throw new IllegalStateException("Marbles are not neighbors: " + currentMarble.formatCoordinate()
-                //         + " and " + nextMarble.formatCoordinate());
             }
 
         }

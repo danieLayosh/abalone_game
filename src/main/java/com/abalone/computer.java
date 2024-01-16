@@ -1,8 +1,6 @@
 package com.abalone;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,6 +24,7 @@ public class Computer {
         this.myMarbles = new ArrayList<>(); // Initialize the list of your marbles
         cellsToMoveTo();
         updateMyMarbles(); // Update the list of your marbles
+        generateValidMoves(); // get all the valid moves
     }
 
     private void cellsToMoveTo() {
@@ -58,8 +57,27 @@ public class Computer {
                 .collect(Collectors.toList());
     }
 
-    private void moves() {
+    // Method to generate all valid moves
+    public void generateValidMoves() {
+        for (int i = 0; i < myMarbles.size(); i++) {
+            for (int j = i; j < myMarbles.size(); j++) {
+                for (int k = j; k < myMarbles.size(); k++) {
+                    List<Cell> marblesToMove = new ArrayList<>();
+                    marblesToMove.add(myMarbles.get(i));
+                    if (j != i)
+                        marblesToMove.add(myMarbles.get(j));
+                    if (k != j && k != i)
+                        marblesToMove.add(myMarbles.get(k));
 
+                    for (Cell destination : cellsToMoveTo) {
+                        Move potentialMove = new Move(marblesToMove, destination, player);
+                        if (potentialMove.isValid() && !moves.contains(potentialMove)) {
+                            moves.add(potentialMove);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

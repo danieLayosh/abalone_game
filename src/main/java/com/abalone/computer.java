@@ -18,13 +18,17 @@ public class Computer {
     public Computer(GameBoard gameBoard, int player) {
         this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
-        this.cellsToMoveTo = new ArrayList<>(board.keySet());
         this.player = player;
+
+        this.cellsToMoveTo = new ArrayList<>(board.keySet());
         this.moves = new ArrayList<>();
         this.myMarbles = new ArrayList<>(); // Initialize the list of your marbles
-        cellsToMoveTo();
+
+        cellsToMoveTo(); // Filter cells to move to
         updateMyMarbles(); // Update the list of your marbles
-        generateValidMoves(); // get all the valid moves
+        printDebugInfo(); // Add this for debugging
+
+        generateValidMoves(); // Generate all valid moves
     }
 
     private void cellsToMoveTo() {
@@ -52,9 +56,12 @@ public class Computer {
 
     // Update the list of your marbles
     private void updateMyMarbles() {
-        myMarbles = cellsToMoveTo.stream()
-                .filter(cell -> cell.getState() == player)
-                .collect(Collectors.toList());
+        myMarbles.clear(); // Clear existing marbles
+        for (Cell cell : board.keySet()) {
+            if (cell.getState() == player) {
+                myMarbles.add(cell); // Add the cell if it belongs to the player
+            }
+        }
     }
 
     // Method to generate all valid moves
@@ -78,6 +85,26 @@ public class Computer {
                 }
             }
         }
+    }
+
+    public void printAllMoves() {
+        if (moves.isEmpty()) {
+            System.out.println("No moves available.");
+            return;
+        }
+        for (Move move : moves) {
+            System.out.println(move.toString());
+        }
+    }
+
+    private void printDebugInfo() {
+        // Print cellsToMoveTo for debugging
+        System.out.println("Cells To Move To: " + cellsToMoveTo.stream()
+                .map(Cell::formatCoordinate)
+                .collect(Collectors.joining(", ")));
+        // Print board cells and their states
+        System.out.println("Board Cells:");
+        board.keySet().forEach(cell -> System.out.println(cell.formatCoordinate() + ": State " + cell.getState()));
     }
 
 }

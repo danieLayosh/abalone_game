@@ -38,12 +38,14 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        // launch();
+        launch();
         GameBoard gameBoard = new GameBoard();
         gameBoard.printBoardWithCoordinates();
         Computer computer = new Computer(gameBoard, 1);
-        gameBoard.printBoardScore();
-        computer.printPotentialCells();
+        // gameBoard.printBoardScore();
+        // computer.printPotentialCells();
+        computer.printAllMoves();
+        gameBoard.printBoardWithCoordinates();
     }
 
 }

@@ -3,6 +3,8 @@ package com.abalone;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
@@ -15,6 +17,8 @@ public class Move {
     private int player;
     private MoveType moveType;
     private int sizeInLine;
+
+    private Map<Cell, Integer> marblesUsed;
 
     public Move(List<Cell> marbles, Cell dest, int player) {
         this.marbles = marbles;
@@ -342,6 +346,8 @@ public class Move {
         // Handle different types of moves
         switch (moveType) {
             case SINGLE:
+                marblesUsed.put(marbles.get(0), player);
+                marblesUsed.put(dest, 0);
                 marbles.get(0).setState(0);
                 dest.setState(player);
             case INLINE:
@@ -356,7 +362,6 @@ public class Move {
             // throw new IllegalStateException("Unknown move type.");
         }
 
-        // Additional logic if needed (e.g., checking for winning conditions)
     }
 
     private void executeInlineOrSingleMove() {
@@ -393,7 +398,7 @@ public class Move {
             System.out.println("Cannot execute Sumo move: push not possible.");
             return;
         }
-        
+
         pushOpponentMarbles();
         executeInlineOrSingleMove();
     }
@@ -449,6 +454,43 @@ public class Move {
 
     public int getSizeInLine() {
         return sizeInLine;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Move with marbles: ");
+        for (Cell marble : marbles) {
+            sb.append(marble.formatCoordinate()).append(", ");
+        }
+        sb.append("Destination: ").append(dest.formatCoordinate());
+        sb.append(", Player: ").append(player);
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Move move = (Move) o;
+        return player == move.player &&
+                sizeInLine == move.sizeInLine &&
+                Objects.equals(marbles, move.marbles) &&
+                marblesDirection == move.marblesDirection &&
+                directionToDest == move.directionToDest &&
+                Objects.equals(dest, move.dest) &&
+                moveType == move.moveType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(marbles, marblesDirection, directionToDest, dest, player, moveType, sizeInLine);
+    }
+
+    public void undoMove() {
+
     }
 
 }

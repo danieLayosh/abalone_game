@@ -8,10 +8,11 @@ import com.abalone.enums.Direction;
 import javafx.scene.control.Button;
 
 public class Cell {
-    private int x, y; // Coordinates on the board
+    private int x, y, z; // Coordinates on the board
     private int State; // 0 for empty, 1 for player 1 and 2 for player 2
     private Map<Cell, Direction> neighborsMap;
     private Button bt;
+    private int score;
 
     public Cell(int x, int y, int State) {
         this.x = x;
@@ -41,7 +42,7 @@ public class Cell {
 
     public void setState(int State) {
         this.State = State;
-        
+
     }
 
     public Map<Cell, Direction> getNeighborsMap() {
@@ -100,6 +101,30 @@ public class Cell {
 
     public void setBt(Button bt) {
         this.bt = bt;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void convertToCube() {
+        this.z = -this.x - this.y;
+    }
+
+    public int distanceFrom(Cell other) {
+        int x1 = this.x;
+        int z1 = this.y;
+        int y1 = -x1 - z1;
+
+        int x2 = other.x;
+        int z2 = other.y;
+        int y2 = -x2 - z2;
+
+        return (Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(z1 - z2)) / 2;
     }
 
 }

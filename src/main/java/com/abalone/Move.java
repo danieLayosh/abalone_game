@@ -169,7 +169,7 @@ public class Move {
 
         // We can push if we have greater force
         if (ourForce > theirForce) {
-            System.out.println("sumoMove");
+            // System.out.println("sumoMove");
             return true;
         }
         return ourForce > theirForce;
@@ -349,7 +349,6 @@ public class Move {
         if (!isValid()) {
             System.out.println("Attempted to execute an invalid move.");
             return;
-            // throw new IllegalStateException("Attempted to execute an invalid move.");
         }
         marblesUsed.clear();
         // Handle different types of moves
@@ -446,7 +445,7 @@ public class Move {
     }
 
     private void pushMarble(Cell marble) {
-        // marblesUsed.put(marble, marble.getState());// for the undo function
+        marblesUsed.put(marble, marble.getState());// for the undo function
         Cell nextCell = marble.getNeighborInDirection(directionToDest);
 
         // needs some work for the ubdo here

@@ -79,7 +79,7 @@ public class GUI {
                     // Event handler for mouse entering and exiting the button area
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
                     cellButton.setOnMouseExited(event -> endHover(cell));
-
+                    
                     cellButton.setOnAction(event -> turn(cell));
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -212,6 +212,9 @@ public class GUI {
         marbles.clear();
         System.out.println("Computer Move executed.");
 
+        // gameBoard.printBoardScore();
+        // gameBoard.printBoardWithCoordinates();
+        
         // move.undoMove();
         // System.out.println("Move undo" + move.toString());
         // updateBoard(move);
@@ -252,7 +255,6 @@ public class GUI {
         } else {
             if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1) && !marbles.isEmpty()) {
                 Move move = new Move(marbles, cell, player);
-                move.executeMove();
                 executeTheTurn(move);
             } else {
                 marbles.clear();
@@ -269,6 +271,8 @@ public class GUI {
             // System.out.println("Move to " + move.getDirectionToDest() + " direction is
             // valid.");
             System.out.println("The MoveType is: " + move.getMoveType());
+            move.executeMove();
+
             updateBoard(move);
             if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                 if (player == 1) {

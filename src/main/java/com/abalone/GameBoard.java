@@ -60,10 +60,10 @@ public class GameBoard {
         Direction dir[] = { Direction.DOWNLEFT, Direction.LEFT, Direction.UPLEFT, Direction.UPRIGHT, Direction.RIGHT,
                 Direction.DOWNRIGHT };
 
-        double score = 0;
+        double score = 4;
         Cell currnt = getCellAt(4, 4);
         currnt.setScore(score);
-        score++;
+        score--;
         Cell temp = currnt;
         for (int i = 1; i <= 4; i++) {
             temp = temp.getNeighborInDirection(Direction.RIGHT);
@@ -72,10 +72,10 @@ public class GameBoard {
                     temp = temp.getNeighborInDirection(dir[d]);
                     temp.setScore(score);
                     if (i > 1 && h != i - 1)
-                        temp.setScore(score + 0.5);
+                        temp.setScore(score - 0.5);
                 }
             }
-            score++;
+            score--;
         }
     }
 
@@ -277,6 +277,26 @@ public class GameBoard {
 
     public Map<Cell, Map<Cell, Direction>> getBoard() {
         return board;
+    }
+
+    public void printBoardScore() {
+        // Iterate through each row
+        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
+            // Print leading spaces for hexagonal alignment
+            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
+                System.out.print(" ");
+            }
+
+            // Print cells in the row
+            for (int y = 0; y < getRowLength(x); y++) {
+                Cell cell = getCellAt(x, y);
+                // System.out.print(cell.getState() + " ");
+                System.out.print(cell.getScore() + " ");
+            }
+
+            // Move to the next line after printing each row
+            System.out.println();
+        }
     }
 
     public void printBoard() {

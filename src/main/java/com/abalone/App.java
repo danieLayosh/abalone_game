@@ -43,8 +43,9 @@ public class App extends Application {
         gameBoard.printBoardWithCoordinates();
         Computer computer = new Computer(gameBoard, 1);
         System.out.println("");
+        gameBoard.printBoardScore();
         for (Cell cell : computer.myCells) {
-            System.out.print(cell.formatCoordinate() + ", ");
+            System.out.print(cell.formatCoordinate() + ": " + cell.getScore() + ", ");
         }
     }
 

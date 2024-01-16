@@ -1,6 +1,6 @@
 package com.abalone;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -18,7 +18,13 @@ public class Computer {
         this.board = gameBoard.getBoard();
         this.myCells = board.keySet();
         this.player = player;
+        initializeMyCells(); // Initialize myCells set
         myCells();
+    }
+
+    // Initialize myCells set with a copy of the board's key set
+    private void initializeMyCells() {
+        myCells = new HashSet<>(board.keySet());
     }
 
     // gets all the player marbles that are neighbors to at least one of the

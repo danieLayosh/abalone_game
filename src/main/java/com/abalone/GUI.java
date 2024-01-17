@@ -98,14 +98,10 @@ public class GUI {
 
                     // Create a KeyCodeCombination for Ctrl+Z
                     KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
-                    // Add a key event handler to handle Ctrl+Z
-                    // Assuming you have a primary stage or scene variable, replace 'primaryStage'
-                    // or 'scene' with your actual variable
                     stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                         if (ctrlZ.match(event)) {
                             // Perform your action here, for example:
                             undoMove(); // if you want to trigger the undoMove method
-                            // System.out.println("Ctrl+Z pressed"); // or any other action
                         }
                     });
                 }

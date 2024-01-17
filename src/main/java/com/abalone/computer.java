@@ -135,12 +135,13 @@ public class Computer {
             return null;
         }
 
-        double bestEvaluation = 0;
+        double bestEvaluation = -99999.0;
         Move bestMove = moves.get(0);
         ArrayList<Move> bestMoves = new ArrayList<>();
         bestMoves.add(bestMove);
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
+            // double evaluation = (player == 1) ? Math.abs(evaluatesBoardState(move)) : evaluatesBoardState(move);
             if (evaluation > bestEvaluation) {
                 bestMoves.clear();
                 bestEvaluation = evaluation;
@@ -148,8 +149,8 @@ public class Computer {
             if (evaluation == bestEvaluation) {
                 bestMove = move;
                 bestMoves.add(bestMove);
+                System.out.println(move.toString() + " The score is: " + evaluation);
             }
-            System.out.println(move.toString() + " The score is: " + evaluation);
         }
 
         // Choose a random move from the list of possible moves
@@ -157,10 +158,11 @@ public class Computer {
         int randomIndex = 0;
         System.out.println("Total moves: " + moves.size());
         System.out.println("Bests moves: " + bestMoves.size());
-        if (bestMoves.size() > 0) {
+        if (bestMoves.size() == 0) {
             randomIndex = random.nextInt(bestMoves.size());
         }
         bestMove = bestMoves.get(randomIndex);
+        System.out.println(" ");
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
 
         return bestMove;

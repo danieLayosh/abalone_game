@@ -93,8 +93,8 @@ public class GUI {
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
-                    cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
-                    // cellButton.setOnAction(event -> computerPlay()); //computer vs computer
+                    // cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
+                    cellButton.setOnAction(event -> computerPlay()); // computer vs computer
 
                     // Create a KeyCodeCombination for Ctrl+Z
                     KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
@@ -122,7 +122,7 @@ public class GUI {
         if (computerMove != null && playerMove != null) {
             computerMove.undoMove();
             playerMove.undoMove();
-            updateBoard(playerMove);
+            updateBoard();
         }
     }
 
@@ -214,7 +214,7 @@ public class GUI {
 
     }
 
-    public void updateBoard(Move move) {
+    public void updateBoard() {
         for (Cell cell : gameBoard.getCells()) {
             updateCellGUI(cell);
         }
@@ -247,6 +247,7 @@ public class GUI {
                     cellPushed(cell);
                 } else {
                     marbles.remove(cell);
+                    updateCellGUI(cell);
                     System.out.println("The marble is not an inline neighbor.");
                 }
             } else {
@@ -257,11 +258,13 @@ public class GUI {
                         cellPushed(cell);
                     } else {
                         marbles.remove(cell);
+                        updateCellGUI(cell);
                         System.out.println("The marble is not an inline neighbor.");
                     }
                 } else {
                     System.out.println("To much marbles, Choose again please.");
                     marbles.clear();
+                    updateBoard();
                     marbles.add(cell);
                     cellPushed(cell);
                 }
@@ -285,7 +288,8 @@ public class GUI {
         if (move != null && move.isValid()) {
 
             move.executeMove();
-            updateBoard(move);
+
+            updateBoard();
 
             LastTwoMove.add(move);// For the undo move button
 

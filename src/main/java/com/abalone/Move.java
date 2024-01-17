@@ -51,45 +51,40 @@ public class Move {
     public boolean isValid() {
         sortMarbles(); // Ensure marbles are sorted before validation
 
-        if (marbles.size() < 1 || marbles.size() > 3) {
+        if (isNotSizeValid()) {
             // System.out.println("Invalid number of marbles selected.");
             return false;
-            // throw new IllegalStateException("Invalid number of marbles selected.");
         }
 
         if (!marblesBelongToPlayer()) {
             // System.out.println("One or more of the marbles do not belong to the
             // player.");
             return false;
-            // throw new IllegalStateException("One or more of the marbles do not belong to
-            // the player.");
         }
 
         if (!areMarblesInlineAndAdjacent()) {
             // System.out.println("The marbles are not in an inline formation and/or not
             // adjacent.");
             return false;
-            // throw new IllegalStateException("The marbles are not in an inline formation
-            // and/or not adjacent.");
         }
 
         if (determineMoveType(marbles, dest) == null) {
             // System.out.println("Invalid move type for the selected marbles and
             // destination.");
             return false;
-            // throw new IllegalStateException("Invalid move type for the selected marbles
-            // and destination.");
         }
 
         if (!isPathValid()) {
             // System.out.println("Invalid path, the selected marbles can not move in this
             // direction.");
             return false;
-            // throw new IllegalStateException("Invalid path, the selected marbles can not
-            // move in this direction.");
         }
 
         return true;
+    }
+
+    private boolean isNotSizeValid() {
+        return (marbles.size() < 1 || marbles.size() > 3);
     }
 
     /**

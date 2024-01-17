@@ -15,11 +15,35 @@ public class Cell {
     private Map<Cell, Direction> neighborsMap;
     private Button bt;
     private double score;
+    private boolean isborder;
 
     public Cell(int x, int y, int State) {
         this.x = x;
         this.y = y;
         this.State = State;
+        this.isborder = isBorder();
+    }
+
+    private boolean isBorder() {
+        if (x == 0 || x == 8) {
+            return true;
+        } else {
+            if (y == 0) {
+                return true;
+            } else {
+                return getRowLength(x) == y+1;
+            }
+        }
+    }
+
+    public static int getRowLength(int x) {
+        if (x < 4) {
+            return 5 + x; // Rows 0 to 3 increase in length
+        } else if (x < 5) {
+            return 9; // Middle row has the maximum length
+        } else {
+            return 13 - x; // Rows 5 to 8 decrease in length
+        }
     }
 
     public int getX() {
@@ -119,6 +143,10 @@ public class Cell {
             return new HashSet<>(); // Return an empty set if neighborsMap is null
         }
         return new HashSet<>(neighborsMap.keySet());
+    }
+
+    public boolean getIsborder() {
+        return isborder;
     }
 
 }

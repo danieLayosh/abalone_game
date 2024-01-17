@@ -199,6 +199,25 @@ public class GameBoard {
         }
     }
 
+    public void printBoardBorders() {
+        // Iterate through each row
+        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
+            // Print leading spaces for hexagonal alignment
+            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
+                System.out.print(" ");
+            }
+
+            // Print cells in the row
+            for (int y = 0; y < getRowLength(x); y++) {
+                Cell cell = getCellAt(x, y);
+                System.out.print(((cell.getIsborder() == true) ? 1 : 0) + " ");
+            }
+
+            // Move to the next line after printing each row
+            System.out.println();
+        }
+    }
+
     public static int getRowLength(int x) {
         if (x < 4) {
             return 5 + x; // Rows 0 to 3 increase in length

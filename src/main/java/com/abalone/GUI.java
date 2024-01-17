@@ -230,8 +230,9 @@ public class GUI {
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
 
-        gameBoard.printBoardScore();
-        // gameBoard.printBoardWithCoordinates();
+        // gameBoard.printBoardScore();
+        gameBoard.printBoardWithCoordinates();
+        // gameBoard.printBoardBorders();
     }
 
     public void turn(Cell cell) {

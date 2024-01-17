@@ -31,7 +31,7 @@ public class Computer {
         updateMarblesList(); // Update the list of your marbles
         // printDebugInfo(); // Add this for debugging
 
-        generateValidMoves(myMarbles);// Generate all valid moves
+        generateValidMoves();// Generate all valid moves
     }
 
     private void cellsToMoveTo() {
@@ -83,20 +83,19 @@ public class Computer {
     }
 
     // Method to generate all valid moves
-    private void generateValidMoves(List<Cell> marbles) {
+    private void generateValidMoves() {
         moves.clear();
-        for (int i = 0; i < marbles.size(); i++) {
-            for (int j = i; j < marbles.size(); j++) {
-                for (int k = j; k < marbles.size(); k++) {
+        for (int i = 0; i < myMarbles.size(); i++) {
+            for (int j = i; j < myMarbles.size(); j++) {
+                for (int k = j; k < myMarbles.size(); k++) {
                     List<Cell> marblesToMove = new ArrayList<>();
-                    marblesToMove.add(marbles.get(i));
+                    marblesToMove.add(myMarbles.get(i));
                     if (j != i)
-                        marblesToMove.add(marbles.get(j));
+                        marblesToMove.add(myMarbles.get(j));
                     if (k != j && k != i)
-                        marblesToMove.add(marbles.get(k));
+                        marblesToMove.add(myMarbles.get(k));
 
-                    for (Cell destination : (marbles.get(0).getState() == player) ? myCellsToMoveTo
-                            : opponentsCellsToMoveTo) {
+                    for (Cell destination : myCellsToMoveTo) {
                         Move potentialMove = new Move(marblesToMove, destination, player);
                         if (potentialMove.isValid() && !moves.contains(potentialMove)) {
                             moves.add(potentialMove);
@@ -150,21 +149,16 @@ public class Computer {
             }
         }
 
-        // ArrayList<Move> bestMoves = new ArrayList<>();
-        // for (Move move : moves) {
-        // if (move.getMoveType() == MoveType.INLINE || move.getMoveType() ==
-        // MoveType.OUT_OF_THE_BOARD) {
-        // moves2.add(move);
-        // }
-        // }
         // Choose a random move from the list of possible moves
-        Random random = new Random();
-        int randomIndex;
-        if (bestMoves.size() > 0) {
-            randomIndex = random.nextInt(bestMoves.size());
-        } else
-            randomIndex = 0;
-        bestMove = bestMoves.get(randomIndex);
+        // Random random = new Random();
+        // int randomIndex;
+        System.out.println(moves.size());
+        System.out.println(bestMoves.size());
+        // if (bestMoves.size() > 0) {
+        //     randomIndex = random.nextInt(bestMoves.size());
+        // } else
+        //     randomIndex = 0;
+        // bestMove = bestMoves.get(randomIndex);
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
 
         return bestMove;
@@ -184,13 +178,18 @@ public class Computer {
     }
 
     private double evaluateGroupScore() {
-        double GroupScore = 0.0;
+        double MyGroupScore = 0.0;
         for (Move move : moves) {
-            GroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
+            MyGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
         }
-        generateValidMoves(opponentsMarbles);
+        
+        generateValidMoves();
+        double opponentsGroupScore = 0.0;
+        for (Move move : moves) {
+            opponentsGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
+        }
 
-        return GroupScore;
+        return MyGroupScore - opponentsGroupScore;
     }
 
     private double evaluateDistanceScore() {

@@ -21,8 +21,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 
 public class GUI {
+    private Stage stage;
     private GameBoard gameBoard = new GameBoard();;
     private int player;
     private List<Cell> marbles;
@@ -89,6 +95,19 @@ public class GUI {
 
                     cellButton.setOnAction(event -> turn(cell));
                     // cellButton.setOnAction(event -> computerPlay()); //computer vs computer
+
+                    // Create a KeyCodeCombination for Ctrl+Z
+                    KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+                    // Add a key event handler to handle Ctrl+Z
+                    // Assuming you have a primary stage or scene variable, replace 'primaryStage'
+                    // or 'scene' with your actual variable
+                    stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+                        if (ctrlZ.match(event)) {
+                            // Perform your action here, for example:
+                            undoMove(); // if you want to trigger the undoMove method
+                            // System.out.println("Ctrl+Z pressed"); // or any other action
+                        }
+                    });
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Error linking cell to button: " + e.getMessage());
@@ -216,7 +235,7 @@ public class GUI {
         System.out.println("Computer Move executed.");
 
         gameBoard.printBoardScore();
-        gameBoard.printBoardWithCoordinates();
+        // gameBoard.printBoardWithCoordinates();
     }
 
     public void turn(Cell cell) {
@@ -267,7 +286,7 @@ public class GUI {
      * @param cell
      */
     private void executeTheTurn(Move move) {
-        if (move.isValid()) {
+        if (move != null && move.isValid()) {
 
             move.executeMove();
             updateBoard(move);
@@ -338,9 +357,9 @@ public class GUI {
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
         if (player == 2) {
+            computerPlay();
             playerTurn.setText("Blue Turn");
             playerTurn.setTextFill(Color.BLUE);
-            computerPlay();
         }
         if (player == 1) {
             playerTurn.setText("Red Turn");
@@ -366,6 +385,10 @@ public class GUI {
         colorAdjust.setBrightness(-0.5); // Adjust this value between -1 and 0 to control darkness
         imageView.setEffect(colorAdjust);
         cell.getBt().setGraphic(imageView);
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
 }

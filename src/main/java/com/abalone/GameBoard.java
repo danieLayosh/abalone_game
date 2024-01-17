@@ -172,7 +172,7 @@ public class GameBoard {
             for (int y = 0; y < getRowLength(x); y++) {
                 Cell cell = getCellAt(x, y);
                 // System.out.print(cell.getState() + " ");
-                System.out.print(cell.getScore() + " ");
+                System.out.print("["+cell.getScore() + "]");
             }
 
             // Move to the next line after printing each row

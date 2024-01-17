@@ -13,14 +13,16 @@ public class Computer {
     private Map<Cell, Map<Cell, Direction>> board;
     private List<Cell> myMarbles; // List to store your marbles
     private List<Cell> opponentsMarbles; // List to store opponents marbles
-    private List<Cell> cellsToMoveTo;
+    private List<Cell> myCellsToMoveTo;
+    private List<Cell> opponentsCellsToMoveTo;
     private ArrayList<Move> moves;
 
     public Computer(GameBoard gameBoard, int player) {
         this.board = gameBoard.getBoard();
         this.player = player;
 
-        this.cellsToMoveTo = new ArrayList<>(board.keySet());
+        this.myCellsToMoveTo = new ArrayList<>(board.keySet());
+        this.opponentsCellsToMoveTo = new ArrayList<>(board.keySet());
         this.moves = new ArrayList<>();
         this.myMarbles = new ArrayList<>();
         this.opponentsMarbles = new ArrayList<>();
@@ -29,11 +31,23 @@ public class Computer {
         updateMarblesList(); // Update the list of your marbles
         // printDebugInfo(); // Add this for debugging
 
-        generateValidMoves(); // Generate all valid moves
+        generateValidMoves(myMarbles);// Generate all valid moves
     }
 
     private void cellsToMoveTo() {
-        cellsToMoveTo.removeIf(cell -> !isNeighborOfPlayerCell(cell));
+        myCellsToMoveTo.removeIf(cell -> !isNeighborOfPlayerCell(cell));
+        opponentsCellsToMoveTo.removeIf(cell -> !isNeighborOfOpponentCell(cell));
+    }
+
+    private boolean isNeighborOfOpponentCell(Cell cell) {
+        for (Cell neighbor : cell.getNeighbors()) {
+            if (neighbor.getState() == ((player == 1) ? 2 : 1)) {
+                // For each neighbor of the cell, check if it is empty or belongs to the
+                // opponent
+                return cell.getState() == 0 || cell.getState() == player;
+            }
+        }
+        return false;
     }
 
     // Check if a cell is a neighbor of at least one of the player's cells and is
@@ -50,7 +64,7 @@ public class Computer {
     }
 
     public void printPotentialCells() {
-        for (Cell cell : cellsToMoveTo) {
+        for (Cell cell : myCellsToMoveTo) {
             System.out.print(cell.formatCoordinate() + ": " + cell.getScore() + ", ");
         }
     }
@@ -69,19 +83,19 @@ public class Computer {
     }
 
     // Method to generate all valid moves
-    private void generateValidMoves() {
+    private void generateValidMoves(List<Cell> marbles) {
         moves.clear();
-        for (int i = 0; i < myMarbles.size(); i++) {
-            for (int j = i; j < myMarbles.size(); j++) {
-                for (int k = j; k < myMarbles.size(); k++) {
+        for (int i = 0; i < marbles.size(); i++) {
+            for (int j = i; j < marbles.size(); j++) {
+                for (int k = j; k < marbles.size(); k++) {
                     List<Cell> marblesToMove = new ArrayList<>();
-                    marblesToMove.add(myMarbles.get(i));
+                    marblesToMove.add(marbles.get(i));
                     if (j != i)
-                        marblesToMove.add(myMarbles.get(j));
+                        marblesToMove.add(marbles.get(j));
                     if (k != j && k != i)
-                        marblesToMove.add(myMarbles.get(k));
+                        marblesToMove.add(marbles.get(k));
 
-                    for (Cell destination : cellsToMoveTo) {
+                    for (Cell destination : (marbles.get(0).getState() == player) ? myCellsToMoveTo:opponentsCellsToMoveTo) {
                         Move potentialMove = new Move(marblesToMove, destination, player);
                         if (potentialMove.isValid() && !moves.contains(potentialMove)) {
                             moves.add(potentialMove);
@@ -125,13 +139,14 @@ public class Computer {
         Move bestMove = moves.get(0);
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
+            System.out.println(bestMove.toString() + " The score is: " + evaluation);
             if (evaluation > bestEvaluation) {
                 bestMove = move;
                 bestEvaluation = evaluation;
             }
         }
 
-        System.out.println(bestMove.toString());
+        System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
 
         // ArrayList<Move> moves2 = new ArrayList<>();
         // for (Move move : moves) {
@@ -154,9 +169,21 @@ public class Computer {
 
         double distanceScore = evaluateDistanceScore();// evaluates score from the distances
 
+        // double marblesGroupScore = evaluateGroupScore();
+
         move.undoMove();// undo the move to get it back before checking another move.
 
         return distanceScore;
+    }
+
+    private double evaluateGroupScore() {
+        double GroupScore = 0.0;
+        for (Move move : moves) {
+            GroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
+        }
+        generateValidMoves(opponentsMarbles); 
+
+        return GroupScore;
     }
 
     private double evaluateDistanceScore() {

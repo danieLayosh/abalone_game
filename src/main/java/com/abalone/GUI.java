@@ -3,6 +3,7 @@ package com.abalone;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
@@ -27,12 +28,14 @@ public class GUI {
     private List<Cell> marbles;
     private IntegerProperty blue_score;
     private IntegerProperty red_score;
+    private Stack<Move> LastTwoMove;
 
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
         this.player = 1;
         this.blue_score = new SimpleIntegerProperty(0);
         this.red_score = new SimpleIntegerProperty(0);
+        this.LastTwoMove = new Stack<>();
     }
 
     @FXML
@@ -49,6 +52,9 @@ public class GUI {
 
     @FXML
     private Label bluePoint;
+
+    @FXML
+    private Button undoBt;
 
     @FXML
     private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
@@ -81,11 +87,26 @@ public class GUI {
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
                     cellButton.setOnAction(event -> turn(cell));
+                    undoBt.setOnAction(event -> undoMove());
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Error linking cell to button: " + e.getMessage());
                 // Handle exception or log error
             }
+        }
+    }
+
+    private void undoMove() {
+        Move computerMove = null, playerMove = null;
+        if (!LastTwoMove.empty()) {
+            computerMove = LastTwoMove.pop();
+            if (!LastTwoMove.empty())
+                playerMove = LastTwoMove.pop();
+        }
+        if (computerMove != null && playerMove != null) {
+            computerMove.undoMove();
+            playerMove.undoMove();
+            updateBoard(playerMove);
         }
     }
 
@@ -189,7 +210,6 @@ public class GUI {
 
     private void computerPlay() {
         Computer computer = new Computer(gameBoard, player);
-        // computer.printAllMoves();
         Move move = computer.computerTurn();
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
@@ -247,10 +267,12 @@ public class GUI {
      */
     private void executeTheTurn(Move move) {
         if (move.isValid()) {
-            System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
-            move.executeMove();
 
+            move.executeMove();
             updateBoard(move);
+
+            LastTwoMove.add(move);// For the undo move button
+
             if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                 if (player == 1) {
                     red_score.set(red_score.get() + 1);

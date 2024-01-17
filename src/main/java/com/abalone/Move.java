@@ -351,7 +351,6 @@ public class Move {
             return;
         }
         marblesUsed.clear();
-        System.out.println(toString());
         // Handle different types of moves
         switch (moveType) {
             case SINGLE:

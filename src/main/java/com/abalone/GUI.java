@@ -70,6 +70,7 @@ public class GUI {
     public void initialize() {
         redPoint.textProperty().bind(red_score.asString());
         bluePoint.textProperty().bind(blue_score.asString());
+        undoBt.setOnAction(event -> undoMove());
 
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
@@ -87,7 +88,7 @@ public class GUI {
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
                     cellButton.setOnAction(event -> turn(cell));
-                    undoBt.setOnAction(event -> undoMove());
+                    // cellButton.setOnAction(event -> computerPlay()); //computer vs computer
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Error linking cell to button: " + e.getMessage());
@@ -214,8 +215,8 @@ public class GUI {
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
 
-        // gameBoard.printBoardScore();
-        // gameBoard.printBoardWithCoordinates();
+        gameBoard.printBoardScore();
+        gameBoard.printBoardWithCoordinates();
     }
 
     public void turn(Cell cell) {
@@ -337,9 +338,9 @@ public class GUI {
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
         if (player == 2) {
-            computerPlay();
             playerTurn.setText("Blue Turn");
             playerTurn.setTextFill(Color.BLUE);
+            computerPlay();
         }
         if (player == 1) {
             playerTurn.setText("Red Turn");

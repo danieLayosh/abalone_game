@@ -3,7 +3,7 @@ package com.abalone;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-// import java.util.Random;
+import java.util.Random;
 
 import com.abalone.enums.Direction;
 // import com.abalone.enums.MoveType;
@@ -95,7 +95,8 @@ public class Computer {
                     if (k != j && k != i)
                         marblesToMove.add(marbles.get(k));
 
-                    for (Cell destination : (marbles.get(0).getState() == player) ? myCellsToMoveTo:opponentsCellsToMoveTo) {
+                    for (Cell destination : (marbles.get(0).getState() == player) ? myCellsToMoveTo
+                            : opponentsCellsToMoveTo) {
                         Move potentialMove = new Move(marblesToMove, destination, player);
                         if (potentialMove.isValid() && !moves.contains(potentialMove)) {
                             moves.add(potentialMove);
@@ -137,18 +138,19 @@ public class Computer {
 
         double bestEvaluation = 0;
         Move bestMove = moves.get(0);
+        ArrayList<Move> bestMoves = new ArrayList<>();
+        bestMoves.add(bestMove);
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
-            System.out.println(bestMove.toString() + " The score is: " + evaluation);
-            if (evaluation > bestEvaluation) {
+            if (evaluation >= bestEvaluation) {
+                bestMoves.add(move);
+                System.out.println(move.toString() + " The score is: " + evaluation);
                 bestMove = move;
                 bestEvaluation = evaluation;
             }
         }
 
-        System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
-
-        // ArrayList<Move> moves2 = new ArrayList<>();
+        // ArrayList<Move> bestMoves = new ArrayList<>();
         // for (Move move : moves) {
         // if (move.getMoveType() == MoveType.INLINE || move.getMoveType() ==
         // MoveType.OUT_OF_THE_BOARD) {
@@ -156,9 +158,14 @@ public class Computer {
         // }
         // }
         // Choose a random move from the list of possible moves
-        // Random random = new Random();
-        // int randomIndex = random.nextInt(moves2.size());
-        // bestMove = moves2.get(randomIndex);
+        Random random = new Random();
+        int randomIndex;
+        if (bestMoves.size() > 0) {
+            randomIndex = random.nextInt(bestMoves.size());
+        } else
+            randomIndex = 0;
+        bestMove = bestMoves.get(randomIndex);
+        System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
 
         return bestMove;
     }
@@ -181,7 +188,7 @@ public class Computer {
         for (Move move : moves) {
             GroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
         }
-        generateValidMoves(opponentsMarbles); 
+        generateValidMoves(opponentsMarbles);
 
         return GroupScore;
     }

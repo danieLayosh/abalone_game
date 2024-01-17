@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Stack;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
@@ -21,7 +20,6 @@ public class Move {
     private int sizeInLine;
 
     private Map<Cell, Integer> marblesUsed;
-    private Stack<Move> executedMoves = new Stack<>();
 
     public Move(List<Cell> marbles, Cell dest, int player) {
         this.marbles = marbles;
@@ -363,6 +361,7 @@ public class Move {
                 dest.setState(player);
                 break;
             case INLINE:
+                lineBeforeChanges();
                 executeInlineOrSingleMove();
                 break;
             case SIDESTEP:
@@ -375,14 +374,27 @@ public class Move {
 
     }
 
-    private void executeInlineOrSingleMove() {
-        for (Cell cell : marbles) {
-            if (!marblesUsed.containsKey(cell))
-                marblesUsed.put(cell, cell.getState());// for the undo function
+    private void lineBeforeChanges() {
+        // Traverse to the end of the line
+        Cell currentCell = marbles.get(0);
+        Cell lastCellInLine = currentCell;
+        while (currentCell != null) {
+            lastCellInLine = currentCell;
+            currentCell = currentCell.getNeighborInDirection(marblesDirection);
         }
-        if (!marblesUsed.containsKey(dest))
-            marblesUsed.put(dest, dest.getState());// for the undo function
 
+        // Now traverse back from the end to the start in the opposite direction
+        currentCell = lastCellInLine;
+        while (currentCell != null) {
+            // Store the current state of each cell for undo functionality
+            if (!marblesUsed.containsKey(currentCell))
+                marblesUsed.put(currentCell, currentCell.getState());
+
+            currentCell = currentCell.getNeighborInDirection(oppositeDirection(marblesDirection));
+        }
+    }
+
+    private void executeInlineOrSingleMove() {
         if (dest.getState() == 0) {
             boolean reverseOrder = directionToDest == Direction.DOWNLEFT ||
                     directionToDest == Direction.DOWNRIGHT || directionToDest == Direction.RIGHT;
@@ -437,32 +449,22 @@ public class Move {
 
         // Push the opponent marbles
         if (secondOpponentMarble != null) {
-            if (!marblesUsed.containsKey(secondOpponentMarble))
-                marblesUsed.put(secondOpponentMarble, secondOpponentMarble.getState());
             pushMarble(secondOpponentMarble);
         }
         if (firstOpponentMarble != null) {
-            if (!marblesUsed.containsKey(firstOpponentMarble))
-                marblesUsed.put(firstOpponentMarble, firstOpponentMarble.getState());
             pushMarble(firstOpponentMarble);
         }
 
     }
 
     private void pushMarble(Cell marble) {
-        if (!marblesUsed.containsKey(marble))
-            marblesUsed.put(marble, marble.getState());// for the undo function
         Cell nextCell = marble.getNeighborInDirection(directionToDest);
 
         // needs some work for the ubdo here
         if (nextCell == null) { // Push marble off the board
-            if (!marblesUsed.containsKey(marble))
-                marblesUsed.put(marble, marble.getState());// for the undo function
             marble.setState(0);
             moveType = MoveType.OUT_OF_THE_BOARD;
         } else if (nextCell.getState() == 0) { // Push marble to next cell
-            if (!marblesUsed.containsKey(marble))
-                marblesUsed.put(nextCell, nextCell.getState());// for the undo function
             nextCell.setState(marble.getState());
             marble.setState(0);
         }
@@ -524,13 +526,17 @@ public class Move {
     }
 
     public void undoMove() {
-        if (moveType == MoveType.SINGLE || moveType == MoveType.SIDESTEP) {
-            for (Cell cell : marblesUsed.keySet()) {
-                cell.setState(marblesUsed.get(cell));
-            }
-        }else{
-            
+        // Iterate through each entry in the marblesUsed map
+        for (Map.Entry<Cell, Integer> entry : marblesUsed.entrySet()) {
+            Cell cell = entry.getKey();
+            Integer originalState = entry.getValue();
+
+            // Reset the cell's state to its original state
+            cell.setState(originalState);
         }
+
+        // Clear marblesUsed after undoing the move to prepare for the next move
+        marblesUsed.clear();
     }
 
 }

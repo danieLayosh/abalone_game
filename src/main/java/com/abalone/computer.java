@@ -3,14 +3,13 @@ package com.abalone;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+// import java.util.Random;
 
 import com.abalone.enums.Direction;
-import com.abalone.enums.MoveType;
+// import com.abalone.enums.MoveType;
 
 public class Computer {
     private int player;
-    private GameBoard gameBoard;
     private Map<Cell, Map<Cell, Direction>> board;
     private List<Cell> myMarbles; // List to store your marbles
     private List<Cell> opponentsMarbles; // List to store opponents marbles
@@ -18,7 +17,6 @@ public class Computer {
     private ArrayList<Move> moves;
 
     public Computer(GameBoard gameBoard, int player) {
-        this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
         this.player = player;
 
@@ -133,33 +131,7 @@ public class Computer {
             }
         }
 
-        
         System.out.println(bestMove.toString());
-
-        // gameBoard.printBoard();
-
-        // System.out.println("before");
-        // // for (Cell cell : bestMove.getMarblesUsed().keySet()) {
-        // // System.out.print(cell.formatCoordinate() + " - ");
-        // // }
-        // System.out.println();
-
-        // bestMove.executeMove();
-
-        // gameBoard.printBoard();
-
-        // System.out.println("after");
-        // System.out.println();
-
-        // bestMove.undoMove();
-
-        // gameBoard.printBoard();
-
-        // System.out.println("afterafter");
-        // // for (Cell cell : bestMove.getMarblesUsed().keySet()) {
-        // // System.out.print(cell.formatCoordinate() + " - ");
-        // // }
-        // System.out.println();
 
         // ArrayList<Move> moves2 = new ArrayList<>();
         // for (Move move : moves) {
@@ -177,47 +149,28 @@ public class Computer {
     }
 
     private double evaluatesBoardState(Move move) {
-        // System.out.println(move.toString());
-
-        // System.out.println("before executeMove");
-        // gameBoard.printBoard();
-        // System.out.println();
 
         move.executeMove();// executeMove to evalute the new board state.
 
         double distanceScore = evaluateDistanceScore();// evaluates score from the distances
 
-        // System.out.println("after executeMove");
-        // gameBoard.printBoard();
-        // System.out.println();
-
         move.undoMove();// undo the move to get it back before checking another move.
-
-        // System.out.println("after undoMove");
-        // gameBoard.printBoard();
-        // System.out.println();
 
         return distanceScore;
     }
 
     private double evaluateDistanceScore() {
         updateMarblesList(); // update the player marbles list.
+
         double MydistanceScore = 0;
         for (Cell cell : myMarbles) {
-            // System.out.println(cell.formatCoordinate() + " <-> " + cell.getScore());
             MydistanceScore += cell.getScore();// sum player's marbles score, according to the distance from the center.
         }
-        // System.out.println("-----------OPPONENTES MARBLES-------------------------");
+
         double opponentsDistanceScore = 0;
         for (Cell cell : opponentsMarbles) {
-            // System.out.println(cell.formatCoordinate() + " <-> " + cell.getScore());
             opponentsDistanceScore += cell.getScore();
         }
-
-        // System.out.println("------------------------------------------------------");
-        // System.out.println("this move evaluate Distance Score is: " +
-        // (MydistanceScore - opponentsDistanceScore));
-        // System.out.println("------------------------------------------------------");
 
         return MydistanceScore - opponentsDistanceScore;
     }

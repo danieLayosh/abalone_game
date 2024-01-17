@@ -141,24 +141,26 @@ public class Computer {
         bestMoves.add(bestMove);
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
-            if (evaluation >= bestEvaluation) {
-                bestMoves.add(move);
-                System.out.println(move.toString() + " The score is: " + evaluation);
-                bestMove = move;
+            if (evaluation > bestEvaluation) {
+                bestMoves.clear();
                 bestEvaluation = evaluation;
             }
+            if (evaluation == bestEvaluation) {
+                bestMove = move;
+                bestMoves.add(bestMove);
+            }
+            System.out.println(move.toString() + " The score is: " + evaluation);
         }
 
         // Choose a random move from the list of possible moves
-        // Random random = new Random();
-        // int randomIndex;
-        System.out.println(moves.size());
-        System.out.println(bestMoves.size());
-        // if (bestMoves.size() > 0) {
-        //     randomIndex = random.nextInt(bestMoves.size());
-        // } else
-        //     randomIndex = 0;
-        // bestMove = bestMoves.get(randomIndex);
+        Random random = new Random();
+        int randomIndex = 0;
+        System.out.println("Total moves: " + moves.size());
+        System.out.println("Bests moves: " + bestMoves.size());
+        if (bestMoves.size() > 0) {
+            randomIndex = random.nextInt(bestMoves.size());
+        }
+        bestMove = bestMoves.get(randomIndex);
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
 
         return bestMove;
@@ -182,7 +184,7 @@ public class Computer {
         for (Move move : moves) {
             MyGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
         }
-        
+
         generateValidMoves();
         double opponentsGroupScore = 0.0;
         for (Move move : moves) {

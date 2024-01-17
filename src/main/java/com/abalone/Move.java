@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Stack;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
@@ -20,6 +21,7 @@ public class Move {
     private int sizeInLine;
 
     private Map<Cell, Integer> marblesUsed;
+    private Stack<Move> executedMoves = new Stack<>();
 
     public Move(List<Cell> marbles, Cell dest, int player) {
         this.marbles = marbles;
@@ -351,6 +353,7 @@ public class Move {
             return;
         }
         marblesUsed.clear();
+        System.out.println(toString());
         // Handle different types of moves
         switch (moveType) {
             case SINGLE:
@@ -358,6 +361,7 @@ public class Move {
                 marblesUsed.put(dest, 0);
                 marbles.get(0).setState(0);
                 dest.setState(player);
+                break;
             case INLINE:
                 executeInlineOrSingleMove();
                 break;
@@ -367,7 +371,6 @@ public class Move {
             default:
                 System.out.println("Attempted to execute an invalid move.");
                 return;
-            // throw new IllegalStateException("Unknown move type.");
         }
 
     }
@@ -521,9 +524,12 @@ public class Move {
     }
 
     public void undoMove() {
-        
-        for (Cell cell : marblesUsed.keySet()) {
-            cell.setState(marblesUsed.get(cell));
+        if (moveType == MoveType.SINGLE || moveType == MoveType.SIDESTEP) {
+            for (Cell cell : marblesUsed.keySet()) {
+                cell.setState(marblesUsed.get(cell));
+            }
+        }else{
+            
         }
     }
 

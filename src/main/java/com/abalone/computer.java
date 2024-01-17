@@ -10,6 +10,7 @@ import com.abalone.enums.MoveType;
 
 public class Computer {
     private int player;
+    private GameBoard gameBoard;
     private Map<Cell, Map<Cell, Direction>> board;
     private List<Cell> myMarbles; // List to store your marbles
     private List<Cell> opponentsMarbles; // List to store opponents marbles
@@ -17,6 +18,7 @@ public class Computer {
     private ArrayList<Move> moves;
 
     public Computer(GameBoard gameBoard, int player) {
+        this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
         this.player = player;
 
@@ -130,24 +132,34 @@ public class Computer {
                 bestEvaluation = evaluation;
             }
         }
+
+        
         System.out.println(bestMove.toString());
-        System.out.println("before");
 
-        for (Cell cell : bestMove.getMarblesUsed().keySet()) {
-            System.out.print(cell.formatCoordinate() + " - ");
-        }
-        System.out.println();
-        System.out.println("after");
+        // gameBoard.printBoard();
 
-        bestMove.executeMove();
+        // System.out.println("before");
+        // // for (Cell cell : bestMove.getMarblesUsed().keySet()) {
+        // // System.out.print(cell.formatCoordinate() + " - ");
+        // // }
+        // System.out.println();
 
-        bestMove.undoMove();
+        // bestMove.executeMove();
 
-        for (Cell cell : bestMove.getMarblesUsed().keySet()) {
-            System.out.print(cell.formatCoordinate() + " - ");
-        }
-        System.out.println();
+        // gameBoard.printBoard();
 
+        // System.out.println("after");
+        // System.out.println();
+
+        // bestMove.undoMove();
+
+        // gameBoard.printBoard();
+
+        // System.out.println("afterafter");
+        // // for (Cell cell : bestMove.getMarblesUsed().keySet()) {
+        // // System.out.print(cell.formatCoordinate() + " - ");
+        // // }
+        // System.out.println();
 
         // ArrayList<Move> moves2 = new ArrayList<>();
         // for (Move move : moves) {
@@ -165,11 +177,26 @@ public class Computer {
     }
 
     private double evaluatesBoardState(Move move) {
+        // System.out.println(move.toString());
+
+        // System.out.println("before executeMove");
+        // gameBoard.printBoard();
+        // System.out.println();
+
         move.executeMove();// executeMove to evalute the new board state.
 
         double distanceScore = evaluateDistanceScore();// evaluates score from the distances
 
+        // System.out.println("after executeMove");
+        // gameBoard.printBoard();
+        // System.out.println();
+
         move.undoMove();// undo the move to get it back before checking another move.
+
+        // System.out.println("after undoMove");
+        // gameBoard.printBoard();
+        // System.out.println();
+
         return distanceScore;
     }
 

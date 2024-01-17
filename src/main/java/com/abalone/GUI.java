@@ -192,26 +192,7 @@ public class GUI {
         // computer.printAllMoves();
         Move move = computer.computerTurn();
         executeTheTurn(move);
-        // move.executeMove();
-
-        // if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
-        // blue_score.set(blue_score.get() + 1);
-        // Image image = new Image("abalone2.gif");
-        // ImageView imageView = new ImageView(image);
-        // imageView.setFitHeight(35); // Set height
-        // imageView.setPreserveRatio(true);
-        // redHBox.getChildren().add(imageView);
-        // }
-
-        // if (red_score.get() == 6 || blue_score.get() == 6) {
-        // endGame();
-        // }
-
-        // updateBoard(move);
-
-        // changePlayer();
-        // marbles.clear();
-        // System.out.println("Computer Move executed.");
+        System.out.println("Computer Move executed.");
 
         // gameBoard.printBoardScore();
         // gameBoard.printBoardWithCoordinates();
@@ -253,6 +234,7 @@ public class GUI {
             if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1) && !marbles.isEmpty()) {
                 Move move = new Move(marbles, cell, player);
                 executeTheTurn(move);
+                System.out.println("Player Move executed.");
             } else {
                 marbles.clear();
                 System.out.println("Move is invalid.");
@@ -291,7 +273,6 @@ public class GUI {
             }
             changePlayer();
             marbles.clear();
-            System.out.println("Player Move executed.");
         }
     }
 

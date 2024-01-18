@@ -148,18 +148,20 @@ public class GUI {
         if (cell.getState() == player) {
             if (marbles.isEmpty()) {
                 cell.getBt().setStyle(
-                        "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 10, 0, 0, 0); -fx-opacity: 0.75;");
+                        "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
             } else {
                 marbles.add(cell);
                 if (move.areMarblesInlineAndAdjacent()) {
                     cell.getBt().setStyle(
-                            "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 10, 0, 0, 0); -fx-opacity: 0.75;");
+                            "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
                     showDirectionOnMarbles(move);
                 }
                 marbles.remove(cell);
             }
         } else {
             if (move.isValid()) {
+                cell.getBt().setStyle(
+                        " -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
                 showDirectionOnMarbles(move);
             }
         }

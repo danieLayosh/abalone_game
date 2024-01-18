@@ -160,6 +160,7 @@ public class Computer {
         bestMove = bestMoves.get(randomIndex);
         System.out.println(" ");
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
+        System.out.println("evaluateGroupScore --->>> " + evaluateGroupScore());
         System.out.println(" ");
 
         return bestMove;
@@ -182,7 +183,7 @@ public class Computer {
         // System.out.println("evaluateGroupScore --->>> " + marblesGroupScore);
 
         move.undoMove();// undo the move to get it back before checking another move.
-        return gravityCenterScore + keepPackedScore + pushedOffScore;
+        return gravityCenterScore + keepPackedScore + pushedOffScore + marblesGroupScore * 0.5;
     }
 
     private double keepPacked() {

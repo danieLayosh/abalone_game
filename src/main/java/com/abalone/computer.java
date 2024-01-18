@@ -183,7 +183,11 @@ public class Computer {
         // System.out.println("evaluateGroupScore --->>> " + marblesGroupScore);
 
         move.undoMove();// undo the move to get it back before checking another move.
-        return gravityCenterScore + keepPackedScore + pushedOffScore + marblesGroupScore * 0.5;
+        // if (player == 2) {
+            return gravityCenterScore + marblesGroupScore + pushedOffScore;
+        // } else {
+        //     return gravityCenterScore + marblesGroupScore + pushedOffScore + keepPackedScore;
+        // }
     }
 
     private double keepPacked() {

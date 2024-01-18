@@ -93,8 +93,8 @@ public class GUI {
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
-                    cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
-                    // cellButton.setOnAction(event -> computerPlay()); // computer vs computer
+                    // cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
+                    cellButton.setOnAction(event -> computerPlay()); // computer vs computer
 
                     // Create a KeyCodeCombination for Ctrl+Z
                     KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);

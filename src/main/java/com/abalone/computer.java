@@ -30,14 +30,12 @@ public class Computer {
         this.myMarbles = new ArrayList<>();
         this.opponentsMarbles = new ArrayList<>();
 
-        getAllPotentialMoves(player);
-        System.out.println("getAllPotentialMoves for player: " + moves.size());
-
-        getAllPotentialMoves(player == 2 ? 1 : 2);
-        System.out.println("getAllPotentialMoves for opponent: " + movesOppo.size());
+        getAllPotentialMovesForBoth();
     }
 
     private void cellsToMoveTo() {
+        myCellsToMoveTo = new ArrayList<>(board.keySet());
+        opponentsCellsToMoveTo = new ArrayList<>(board.keySet());
         myCellsToMoveTo.removeIf(cell -> !isNeighborOfPlayerCell(cell));
         opponentsCellsToMoveTo.removeIf(cell -> !isNeighborOfOpponentCell(cell));
     }
@@ -66,12 +64,6 @@ public class Computer {
         return false;
     }
 
-    public void printPotentialCells() {
-        for (Cell cell : myCellsToMoveTo) {
-            System.out.print(cell.formatCoordinate() + ": " + cell.getScore() + ", ");
-        }
-    }
-
     // Update the list of your marbles
     private void updateMarblesList() {
         myMarbles.clear(); // Clear existing marbles
@@ -85,35 +77,28 @@ public class Computer {
         }
     }
 
-    // Method to generate all valid moves
-    // private void generateValidMoves() {
-    //     moves.clear();
-    //     for (int i = 0; i < myMarbles.size(); i++) {
-    //         for (int j = i; j < myMarbles.size(); j++) {
-    //             for (int k = j; k < myMarbles.size(); k++) {
-    //                 List<Cell> marblesToMove = new ArrayList<>();
-    //                 marblesToMove.add(myMarbles.get(i));
-    //                 if (j != i)
-    //                     marblesToMove.add(myMarbles.get(j));
-    //                 if (k != j && k != i)
-    //                     marblesToMove.add(myMarbles.get(k));
-
-    //                 for (Cell destination : myCellsToMoveTo) {
-    //                     Move potentialMove = new Move(marblesToMove, destination, player);
-    //                     if (potentialMove.isValid() && !moves.contains(potentialMove)) {
-    //                         moves.add(potentialMove);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    private void getAllPotentialMoves(int ply) {
+    /**
+     * Updates both players own marbles list and cellsToMoveTo lists and then
+     * calculte all possibol moves for each one
+     */
+    private void getAllPotentialMovesForBoth() {
         cellsToMoveTo(); // Filter cells to move to
         updateMarblesList(); // Update the list of your marbles
 
+        getAllPotentialMovesForPlayer(player);
+        getAllPotentialMovesForPlayer(player == 2 ? 1 : 2);
+    }
+
+    /**
+     * ----- Need to update his marbles and CellToMoveTo lists!!!!
+     * 
+     * @param ply -> Player number
+     *            Calcultes all possibol moves for one player and updates the his
+     *            moves list
+     */
+    private void getAllPotentialMovesForPlayer(int ply) {
         List<Cell> marblesToConsider = (ply == player) ? myMarbles : opponentsMarbles;
+
         if (ply == player) {
             moves.clear();
         } else {
@@ -138,18 +123,6 @@ public class Computer {
                     }
                 }
             }
-        }
-        // return (((ply == player) ? moves : movesOppo)); // Return a copy of the moves
-        // list
-    }
-
-    public void printAllMoves() {
-        if (moves.isEmpty()) {
-            System.out.println("No moves available.");
-            return;
-        }
-        for (Move move : moves) {
-            System.out.println(move.toString());
         }
     }
 
@@ -253,8 +226,8 @@ public class Computer {
             MyGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
         }
 
-        getAllPotentialMoves(2);
-        getAllPotentialMoves(1);
+        getAllPotentialMovesForPlayer(2);
+        getAllPotentialMovesForPlayer(1);
 
         double opponentsGroupScore = 0.0;
         for (Move move : moves) {

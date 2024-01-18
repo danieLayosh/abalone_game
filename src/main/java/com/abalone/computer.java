@@ -86,28 +86,28 @@ public class Computer {
     }
 
     // Method to generate all valid moves
-    private void generateValidMoves() {
-        moves.clear();
-        for (int i = 0; i < myMarbles.size(); i++) {
-            for (int j = i; j < myMarbles.size(); j++) {
-                for (int k = j; k < myMarbles.size(); k++) {
-                    List<Cell> marblesToMove = new ArrayList<>();
-                    marblesToMove.add(myMarbles.get(i));
-                    if (j != i)
-                        marblesToMove.add(myMarbles.get(j));
-                    if (k != j && k != i)
-                        marblesToMove.add(myMarbles.get(k));
+    // private void generateValidMoves() {
+    //     moves.clear();
+    //     for (int i = 0; i < myMarbles.size(); i++) {
+    //         for (int j = i; j < myMarbles.size(); j++) {
+    //             for (int k = j; k < myMarbles.size(); k++) {
+    //                 List<Cell> marblesToMove = new ArrayList<>();
+    //                 marblesToMove.add(myMarbles.get(i));
+    //                 if (j != i)
+    //                     marblesToMove.add(myMarbles.get(j));
+    //                 if (k != j && k != i)
+    //                     marblesToMove.add(myMarbles.get(k));
 
-                    for (Cell destination : myCellsToMoveTo) {
-                        Move potentialMove = new Move(marblesToMove, destination, player);
-                        if (potentialMove.isValid() && !moves.contains(potentialMove)) {
-                            moves.add(potentialMove);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //                 for (Cell destination : myCellsToMoveTo) {
+    //                     Move potentialMove = new Move(marblesToMove, destination, player);
+    //                     if (potentialMove.isValid() && !moves.contains(potentialMove)) {
+    //                         moves.add(potentialMove);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     private void getAllPotentialMoves(int ply) {
         cellsToMoveTo(); // Filter cells to move to

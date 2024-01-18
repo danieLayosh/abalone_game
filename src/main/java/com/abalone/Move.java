@@ -490,6 +490,7 @@ public class Move {
             sb.append(marble.formatCoordinate()).append(", ");
         }
         sb.append("Destination: ").append(dest.formatCoordinate());
+        sb.append(", Direction: ").append(directionToDest);
         sb.append(", Player: ").append(player);
         return sb.toString();
     }

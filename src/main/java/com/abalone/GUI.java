@@ -144,6 +144,13 @@ public class GUI {
 
     private void hoverOn(Cell cell) {
         Move move = new Move(marbles, cell, player);
+        Move move2 = new Move(marbles, cell, player);
+
+        // can be used to show direction when hover in player marbles
+        if (move2.isValid()) {
+            System.out.println(move2.toString());
+        }
+
         if (cell.getState() == player) {
             if (marbles.isEmpty()) {
                 cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill:white;");

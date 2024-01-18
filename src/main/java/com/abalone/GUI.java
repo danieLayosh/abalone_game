@@ -259,12 +259,10 @@ public class GUI {
         Computer computer = new Computer(gameBoard, player);
         Move move = computer.computerTurn();
         executeTheTurn(move);
-        System.out.println("evaluateGroupScore: " + computer.evaluateGroupScore());
         System.out.println("Computer Move executed.");
 
         // gameBoard.printBoardScore();
-        gameBoard.printBoardWithCoordinates();
-        // gameBoard.printBoardBorders();
+        // gameBoard.printBoardWithCoordinates();
     }
 
     public void turn(Cell cell) {

@@ -92,11 +92,10 @@ public class Computer {
     }
 
     /**
-     * ----- Need to update his marbles and CellToMoveTo lists!!!!
+     * Need to update his marbles and CellToMoveTo lists!!!!
      * 
-     * @param ply -> Player number
-     *            Calcultes all possibol moves for one player and updates the his
-     *            moves list
+     * @param ply
+     *            Calcultes all moves for a player, updates his moves list
      */
     private void getAllPotentialMovesForPlayer(int ply) {
         List<Cell> marblesToConsider = (ply == player) ? myMarbles : opponentsMarbles;
@@ -180,7 +179,8 @@ public class Computer {
         double keepPackedScore = keepPacked();
         // System.out.println("keepPacked --->>> " + keepPackedScore);
 
-        // double marblesGroupScore = evaluateGroupScore();
+        double marblesGroupScore = evaluateGroupScore();
+        System.out.println("evaluateGroupScore --->>> " + marblesGroupScore);
 
         move.undoMove();// undo the move to get it back before checking another move.
         return gravityCenterScore + keepPackedScore + pushedOffScore;
@@ -237,7 +237,7 @@ public class Computer {
         // return myMarbles.size() - opponentsMarbles.size();
     }
 
-    public double evaluateGroupScore() {
+    private double evaluateGroupScore() {
         double Score = 0.0;
 
         // Evaluate group score Top Left To Bottom Right diagnols

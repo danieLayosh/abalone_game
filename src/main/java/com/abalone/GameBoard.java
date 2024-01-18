@@ -71,8 +71,8 @@ public class GameBoard {
                 for (int h = 0; h < i; h++) {
                     temp = temp.getNeighborInDirection(dir[d]);
                     temp.setScore(score);
-                    // if (i > 1 && h != i - 1)
-                    //     temp.setScore(score - 0.5);
+                    if (i > 1 && h != i - 1)
+                        temp.setScore(score - 0.5);
                 }
             }
             score -= 2;

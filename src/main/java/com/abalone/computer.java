@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.abalone.enums.Direction;
 // import com.abalone.enums.MoveType;
+import com.abalone.enums.MoveType;
 
 public class Computer {
     private int player;
@@ -16,6 +17,7 @@ public class Computer {
     private List<Cell> myCellsToMoveTo;
     private List<Cell> opponentsCellsToMoveTo;
     private ArrayList<Move> moves;
+    private ArrayList<Move> movesOppo;
 
     public Computer(GameBoard gameBoard, int player) {
         this.board = gameBoard.getBoard();
@@ -24,14 +26,15 @@ public class Computer {
         this.myCellsToMoveTo = new ArrayList<>(board.keySet());
         this.opponentsCellsToMoveTo = new ArrayList<>(board.keySet());
         this.moves = new ArrayList<>();
+        this.movesOppo = new ArrayList<>();
         this.myMarbles = new ArrayList<>();
         this.opponentsMarbles = new ArrayList<>();
 
-        cellsToMoveTo(); // Filter cells to move to
-        updateMarblesList(); // Update the list of your marbles
-        // printDebugInfo(); // Add this for debugging
+        getAllPotentialMoves(player);
+        System.out.println("getAllPotentialMoves for player: " + moves.size());
 
-        generateValidMoves();// Generate all valid moves
+        getAllPotentialMoves(player == 2 ? 1 : 2);
+        System.out.println("getAllPotentialMoves for opponent: " + movesOppo.size());
     }
 
     private void cellsToMoveTo() {
@@ -106,6 +109,40 @@ public class Computer {
         }
     }
 
+    private void getAllPotentialMoves(int ply) {
+        cellsToMoveTo(); // Filter cells to move to
+        updateMarblesList(); // Update the list of your marbles
+
+        List<Cell> marblesToConsider = (ply == player) ? myMarbles : opponentsMarbles;
+        if (ply == player) {
+            moves.clear();
+        } else {
+            movesOppo.clear();
+        }
+
+        for (int i = 0; i < marblesToConsider.size(); i++) {
+            for (int j = i; j < marblesToConsider.size(); j++) {
+                for (int k = j; k < marblesToConsider.size(); k++) {
+                    List<Cell> marblesToMove = new ArrayList<>();
+                    marblesToMove.add(marblesToConsider.get(i));
+                    if (j != i)
+                        marblesToMove.add(marblesToConsider.get(j));
+                    if (k != j && k != i)
+                        marblesToMove.add(marblesToConsider.get(k));
+
+                    for (Cell destination : (ply == player) ? myCellsToMoveTo : opponentsCellsToMoveTo) {
+                        Move potentialMove = new Move(marblesToMove, destination, ply);
+                        if (potentialMove.isValid() && !((ply == player) ? moves : movesOppo).contains(potentialMove)) {
+                            ((ply == player) ? moves : movesOppo).add(potentialMove);
+                        }
+                    }
+                }
+            }
+        }
+        // return (((ply == player) ? moves : movesOppo)); // Return a copy of the moves
+        // list
+    }
+
     public void printAllMoves() {
         if (moves.isEmpty()) {
             System.out.println("No moves available.");
@@ -116,33 +153,18 @@ public class Computer {
         }
     }
 
-    /*
-     * private void printDebugInfo() {
-     * // Print cellsToMoveTo for debugging
-     * System.out.println("Cells To Move To: " + cellsToMoveTo.stream()
-     * .map(Cell::formatCoordinate)
-     * .collect(Collectors.joining(", ")));
-     * // Print board cells and their states
-     * System.out.println("Board Cells:");
-     * board.keySet().forEach(cell -> System.out.println(cell.formatCoordinate() +
-     * ": State " + cell.getState()));
-     * }
-     */
-
     public Move computerTurn() {
         if (moves.isEmpty()) {
             // No valid moves available, return null or handle this case as needed
             return null;
         }
 
-        double bestEvaluation = -99999.0;
+        double bestEvaluation = Double.NEGATIVE_INFINITY;
         Move bestMove = moves.get(0);
         ArrayList<Move> bestMoves = new ArrayList<>();
         bestMoves.add(bestMove);
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
-            // double evaluation = (player == 1) ? Math.abs(evaluatesBoardState(move)) :
-            // evaluatesBoardState(move);
             if (evaluation > bestEvaluation) {
                 bestMoves.clear();
                 bestEvaluation = evaluation;
@@ -165,34 +187,64 @@ public class Computer {
         bestMove = bestMoves.get(randomIndex);
         System.out.println(" ");
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
+        System.out.println(" ");
 
         return bestMove;
     }
 
     private double evaluatesBoardState(Move move) {
-
         move.executeMove();// executeMove to evalute the new board state.
 
         updateMarblesList(); // update the player marbles list.
 
-        double distanceScore = evaluateDistanceScore();// evaluates score from the distances
+        double gravityCenterScore = gravityCenter();// evaluates score from the distances
 
-        double marblesPushedOff = pushedOff() * 30;
-        System.out.println("Marbles pushed off --->>> " + marblesPushedOff);
+        double pushedOffScore = pushedOff(move);
+        // System.out.println("Marbles pushed off --->>> " + pushedOffScore);
+
+        double keepPackedScore = keepPacked();
+        // System.out.println("keepPacked --->>> " + keepPackedScore);
 
         // double marblesGroupScore = evaluateGroupScore();
 
         move.undoMove();// undo the move to get it back before checking another move.
-
-        return distanceScore + marblesPushedOff;
+        return gravityCenterScore + keepPackedScore + pushedOffScore;
     }
 
-    private double pushedOff() {
+    private double keepPacked() {
+        double counter = 0;
+        for (Cell marble : myMarbles) {
+            for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
+                if (neighborCell.getState() == marble.getState())
+                    counter++;
+            }
+        }
+
+        for (Cell marble : opponentsMarbles) {
+            for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
+                if (neighborCell.getState() == marble.getState())
+                    counter--;
+            }
+        }
+
+        return counter;
+    }
+
+    private double pushedOff(Move move) {
         // if(myMarbles.size() - opponentsMarbles.size() == 0){
         // return 1;
         // }
+        double pushCounter = 0.0;
+        if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
+            pushCounter += 30;
+        }
 
-        return myMarbles.size() - opponentsMarbles.size();
+        // if (condition) {
+        // ************ add the opponent OUT_OF_THE_BOARD ****************************
+        // }
+
+        return pushCounter;
+        // return myMarbles.size() - opponentsMarbles.size();
     }
 
     private double evaluateGroupScore() {
@@ -201,7 +253,9 @@ public class Computer {
             MyGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
         }
 
-        generateValidMoves();
+        getAllPotentialMoves(2);
+        getAllPotentialMoves(1);
+
         double opponentsGroupScore = 0.0;
         for (Move move : moves) {
             opponentsGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
@@ -210,7 +264,7 @@ public class Computer {
         return MyGroupScore - opponentsGroupScore;
     }
 
-    private double evaluateDistanceScore() {
+    private double gravityCenter() {
 
         double MydistanceScore = 0;
         for (Cell cell : myMarbles) {

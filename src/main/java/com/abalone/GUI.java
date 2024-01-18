@@ -120,9 +120,25 @@ public class GUI {
                 playerMove = LastTwoMove.pop();
         }
         if (computerMove != null && playerMove != null) {
+            handleScoreUpdate(computerMove);
+            handleScoreUpdate(playerMove);
+
             computerMove.undoMove();
             playerMove.undoMove();
             updateBoard();
+        }
+    }
+
+    private void handleScoreUpdate(Move move) {
+        if (move != null && move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
+            // Adjust the score and update display
+            if (move.getPlayer() == 1) {
+                red_score.set(red_score.get() - 1);
+                updateScoreDisplay(red_score.get(), redHBox, "abalone2.gif");
+            } else {
+                blue_score.set(blue_score.get() - 1);
+                updateScoreDisplay(blue_score.get(), blueHBox, "abalone1.gif");
+            }
         }
     }
 
@@ -231,7 +247,7 @@ public class GUI {
         System.out.println("Computer Move executed.");
 
         // gameBoard.printBoardScore();
-        gameBoard.printBoardWithCoordinates();
+        // gameBoard.printBoardWithCoordinates();
         // gameBoard.printBoardBorders();
     }
 
@@ -297,25 +313,29 @@ public class GUI {
             if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                 if (player == 1) {
                     red_score.set(red_score.get() + 1);
-                    Image image = new Image("abalone2.gif");
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(35); // Set height
-                    imageView.setPreserveRatio(true);
-                    redHBox.getChildren().add(imageView);
+                    updateScoreDisplay(red_score.get(), redHBox, "abalone2.gif");
                 } else {
                     blue_score.set(blue_score.get() + 1);
-                    Image image = new Image("abalone1.gif");
-                    ImageView imageView = new ImageView(image);
-                    imageView.setFitHeight(35); // Set height
-                    imageView.setPreserveRatio(true);
-                    blueHBox.getChildren().add(imageView);
+                    updateScoreDisplay(blue_score.get(), blueHBox, "abalone1.gif");
                 }
+
                 if (red_score.get() == 6 || blue_score.get() == 6) {
                     endGame();
                 }
             }
+
             changePlayer();
             marbles.clear();
+        }
+    }
+
+    private void updateScoreDisplay(int score, HBox hbox, String imageFile) {
+        hbox.getChildren().clear(); // Clear existing images
+        for (int i = 0; i < score; i++) {
+            ImageView imageView = new ImageView(new Image(imageFile));
+            imageView.setFitHeight(35); // Set height
+            imageView.setPreserveRatio(true);
+            hbox.getChildren().add(imageView); // Add new image for each point in score
         }
     }
 

@@ -141,7 +141,8 @@ public class Computer {
         bestMoves.add(bestMove);
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
-            // double evaluation = (player == 1) ? Math.abs(evaluatesBoardState(move)) : evaluatesBoardState(move);
+            // double evaluation = (player == 1) ? Math.abs(evaluatesBoardState(move)) :
+            // evaluatesBoardState(move);
             if (evaluation > bestEvaluation) {
                 bestMoves.clear();
                 bestEvaluation = evaluation;
@@ -172,13 +173,26 @@ public class Computer {
 
         move.executeMove();// executeMove to evalute the new board state.
 
+        updateMarblesList(); // update the player marbles list.
+
         double distanceScore = evaluateDistanceScore();// evaluates score from the distances
+
+        double marblesPushedOff = pushedOff() * 30;
+        System.out.println("Marbles pushed off --->>> " + marblesPushedOff);
 
         // double marblesGroupScore = evaluateGroupScore();
 
         move.undoMove();// undo the move to get it back before checking another move.
 
-        return distanceScore;
+        return distanceScore + marblesPushedOff;
+    }
+
+    private double pushedOff() {
+        // if(myMarbles.size() - opponentsMarbles.size() == 0){
+        // return 1;
+        // }
+
+        return myMarbles.size() - opponentsMarbles.size();
     }
 
     private double evaluateGroupScore() {
@@ -197,7 +211,6 @@ public class Computer {
     }
 
     private double evaluateDistanceScore() {
-        updateMarblesList(); // update the player marbles list.
 
         double MydistanceScore = 0;
         for (Cell cell : myMarbles) {

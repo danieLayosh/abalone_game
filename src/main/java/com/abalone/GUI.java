@@ -93,8 +93,8 @@ public class GUI {
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
-                    // cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
-                    cellButton.setOnAction(event -> computerPlay()); // computer vs computer
+                    cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
+                    // cellButton.setOnAction(event -> computerPlay()); // computer vs computer
 
                     // Create a KeyCodeCombination for Ctrl+Z
                     KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
@@ -143,56 +143,61 @@ public class GUI {
     }
 
     private void hoverOn(Cell cell) {
-        // System.out.println("Mouse entered button");
+        Move move = new Move(marbles, cell, player);
         if (cell.getState() == player) {
             if (marbles.isEmpty()) {
-                cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill: white;");
+                cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill:white;");
             } else {
                 marbles.add(cell);
-                Move move = new Move(marbles, cell, player);
                 if (move.areMarblesInlineAndAdjacent()) {
-                    cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill: white;");
+                    cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill:white;");
+                    showDirectionOnMarbles(move);
                 }
                 marbles.remove(cell);
             }
         } else {
-            Move move = new Move(marbles, cell, player);
             if (move.isValid()) {
-                // show direction on the marbles
-                Direction direction = move.getDirectionToDest();
-                String playerColor = (player == 1) ? "red" : "blue";
-                Image image = null;
-                switch (direction) {
-                    case LEFT:
-                        image = new Image(playerColor + "Left.gif");
-                        setMarblesImageDirection(image);
-                        break;
-                    case RIGHT:
-                        image = new Image(playerColor + "Right.gif");
-                        setMarblesImageDirection(image);
-                        break;
-                    case UPLEFT:
-                        image = new Image(playerColor + "UpLeft.gif");
-                        setMarblesImageDirection(image);
-                        break;
-                    case UPRIGHT:
-                        image = new Image(playerColor + "UpRight.gif");
-                        setMarblesImageDirection(image);
-                        break;
-                    case DOWNLEFT:
-                        image = new Image(playerColor + "DownLeft.gif");
-                        setMarblesImageDirection(image);
-                        break;
-                    case DOWNRIGHT:
-                        image = new Image(playerColor + "DownRight.gif");
-                        setMarblesImageDirection(image);
-                        break;
-                    default:
-                        break;
-                }
+                showDirectionOnMarbles(move);
             }
         }
+    }
 
+    private void showDirectionOnMarbles(Move move) {
+        Direction direction = move.getDirectionToDest();
+        if (direction != null) { // Add null check
+            String playerColor = (player == 1) ? "red" : "blue";
+            Image image = null;
+            switch (direction) {
+                case LEFT:
+                    image = new Image(playerColor + "Left.gif");
+                    break;
+                case RIGHT:
+                    image = new Image(playerColor + "Right.gif");
+                    break;
+                case UPLEFT:
+                    image = new Image(playerColor + "UpLeft.gif");
+                    break;
+                case UPRIGHT:
+                    image = new Image(playerColor + "UpRight.gif");
+                    break;
+                case DOWNLEFT:
+                    image = new Image(playerColor + "DownLeft.gif");
+                    break;
+                case DOWNRIGHT:
+                    image = new Image(playerColor + "DownRight.gif");
+                    break;
+                default:
+                    break;
+            }
+            if (image != null) {
+                setMarblesImageDirection(image);
+            }
+        } else {
+            // System.out.println("--------------------------------------");
+            // List<Cell> marbles = move.getMarbles();
+            // Cell potintiaCell =
+            // marbles.get(0).getNeighborInDirection(move.getMarblesDirection());
+        }
     }
 
     private void setMarblesImageDirection(Image image) {
@@ -200,6 +205,9 @@ public class GUI {
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(35);
             imageView.setPreserveRatio(true);
+            ColorAdjust colorAdjust = new ColorAdjust();
+            colorAdjust.setBrightness(-0.25); // Adjust this value between -1 and 0 to control darkness
+            imageView.setEffect(colorAdjust);
             cell.getBt().setGraphic(imageView);
         }
     }
@@ -207,6 +215,12 @@ public class GUI {
     private void endHover(Cell cell) {
         // System.out.println("Mouse exited button");
         cell.getBt().setStyle("");
+
+        // Clear directional indicators from all marbles
+        for (Cell marble : marbles) {
+            cellPushed(marble); // Removes the image set during hover
+            marble.getBt().setStyle(""); // Resets any additional styling if needed
+        }
     }
 
     public void updateCellGUI(Cell cell) {
@@ -403,7 +417,7 @@ public class GUI {
         imageView.setFitWidth(35);
         imageView.setPreserveRatio(true);
         ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setBrightness(-0.5); // Adjust this value between -1 and 0 to control darkness
+        colorAdjust.setBrightness(-0.25); // Adjust this value between -1 and 0 to control darkness
         imageView.setEffect(colorAdjust);
         cell.getBt().setGraphic(imageView);
     }

@@ -202,7 +202,6 @@ public class Move {
         if (initialDirection == null) {
             // System.out.println("The first two Marbles are not neighbors.");
             return false;
-            // throw new IllegalStateException("The first two Marbles are not neighbors.");
         }
 
         for (int i = 0; i < marbles.size() - 1; i++) {
@@ -211,9 +210,6 @@ public class Move {
             Direction direction = currentMarble.getDirectionOfNeighbor(nextMarble);
 
             if (direction != initialDirection || direction == null) {
-                // System.out.println("Marbles are not neighbors: " +
-                // currentMarble.formatCoordinate() + " + "
-                // + nextMarble.formatCoordinate());
                 return false;
             }
 
@@ -531,6 +527,10 @@ public class Move {
 
         // Clear marblesUsed after undoing the move to prepare for the next move
         marblesUsed.clear();
+    }
+
+    public Direction getMarblesDirection() {
+        return marblesDirection;
     }
 
 }

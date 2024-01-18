@@ -11,6 +11,7 @@ import com.abalone.enums.MoveType;
 
 public class Computer {
     private int player;
+    private GameBoard gameBoard;
     private Map<Cell, Map<Cell, Direction>> board;
     private List<Cell> myMarbles; // List to store your marbles
     private List<Cell> opponentsMarbles; // List to store opponents marbles
@@ -20,6 +21,7 @@ public class Computer {
     private ArrayList<Move> movesOppo;
 
     public Computer(GameBoard gameBoard, int player) {
+        this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
         this.player = player;
 
@@ -203,6 +205,21 @@ public class Computer {
         return counter;
     }
 
+    private double gravityCenter() {
+
+        double MydistanceScore = 0;
+        for (Cell cell : myMarbles) {
+            MydistanceScore += cell.getScore();// sum player's marbles score, according to the distance from the center.
+        }
+
+        double opponentsDistanceScore = 0;
+        for (Cell cell : opponentsMarbles) {
+            opponentsDistanceScore += cell.getScore();
+        }
+
+        return MydistanceScore - opponentsDistanceScore;
+    }
+
     private double pushedOff(Move move) {
         // if(myMarbles.size() - opponentsMarbles.size() == 0){
         // return 1;
@@ -220,36 +237,147 @@ public class Computer {
         // return myMarbles.size() - opponentsMarbles.size();
     }
 
-    private double evaluateGroupScore() {
-        double MyGroupScore = 0.0;
-        for (Move move : moves) {
-            MyGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
-        }
+    public double evaluateGroupScore() {
+        double Score = 0.0;
 
-        getAllPotentialMovesForPlayer(2);
-        getAllPotentialMovesForPlayer(1);
+        // Evaluate group score Top Left To Bottom Right diagnols
+        Score += mainDiagnols();
 
-        double opponentsGroupScore = 0.0;
-        for (Move move : moves) {
-            opponentsGroupScore += (move.getSizeInLine() == 2) ? 1 : ((move.getSizeInLine() == 3) ? 2 : 0);
-        }
+        // Evaluate group score Top Right To Bottom Left diagnols
+        Score += secondariesDiagnols();
 
-        return MyGroupScore - opponentsGroupScore;
+        // Evaluate group score Left To Right Rows
+        Score += LeftToRight();
+
+        return Score;
     }
 
-    private double gravityCenter() {
+    private double LeftToRight() {
+        double LeftToRightSore = 0.0;
+        int playerInOrder, opponentInOrder;
+        for (int x = 0; x < 9; x++) {
+            int rowLength = getRowLength(x);
+            playerInOrder = 0;
+            opponentInOrder = 0;
+            for (int y = 0; y < rowLength; y++) {
+                Cell cell = gameBoard.getCellAt(x, y);
+                if (cell.getState() == player) {
+                    opponentInOrder = 0;
+                    if (playerInOrder == 0) {
+                        playerInOrder++;
+                    } else {
+                        if (playerInOrder == 1) {
+                            playerInOrder++;
+                            LeftToRightSore++;
+                        } else if (playerInOrder == 2) {
+                            playerInOrder++;
+                            LeftToRightSore++;
+                        }
+                    }
+                } else {
+                    if (cell.getState() != 0) {
+                        playerInOrder = 0;
+                        if (opponentInOrder == 0) {
+                            opponentInOrder++;
+                        } else {
+                            if (opponentInOrder == 1) {
+                                opponentInOrder++;
+                                LeftToRightSore--;
+                            } else if (opponentInOrder == 2) {
+                                opponentInOrder++;
+                                LeftToRightSore--;
+                            }
+                        }
+                    } else {
+                        opponentInOrder = 0;
+                        playerInOrder = 0;
+                    }
+                }
+            }
+        }
+        return LeftToRightSore;
+    }
 
-        double MydistanceScore = 0;
-        for (Cell cell : myMarbles) {
-            MydistanceScore += cell.getScore();// sum player's marbles score, according to the distance from the center.
+    private double mainDiagnols() {
+        double mainDiagnolScore = 0.0;
+
+        for (int d = 0; d < 5; d++) {
+            Cell cell = gameBoard.getCellAt(d, 0);
+            mainDiagnolScore += evaluateDiagnol(cell, Direction.DOWNRIGHT);
+        }
+        for (int d = 1; d < 5; d++) {
+            Cell cell = gameBoard.getCellAt(0, d);
+            mainDiagnolScore += evaluateDiagnol(cell, Direction.DOWNRIGHT);
         }
 
-        double opponentsDistanceScore = 0;
-        for (Cell cell : opponentsMarbles) {
-            opponentsDistanceScore += cell.getScore();
+        return mainDiagnolScore;
+    }
+
+    private double secondariesDiagnols() {
+        double secondariesDiagnolsScore = 0.0;
+
+        for (int d = 4; d < 9; d++) {
+            Cell cell = gameBoard.getCellAt(d, 0);
+            secondariesDiagnolsScore += evaluateDiagnol(cell, Direction.UPRIGHT);
+        }
+        for (int d = 1; d < 5; d++) {
+            Cell cell = gameBoard.getCellAt(8, d);
+            secondariesDiagnolsScore += evaluateDiagnol(cell, Direction.UPRIGHT);
         }
 
-        return MydistanceScore - opponentsDistanceScore;
+        return secondariesDiagnolsScore;
+    }
+
+    private double evaluateDiagnol(Cell cell, Direction direction) {
+        double evaluatedLeftToRightDiagnol = 0.0;
+        int playerInOrder = 0;
+        int opponentInOrder = 0;
+        while (cell != null) {
+            if (cell.getState() == player) {
+                opponentInOrder = 0;
+                if (playerInOrder == 0) {
+                    playerInOrder++;
+                } else {
+                    if (playerInOrder == 1) {
+                        playerInOrder++;
+                        evaluatedLeftToRightDiagnol++;
+                    } else if (playerInOrder == 2) {
+                        playerInOrder++;
+                        evaluatedLeftToRightDiagnol++;
+                    }
+                }
+            } else {
+                if (cell.getState() != 0) {
+                    playerInOrder = 0;
+                    if (opponentInOrder == 0) {
+                        opponentInOrder++;
+                    } else {
+                        if (opponentInOrder == 1) {
+                            opponentInOrder++;
+                            evaluatedLeftToRightDiagnol--;
+                        } else if (opponentInOrder == 2) {
+                            opponentInOrder++;
+                            evaluatedLeftToRightDiagnol--;
+                        }
+                    }
+                } else {
+                    opponentInOrder = 0;
+                    playerInOrder = 0;
+                }
+            }
+            cell = cell.getNeighborInDirection(direction);
+        }
+        return evaluatedLeftToRightDiagnol;
+    }
+
+    private static int getRowLength(int x) {
+        if (x < 4) {
+            return 5 + x; // Rows 0 to 3 increase in length
+        } else if (x < 5) {
+            return 9; // Middle row has the maximum length
+        } else {
+            return 13 - x; // Rows 5 to 8 decrease in length
+        }
     }
 
 }

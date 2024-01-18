@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Random;
 
 import com.abalone.enums.Direction;
-// import com.abalone.enums.MoveType;
 import com.abalone.enums.MoveType;
 
 public class Computer {
@@ -155,7 +154,7 @@ public class Computer {
         int randomIndex = 0;
         System.out.println("Total moves: " + moves.size());
         System.out.println("Bests moves: " + bestMoves.size());
-        if (bestMoves.size() == 0) {
+        if (bestMoves.size() != 0) {
             randomIndex = random.nextInt(bestMoves.size());
         }
         bestMove = bestMoves.get(randomIndex);
@@ -180,7 +179,7 @@ public class Computer {
         // System.out.println("keepPacked --->>> " + keepPackedScore);
 
         double marblesGroupScore = evaluateGroupScore();
-        System.out.println("evaluateGroupScore --->>> " + marblesGroupScore);
+        // System.out.println("evaluateGroupScore --->>> " + marblesGroupScore);
 
         move.undoMove();// undo the move to get it back before checking another move.
         return gravityCenterScore + keepPackedScore + pushedOffScore;

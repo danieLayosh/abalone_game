@@ -147,11 +147,13 @@ public class GUI {
 
         if (cell.getState() == player) {
             if (marbles.isEmpty()) {
-                cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill:white;");
+                cell.getBt().setStyle(
+                        "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 10, 0, 0, 0); -fx-opacity: 0.75;");
             } else {
                 marbles.add(cell);
                 if (move.areMarblesInlineAndAdjacent()) {
-                    cell.getBt().setStyle("-fx-background-color: #6699ff; -fx-text-fill:white;");
+                    cell.getBt().setStyle(
+                            "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 10, 0, 0, 0); -fx-opacity: 0.75;");
                     showDirectionOnMarbles(move);
                 }
                 marbles.remove(cell);
@@ -303,8 +305,11 @@ public class GUI {
         } else {
             if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1) && !marbles.isEmpty()) {
                 Move move = new Move(marbles, cell, player);
-                executeTheTurn(move);
-                System.out.println("Player Move executed.");
+                if (move.isValid()) {
+                    executeTheTurn(move);
+                    System.out.println("Player Move executed.");
+                } else
+                    System.out.println("Move is invalid.");
             } else {
                 marbles.clear();
                 System.out.println("Move is invalid.");

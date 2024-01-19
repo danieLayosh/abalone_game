@@ -2,7 +2,9 @@ package com.abalone;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import com.abalone.enums.Direction;
@@ -264,7 +266,6 @@ public class GUI {
         Move move = computer.computerTurn();
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
-
         // gameBoard.printBoardScore();
         // gameBoard.printBoardWithCoordinates();
     }
@@ -342,11 +343,13 @@ public class GUI {
 
                 if (red_score.get() == 6 || blue_score.get() == 6) {
                     endGame();
+                    // endGameCPTesting();
                 }
             }
 
             changePlayer();
             marbles.clear();
+            // computerVsComputerTesting();//testing
         }
     }
 
@@ -360,13 +363,19 @@ public class GUI {
         }
     }
 
+    private void computerVsComputerTesting() {
+        computerPlay();// for the loop
+        endGameCPTesting();
+    }
+
     private void endGame() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Game Over");
         if (player == 1) {
             alert.setHeaderText("THE RED PLAYER WON!!!!");
-        } else
+        } else {
             alert.setHeaderText("THE BLUE PLAYER WON!!!!");
+        }
 
         alert.setContentText("Do you want to play another game?");
 
@@ -384,6 +393,16 @@ public class GUI {
         });
     }
 
+    private void endGameCPTesting() {
+        if (player == 1) {
+            System.out.println("THE RED PLAYER WON!!!!");
+        } else {
+            System.out.println("THE BLUE PLAYER WON!!!!");
+        }
+        restartGame();
+
+    }
+
     private void restartGame() {
         this.player = 2;
         this.blue_score = new SimpleIntegerProperty(0);
@@ -392,7 +411,6 @@ public class GUI {
         this.marbles.clear();
         this.redHBox.getChildren().clear();
         this.blueHBox.getChildren().clear();
-
         initialize();
     }
 

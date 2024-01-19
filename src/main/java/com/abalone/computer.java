@@ -128,7 +128,6 @@ public class Computer {
 
     public Move computerTurn() {
         if (moves.isEmpty()) {
-            // No valid moves available, return null or handle this case as needed
             return null;
         }
 
@@ -145,25 +144,28 @@ public class Computer {
             if (evaluation == bestEvaluation) {
                 bestMove = move;
                 bestMoves.add(bestMove);
-                System.out.println(move.toString() + " The score is: " + evaluation);
             }
         }
 
         // Choose a random move from the list of possible moves
         Random random = new Random();
         int randomIndex = 0;
-        System.out.println("Total moves: " + moves.size());
-        System.out.println("Bests moves: " + bestMoves.size());
         if (bestMoves.size() != 0) {
             randomIndex = random.nextInt(bestMoves.size());
         }
         bestMove = bestMoves.get(randomIndex);
+        printMoveDetails(bestMove, bestMoves, bestEvaluation);
+
+        return bestMove;
+    }
+
+    private void printMoveDetails(Move bestMove, List<Move> bestMoves, double bestEvaluation) {
+        System.out.println("Total moves: " + moves.size());
+        System.out.println("Bests moves: " + bestMoves.size());
         System.out.println(" ");
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
         System.out.println("evaluateGroupScore --->>> " + evaluateGroupScore());
         System.out.println(" ");
-
-        return bestMove;
     }
 
     private double evaluatesBoardState(Move move) {
@@ -184,9 +186,9 @@ public class Computer {
 
         move.undoMove();// undo the move to get it back before checking another move.
         // if (player == 2) {
-            return gravityCenterScore + marblesGroupScore + pushedOffScore + keepPackedScore;
+            return gravityCenterScore + pushedOffScore + marblesGroupScore ;
         // } else {
-        //     return gravityCenterScore + marblesGroupScore + pushedOffScore + keepPackedScore;
+        //     return gravityCenterScore + pushedOffScore + marblesGroupScore;
         // }
     }
 

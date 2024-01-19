@@ -264,6 +264,7 @@ public class GUI {
     private void computerPlay() {
         Computer computer = new Computer(gameBoard, player);
         Move move = computer.computerTurn();
+
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
         // gameBoard.printBoardScore();
@@ -271,6 +272,7 @@ public class GUI {
     }
 
     public void turn(Cell cell) {
+
         // if the marble is already pushed remove her
         if (marbles.contains(cell)) {
             marbles.remove(cell);

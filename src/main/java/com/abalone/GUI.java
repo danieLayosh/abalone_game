@@ -2,9 +2,7 @@ package com.abalone;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import com.abalone.enums.Direction;
@@ -229,16 +227,19 @@ public class GUI {
 
     public void updateCellGUI(Cell cell) {
         Image image = new Image("abalone0.gif");
-        // Image image = new Image(getClass().getResourceAsStream("/blackAndWhite/hole.png"));
+        // Image image = new
+        // Image(getClass().getResourceAsStream("/blackAndWhite/hole.png"));
 
         switch (cell.getState()) {
             case 1:
                 image = new Image("abalone1.gif");
-                // image = new Image(getClass().getResourceAsStream("/blackAndWhite/white_ball.png"));
+                // image = new
+                // Image(getClass().getResourceAsStream("/blackAndWhite/white_ball.png"));
                 break;
             case 2:
                 image = new Image("abalone2.gif");
-                // image = new Image(getClass().getResourceAsStream("/blackAndWhite/black_ball.png"));
+                // image = new
+                // Image(getClass().getResourceAsStream("/blackAndWhite/black_ball.png"));
                 break;
             default:
                 break;
@@ -272,7 +273,6 @@ public class GUI {
     }
 
     public void turn(Cell cell) {
-
         // if the marble is already pushed remove her
         if (marbles.contains(cell)) {
             marbles.remove(cell);
@@ -295,9 +295,13 @@ public class GUI {
                     if (move.areMarblesInlineAndAdjacent()) {
                         cellPushed(cell);
                     } else {
-                        marbles.remove(cell);
-                        updateCellGUI(cell);
-                        System.out.println("The marble is not an inline neighbor.");
+                        if (marbles.size() == 2 && inlineWithJump(marbles.get(0), marbles.get(1))) {
+                            cellPushed(cell);
+                        } else {
+                            marbles.remove(cell);
+                            updateCellGUI(cell);
+                            System.out.println("The marble is not an inline neighbor.");
+                        }
                     }
                 } else {
                     System.out.println("To much marbles, Choose again please.");
@@ -320,6 +324,18 @@ public class GUI {
                 System.out.println("Move is invalid.");
             }
         }
+    }
+
+    private boolean inlineWithJump(Cell cell, Cell cell2) {
+        for (Direction direction : cell.getNeighborsMap().values()) {
+            if (cell.getNeighborInDirection(direction) == cell2
+                    .getNeighborInDirection(Move.oppositeDirection(direction))) {
+                marbles.add(cell.getNeighborInDirection(direction));
+                cellPushed(cell.getNeighborInDirection(direction));
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

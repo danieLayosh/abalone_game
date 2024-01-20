@@ -296,7 +296,7 @@ public class Move {
         return false;
     }
 
-    public Direction oppositeDirection(Direction direction) {
+    public static Direction oppositeDirection(Direction direction) {
         switch (direction) {
             case UPLEFT:
                 return Direction.DOWNRIGHT;
@@ -309,9 +309,7 @@ public class Move {
             case DOWNLEFT:
                 return Direction.UPRIGHT;
             default:
-                System.out.println("Invalid direction: " + direction);
                 return null;
-            // throw new IllegalArgumentException("Invalid direction: " + direction);
         }
     }
 

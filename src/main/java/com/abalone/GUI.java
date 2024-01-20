@@ -200,10 +200,7 @@ public class GUI {
                 setMarblesImageDirection(image);
             }
         } else {
-            // System.out.println("--------------------------------------");
-            // List<Cell> marbles = move.getMarbles();
-            // Cell potintiaCell =
-            // marbles.get(0).getNeighborInDirection(move.getMarblesDirection());
+
         }
     }
 
@@ -232,13 +229,16 @@ public class GUI {
 
     public void updateCellGUI(Cell cell) {
         Image image = new Image("abalone0.gif");
+        // Image image = new Image(getClass().getResourceAsStream("/blackAndWhite/hole.png"));
 
         switch (cell.getState()) {
             case 1:
                 image = new Image("abalone1.gif");
+                // image = new Image(getClass().getResourceAsStream("/blackAndWhite/white_ball.png"));
                 break;
             case 2:
                 image = new Image("abalone2.gif");
+                // image = new Image(getClass().getResourceAsStream("/blackAndWhite/black_ball.png"));
                 break;
             default:
                 break;

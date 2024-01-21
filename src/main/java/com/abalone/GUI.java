@@ -23,6 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -164,11 +165,17 @@ public class GUI {
             while (nextCell != null && nextCell.getState() == player) {
                 nextCell = nextCell.getNeighborInDirection(direction);
             }
+
             Cell dest = null;
             if (nextCell != null && nextCell.getState() != player) {
                 dest = nextCell;
             }
-            turn(dest);
+
+            if (dest != null) {
+                turn(dest);
+            } else {
+                showTemporaryMessage("This move is not valid. Please try again.");
+            }
         } else {
             int x = button.getId().charAt(2) - '0';
             int y = button.getId().charAt(4) - '0';
@@ -178,26 +185,34 @@ public class GUI {
                 if (move.isValid()) {
                     executeTheTurn(move);
                 } else {
-                    showInvalidMoveAlert();
+                    showTemporaryMessage("This move is not valid. Please try again.");
                 }
             }
         }
     }
 
-private void showInvalidMoveAlert() {
-    Alert alert = new Alert(Alert.AlertType.ERROR);
-    alert.setTitle("Invalid Move");
-    alert.setHeaderText(null);
-    alert.setContentText("This move is not valid. Please try again.");
-    alert.show();
+    private void showTemporaryMessage(String message) {
+        Label label = new Label(message);
+        label.setStyle(
+                "-fx-background-color: rgba(0, 0, 0, 0.5); -fx-text-fill: white; -fx-padding: 5px; -fx-font-size: 20px; -fx-background-radius: 5px;");
 
-    // Fade out transition
-    FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), alert.getDialogPane());
-    fadeOut.setFromValue(1.0);
-    fadeOut.setToValue(0.0);
-    fadeOut.setOnFinished(event -> alert.close());
-    fadeOut.play();
-}
+        Popup popup = new Popup();
+        popup.getContent().add(label);
+
+        FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), label);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setDelay(Duration.seconds(0.5)); // Message visible for 2 seconds before fading
+        fadeOut.setOnFinished(event -> popup.hide());
+
+        // Show the popup and then set its position
+        popup.show(stage); // 'stage' should be your primary stage
+        popup.setX(stage.getX() + stage.getWidth() / 2 - label.getWidth() / 2);
+        popup.setY(stage.getY() + 100);
+
+        popup.show(stage); // 'stage' should be your primary stage
+        fadeOut.play();
+    }
 
     private void undoMove() {
         Move computerMove = null, playerMove = null;

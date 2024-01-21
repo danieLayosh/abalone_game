@@ -31,8 +31,8 @@ public class GUI {
     private GameBoard gameBoard = new GameBoard();;
     private int player;
     private List<Cell> marbles;
-    private IntegerProperty blue_score;
-    private IntegerProperty red_score;
+    private IntegerProperty black_score;
+    private IntegerProperty white_score;
     private Stack<Move> LastTwoMove;
     private double startX, startY;
     private List<Move> moveHistory = new ArrayList<>();
@@ -40,25 +40,25 @@ public class GUI {
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
         this.player = 1;
-        this.blue_score = new SimpleIntegerProperty(0);
-        this.red_score = new SimpleIntegerProperty(0);
+        this.black_score = new SimpleIntegerProperty(0);
+        this.white_score = new SimpleIntegerProperty(0);
         this.LastTwoMove = new Stack<>();
     }
 
     @FXML
-    private HBox blueHBox;
+    private HBox blackHBox;
 
     @FXML
-    private HBox redHBox;
+    private HBox whiteHBox;
 
     @FXML
     private Label playerTurn;
 
     @FXML
-    private Label redPoint;
+    private Label whitePoint;
 
     @FXML
-    private Label bluePoint;
+    private Label blackPoint;
 
     @FXML
     private Button undoBt;
@@ -75,8 +75,8 @@ public class GUI {
             bt8_0, bt8_1, bt8_2, bt8_3, bt8_4;
 
     public void initialize() {
-        redPoint.textProperty().bind(red_score.asString());
-        bluePoint.textProperty().bind(blue_score.asString());
+        whitePoint.textProperty().bind(white_score.asString());
+        blackPoint.textProperty().bind(black_score.asString());
         undoBt.setOnAction(event -> undoMove());
 
         // Iterate over all cells in the game board and link them to buttons
@@ -245,11 +245,11 @@ public class GUI {
         if (move != null && move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
             // Adjust the score and update display
             if (move.getPlayer() == 1) {
-                red_score.set(red_score.get() - 1);
-                updateScoreDisplay(red_score.get(), redHBox, "/blackAndWhite/black_ball.png");
+                white_score.set(white_score.get() - 1);
+                updateScoreDisplay(white_score.get(), whiteHBox, "/blackAndWhite/black_ball.png");
             } else {
-                blue_score.set(blue_score.get() - 1);
-                updateScoreDisplay(blue_score.get(), blueHBox, "/blackAndWhite/white_ball.png");
+                black_score.set(black_score.get() - 1);
+                updateScoreDisplay(black_score.get(), blackHBox, "/blackAndWhite/white_ball.png");
             }
         }
     }
@@ -307,7 +307,8 @@ public class GUI {
                     break;
                 case DOWNRIGHT:
                     image = new Image(
-                            getClass().getResourceAsStream(("/blackAndWhite/arrows/" + playerColor + "_DownRight.png")));
+                            getClass()
+                                    .getResourceAsStream(("/blackAndWhite/arrows/" + playerColor + "_DownRight.png")));
                     break;
                 default:
                     break;
@@ -478,14 +479,14 @@ public class GUI {
 
             if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                 if (player == 1) {
-                    red_score.set(red_score.get() + 1);
-                    updateScoreDisplay(red_score.get(), redHBox, "abalone2.gif");
+                    white_score.set(white_score.get() + 1);
+                    updateScoreDisplay(white_score.get(), whiteHBox, "abalone2.gif");
                 } else {
-                    blue_score.set(blue_score.get() + 1);
-                    updateScoreDisplay(blue_score.get(), blueHBox, "abalone1.gif");
+                    black_score.set(black_score.get() + 1);
+                    updateScoreDisplay(black_score.get(), blackHBox, "abalone1.gif");
                 }
 
-                if (red_score.get() == 6 || blue_score.get() == 6) {
+                if (white_score.get() == 6 || black_score.get() == 6) {
                     endGame();
                     // endGameCPTesting(); // for testing
                 }
@@ -516,9 +517,9 @@ public class GUI {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Game Over");
         if (player == 1) {
-            alert.setHeaderText("THE RED PLAYER WON!!!!");
+            alert.setHeaderText("THE WHITE PLAYER WON!!!!");
         } else {
-            alert.setHeaderText("THE BLUE PLAYER WON!!!!");
+            alert.setHeaderText("THE BLACK PLAYER WON!!!!");
         }
 
         alert.setContentText("Do you want to play another game?");
@@ -539,9 +540,9 @@ public class GUI {
 
     private void endGameCPTesting() {
         if (player == 1) {
-            System.out.println("THE RED PLAYER WON!!!!");
+            System.out.println("THE WHITE PLAYER WON!!!!");
         } else {
-            System.out.println("THE BLUE PLAYER WON!!!!");
+            System.out.println("THE BLACK PLAYER WON!!!!");
         }
         restartGame();
 
@@ -549,31 +550,33 @@ public class GUI {
 
     private void restartGame() {
         this.player = 2;
-        this.blue_score = new SimpleIntegerProperty(0);
-        this.red_score = new SimpleIntegerProperty(0);
+        this.black_score = new SimpleIntegerProperty(0);
+        this.white_score = new SimpleIntegerProperty(0);
         this.gameBoard = new GameBoard();
         this.marbles.clear();
-        this.redHBox.getChildren().clear();
-        this.blueHBox.getChildren().clear();
+        this.whiteHBox.getChildren().clear();
+        this.blackHBox.getChildren().clear();
         this.LastTwoMove.clear();
         this.moveHistory.clear();
-        this.blueHBox.getChildren().clear();
-        this.redHBox.getChildren().clear();
-        this.bluePoint.textProperty().bind(blue_score.asString());
-        this.redPoint.textProperty().bind(red_score.asString());
+        this.blackHBox.getChildren().clear();
+        this.whiteHBox.getChildren().clear();
+        this.blackPoint.textProperty().bind(black_score.asString());
+        this.whitePoint.textProperty().bind(white_score.asString());
         initialize();
     }
 
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
         if (player == 2) {
-            // computerPlay();
-            playerTurn.setText("Blue Turn");
-            playerTurn.setTextFill(Color.BLUE);
+            computerPlay();
+            playerTurn.setText("Black Turn");
+            playerTurn.setTextFill(Color.BLACK);
+            playerTurn.setStyle("-fx-background-color: #FFFFFF;");
         }
         if (player == 1) {
-            playerTurn.setText("Red Turn");
-            playerTurn.setTextFill(Color.RED);
+            playerTurn.setText("White Turn");
+            playerTurn.setTextFill(Color.WHITE);
+            playerTurn.setStyle("-fx-background-color: #000000;");
         }
     }
 
@@ -592,7 +595,7 @@ public class GUI {
         imageView.setFitWidth(35);
         imageView.setPreserveRatio(true);
         ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setBrightness(-0.25); // Adjust this value between -1 and 0 to control darkness
+        colorAdjust.setBrightness(0.25); // Adjust this value between -1 and 0 to control darkness
         imageView.setEffect(colorAdjust);
         cell.getBt().setGraphic(imageView);
     }

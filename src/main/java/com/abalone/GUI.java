@@ -172,10 +172,19 @@ public class GUI {
             }
 
             if (dest != null) {
-                turn(dest);
+                Move move = new Move(marbles, dest, player);
+                move.isValid();
+                MoveType moveType = move.getMoveType();
+                System.out.println(dest.formatCoordinate());
+                if (moveType == MoveType.SIDESTEP) {
+                    System.out.println("cant do a sideStep with draging.");
+                } else {
+                    turn(dest);
+                }
             } else {
                 showTemporaryMessage("This move is not valid. Please try again.");
             }
+
         } else {
             int x = button.getId().charAt(2) - '0';
             int y = button.getId().charAt(4) - '0';
@@ -401,8 +410,12 @@ public class GUI {
                             cellPushed(cell);
                         } else {
                             marbles.remove(cell);
-                            updateCellGUI(cell);
-                            System.out.println("The marble is not an inline neighbor.");
+                            if (inlineWithJump(marbles.get(0), marbles.get(1))) {
+                                cellPushed(cell);
+                            } else {
+                                updateCellGUI(cell);
+                                System.out.println("The marble is not an inline neighbor.");
+                            }
                         }
                     }
                 } else {

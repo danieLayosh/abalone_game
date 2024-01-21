@@ -308,6 +308,8 @@ public class Move {
                 return Direction.UPLEFT;
             case DOWNLEFT:
                 return Direction.UPRIGHT;
+            case LEFT:
+                return Direction.RIGHT;
             default:
                 return null;
         }

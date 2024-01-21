@@ -154,12 +154,6 @@ public class Computer {
             randomIndex = random.nextInt(bestMoves.size());
         }
         bestMove = bestMoves.get(randomIndex);
-
-        bestMove.executeMove();
-        updateMarblesList(); // update the player marbles list.
-        System.out.println(pushedOff(bestMove));
-        bestMove.undoMove();
-
         printMoveDetails(bestMove, bestMoves, bestEvaluation);
 
         return bestMove;
@@ -189,9 +183,9 @@ public class Computer {
         move.undoMove();// undo the move to get it back before checking another move.
 
         // if (player == 2) {
-        return gravityCenterScore + pushedOffScore + marblesGroupScore;
+            return gravityCenterScore + pushedOffScore + marblesGroupScore ;
         // } else {
-        // return gravityCenterScore + pushedOffScore + marblesGroupScore;
+        //     return gravityCenterScore + pushedOffScore + marblesGroupScore;
         // }
     }
 

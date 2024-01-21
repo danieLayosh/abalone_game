@@ -35,6 +35,7 @@ public class GUI {
     private IntegerProperty red_score;
     private Stack<Move> LastTwoMove;
     private double startX, startY;
+    private List<Move> moveHistory = new ArrayList<>();
 
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
@@ -176,7 +177,7 @@ public class GUI {
                 MoveType moveType = move.getMoveType();
                 System.out.println(dest.formatCoordinate());
                 if (moveType == MoveType.SIDESTEP) {
-                    System.out.println("Cant do a sideStep with draging.");
+                    showTemporaryMessage("Cant do a sideStep with draging.");
                 } else {
                     turn(dest);
                 }
@@ -379,8 +380,6 @@ public class GUI {
 
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
-        // gameBoard.printBoardScore();
-        // gameBoard.printBoardWithCoordinates();
     }
 
     public void turn(Cell cell) {
@@ -397,7 +396,7 @@ public class GUI {
                 } else {
                     marbles.remove(cell);
                     updateCellGUI(cell);
-                    System.out.println("The marble is not an inline neighbor.");
+                    showTemporaryMessage("The marble is not an inline neighbor.");
                 }
             } else {
                 if (marbles.size() < 3) {
@@ -414,12 +413,12 @@ public class GUI {
                                 cellPushed(cell);
                             } else {
                                 updateCellGUI(cell);
-                                System.out.println("The marble is not an inline neighbor.");
+                                showTemporaryMessage("The marble is not an inline neighbor.");
                             }
                         }
                     }
                 } else {
-                    System.out.println("To much marbles, Choose again please.");
+                    showTemporaryMessage("To much marbles, Choose again please.");
                     marbles.clear();
                     updateBoard();
                     marbles.add(cell);
@@ -436,7 +435,7 @@ public class GUI {
                     System.out.println("Move is invalid.");
             } else {
                 marbles.clear();
-                System.out.println("Move is invalid.");
+                showTemporaryMessage("Move is invalid.");
             }
         }
     }
@@ -461,9 +460,16 @@ public class GUI {
     private void executeTheTurn(Move move) {
         if (move != null && move.isValid()) {
 
+            moveHistory.add(move);
+            if (isLoopingSequenceDetected()) {
+                endGameDueToLoop_TIE();
+                // restartGame(); // For testing
+                return;
+            }
+
             move.executeMove();
 
-            updateBoard();
+            updateBoard();// For testing turn off
 
             LastTwoMove.add(move);// For the undo move button
 
@@ -478,13 +484,13 @@ public class GUI {
 
                 if (red_score.get() == 6 || blue_score.get() == 6) {
                     endGame();
-                    // endGameCPTesting();
+                    // endGameCPTesting(); // for testing
                 }
             }
 
             changePlayer();
             marbles.clear();
-            // computerVsComputerTesting();//testing
+            // computerVsComputerTesting();// for testing
         }
     }
 
@@ -546,6 +552,12 @@ public class GUI {
         this.marbles.clear();
         this.redHBox.getChildren().clear();
         this.blueHBox.getChildren().clear();
+        this.LastTwoMove.clear();
+        this.moveHistory.clear();
+        this.blueHBox.getChildren().clear();
+        this.redHBox.getChildren().clear();
+        this.bluePoint.textProperty().bind(blue_score.asString());
+        this.redPoint.textProperty().bind(red_score.asString());
         initialize();
     }
 
@@ -584,6 +596,39 @@ public class GUI {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    private boolean isLoopingSequenceDetected() {
+        int historySize = moveHistory.size();
+        if (historySize < 6) { // Minimum size for a loop, can be adjusted
+            return false;
+        }
+
+        // Check for a loop by analyzing the history
+        for (int sequenceSize = 2; sequenceSize <= historySize / 2; sequenceSize++) {
+            boolean sequenceRepeated = true;
+            for (int i = 0; i < sequenceSize; i++) {
+                // Compare the sequence with the sequence before it
+                if (!moveHistory.get(historySize - sequenceSize - i).equals(moveHistory.get(historySize - i - 1))) {
+                    sequenceRepeated = false;
+                    break;
+                }
+            }
+            if (sequenceRepeated) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void endGameDueToLoop_TIE() {
+        // Handle the end game logic for a loop scenario
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText("Game ended due to repetitive loop - TIE");
+        alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
+        alert.showAndWait();
+        // Additional logic to restart or close the game
     }
 
 }

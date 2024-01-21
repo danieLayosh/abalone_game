@@ -183,9 +183,9 @@ public class Computer {
         move.undoMove();// undo the move to get it back before checking another move.
 
         // if (player == 2) {
-            return gravityCenterScore + pushedOffScore + marblesGroupScore ;
+        return gravityCenterScore + pushedOffScore + marblesGroupScore;
         // } else {
-        //     return gravityCenterScore + pushedOffScore + marblesGroupScore;
+        // return gravityCenterScore + pushedOffScore + marblesGroupScore;
         // }
     }
 
@@ -240,7 +240,7 @@ public class Computer {
                 } else if (myMarbles.size() - opponentsMarbles.size() > 0) {
                     pushCounter = 0;
                 } else {
-                    pushCounter = 29;
+                    pushCounter = 30;
                 }
             }
         }

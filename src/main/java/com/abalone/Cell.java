@@ -31,7 +31,7 @@ public class Cell {
             if (y == 0) {
                 return true;
             } else {
-                return getRowLength(x) == y+1;
+                return getRowLength(x) == y + 1;
             }
         }
     }
@@ -147,6 +147,16 @@ public class Cell {
 
     public boolean getIsborder() {
         return isborder;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cell: ").append(formatCoordinate());
+        sb.append(", State: ").append(getState());
+        sb.append(", isBorder: ").append(isborder);
+        sb.append(" ");
+        return sb.toString();
     }
 
 }

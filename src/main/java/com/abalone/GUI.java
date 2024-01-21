@@ -9,7 +9,6 @@ import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -230,14 +229,15 @@ public class GUI {
             if (!LastTwoMove.empty())
                 playerMove = LastTwoMove.pop();
         }
+
         if (computerMove != null && playerMove != null) {
             handleScoreUpdate(computerMove);
             handleScoreUpdate(playerMove);
 
             computerMove.undoMove();
             playerMove.undoMove();
-            updateBoard();
         }
+        updateBoard();
     }
 
     private void handleScoreUpdate(Move move) {
@@ -445,9 +445,11 @@ public class GUI {
         for (Direction direction : cell.getNeighborsMap().values()) {
             if (cell.getNeighborInDirection(direction) == cell2
                     .getNeighborInDirection(Move.oppositeDirection(direction))) {
-                marbles.add(cell.getNeighborInDirection(direction));
-                cellPushed(cell.getNeighborInDirection(direction));
-                return true;
+                if (cell.getNeighborInDirection(direction).getState() == player) {
+                    marbles.add(cell.getNeighborInDirection(direction));
+                    cellPushed(cell.getNeighborInDirection(direction));
+                    return true;
+                }
             }
         }
         return false;

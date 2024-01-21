@@ -8,6 +8,8 @@ import java.util.Stack;
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -22,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class GUI {
     private Stage stage;
@@ -106,7 +109,6 @@ public class GUI {
         button.setOnMousePressed(event -> {
             startX = event.getSceneX();
             startY = event.getSceneY();
-
         });
 
         button.setOnMouseReleased(event -> {
@@ -163,20 +165,39 @@ public class GUI {
                 nextCell = nextCell.getNeighborInDirection(direction);
             }
             Cell dest = null;
-            if (nextCell.getState() != player) {
+            if (nextCell != null && nextCell.getState() != player) {
                 dest = nextCell;
             }
             turn(dest);
         } else {
             int x = button.getId().charAt(2) - '0';
             int y = button.getId().charAt(4) - '0';
-            marbles.add(gameBoard.getCellAt(x, y));
-            Move move = new Move(marbles, marbles.get(0).getNeighborInDirection(direction), player);
-            if (move.isValid()) {
-                executeTheTurn(move);
+            if (gameBoard.getCellAt(x, y) != null && gameBoard.getCellAt(x, y).getState() == player) {
+                marbles.add(gameBoard.getCellAt(x, y));
+                Move move = new Move(marbles, marbles.get(0).getNeighborInDirection(direction), player);
+                if (move.isValid()) {
+                    executeTheTurn(move);
+                } else {
+                    showInvalidMoveAlert();
+                }
             }
         }
     }
+
+private void showInvalidMoveAlert() {
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Invalid Move");
+    alert.setHeaderText(null);
+    alert.setContentText("This move is not valid. Please try again.");
+    alert.show();
+
+    // Fade out transition
+    FadeTransition fadeOut = new FadeTransition(Duration.seconds(1), alert.getDialogPane());
+    fadeOut.setFromValue(1.0);
+    fadeOut.setToValue(0.0);
+    fadeOut.setOnFinished(event -> alert.close());
+    fadeOut.play();
+}
 
     private void undoMove() {
         Move computerMove = null, playerMove = null;
@@ -343,7 +364,7 @@ public class GUI {
         if (marbles.contains(cell)) {
             marbles.remove(cell);
             updateCellGUI(cell);
-        } else if (cell.getState() == player) {
+        } else if (cell != null && cell.getState() == player) {
             if (marbles.isEmpty()) {
                 marbles.add(cell);
                 Move move = new Move(marbles, cell, player);

@@ -246,10 +246,10 @@ public class GUI {
             // Adjust the score and update display
             if (move.getPlayer() == 1) {
                 red_score.set(red_score.get() - 1);
-                updateScoreDisplay(red_score.get(), redHBox, "abalone2.gif");
+                updateScoreDisplay(red_score.get(), redHBox, "/blackAndWhite/black_ball.png");
             } else {
                 blue_score.set(blue_score.get() - 1);
-                updateScoreDisplay(blue_score.get(), blueHBox, "abalone1.gif");
+                updateScoreDisplay(blue_score.get(), blueHBox, "/blackAndWhite/white_ball.png");
             }
         }
     }
@@ -282,26 +282,32 @@ public class GUI {
     private void showDirectionOnMarbles(Move move) {
         Direction direction = move.getDirectionToDest();
         if (direction != null) { // Add null check
-            String playerColor = (player == 1) ? "red" : "blue";
+            String playerColor = (player == 1) ? "white" : "black";
             Image image = null;
             switch (direction) {
                 case LEFT:
-                    image = new Image(playerColor + "Left.gif");
+                    image = new Image(
+                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_Left.png"));
                     break;
                 case RIGHT:
-                    image = new Image(playerColor + "Right.gif");
+                    image = new Image(
+                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_Right.png"));
                     break;
                 case UPLEFT:
-                    image = new Image(playerColor + "UpLeft.gif");
+                    image = new Image(
+                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_UpLeft.png"));
                     break;
                 case UPRIGHT:
-                    image = new Image(playerColor + "UpRight.gif");
+                    image = new Image(
+                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_UpRight.png"));
                     break;
                 case DOWNLEFT:
-                    image = new Image(playerColor + "DownLeft.gif");
+                    image = new Image(
+                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_DownLeft.png"));
                     break;
                 case DOWNRIGHT:
-                    image = new Image(playerColor + "DownRight.gif");
+                    image = new Image(
+                            getClass().getResourceAsStream(("/blackAndWhite/arrows/" + playerColor + "_DownRight.png")));
                     break;
                 default:
                     break;
@@ -338,20 +344,17 @@ public class GUI {
     }
 
     public void updateCellGUI(Cell cell) {
-        Image image = new Image("abalone0.gif");
-        // Image image = new
-        // Image(getClass().getResourceAsStream("/blackAndWhite/hole.png"));
+        // Image image = new Image("abalone0.gif");
+        Image image = new Image(getClass().getResourceAsStream("/blackAndWhite/hole.png"));
 
         switch (cell.getState()) {
             case 1:
-                image = new Image("abalone1.gif");
-                // image = new
-                // Image(getClass().getResourceAsStream("/blackAndWhite/white_ball.png"));
+                // image = new Image("abalone1.gif");
+                image = new Image(getClass().getResourceAsStream("/blackAndWhite/white_ball.png"));
                 break;
             case 2:
-                image = new Image("abalone2.gif");
-                // image = new
-                // Image(getClass().getResourceAsStream("/blackAndWhite/black_ball.png"));
+                // image = new Image("abalone2.gif");
+                image = new Image(getClass().getResourceAsStream("/blackAndWhite/black_ball.png"));
                 break;
             default:
                 break;
@@ -564,7 +567,7 @@ public class GUI {
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
         if (player == 2) {
-            computerPlay();
+            // computerPlay();
             playerTurn.setText("Blue Turn");
             playerTurn.setTextFill(Color.BLUE);
         }
@@ -578,10 +581,10 @@ public class GUI {
         Image image = null;
         switch (cell.getState()) {
             case 1:
-                image = new Image("abalone_red_pushed.gif");
+                image = new Image(getClass().getResourceAsStream("/blackAndWhite/white_pushed.png"));
                 break;
             case 2:
-                image = new Image("abalone_blue_pushed.gif");
+                image = new Image(getClass().getResourceAsStream("/blackAndWhite/black_pushed.png"));
                 break;
         }
         ImageView imageView = new ImageView(image);

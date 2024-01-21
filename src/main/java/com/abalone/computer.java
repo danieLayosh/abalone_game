@@ -230,24 +230,25 @@ public class Computer {
     }
 
     private double pushedOff(Move move) {
-
         double pushCounter = 0.0;
+
         if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
-            // for (Cell cell : move.getMarbles()) {
-                pushCounter = 30;
-                if (canBePushed(move.getDestCell())) {
-                    if (myMarbles.size() - opponentsMarbles.size() == 0 && 14 - opponentsMarbles.size() != 5) {
-                        pushCounter = 10;
-                    } else {
-                        if (myMarbles.size() - opponentsMarbles.size() > 0) {
-                            pushCounter = 0;
-                        } else {
-                            pushCounter = 29;
-                        }
-                    }
-                    return pushCounter;
+            // Initial score for pushing a marble out
+            pushCounter = 30;
+
+            // Check if this move results in a win
+            if (14 - opponentsMarbles.size() == 5) { // Check if pushing this marble results in six marbles being out
+                pushCounter = 100; // Assign a high score for a winning move
+            } else if (canBePushed(move.getDestCell())) {
+                // If it's not a winning move, but the player's marble can be pushed in return
+                if (myMarbles.size() - opponentsMarbles.size() == 0) {
+                    pushCounter = 10;
+                } else if (myMarbles.size() - opponentsMarbles.size() > 0) {
+                    pushCounter = 0;
+                } else {
+                    pushCounter = 29;
                 }
-            // }
+            }
         }
 
         return pushCounter;
@@ -276,15 +277,14 @@ public class Computer {
     private boolean isConsecutiveOpponent(Cell startCell, Direction direction, int opponentState) {
         Cell currentCell = startCell.getNeighborInDirection(direction);
         boolean foundOpponent = false;
-    
+
         while (currentCell != null && currentCell.getState() == opponentState) {
             foundOpponent = true; // At least one opponent cell in the sequence.
             currentCell = currentCell.getNeighborInDirection(direction);
         }
-    
+
         return foundOpponent;
     }
-    
 
     private double evaluateGroupScore() {
         double Score = 0.0;

@@ -106,6 +106,7 @@ public class GUI {
         button.setOnMousePressed(event -> {
             startX = event.getSceneX();
             startY = event.getSceneY();
+
         });
 
         button.setOnMouseReleased(event -> {
@@ -137,17 +138,17 @@ public class GUI {
 
         // Determine direction based on angle
         if ((angle > 330) || (angle <= 30)) {
-            return com.abalone.enums.Direction.RIGHT;
+            return Direction.RIGHT;
         } else if ((angle > 30) && (angle <= 90)) {
-            return com.abalone.enums.Direction.DOWNRIGHT;
+            return Direction.DOWNRIGHT;
         } else if ((angle > 90) && (angle <= 150)) {
-            return com.abalone.enums.Direction.DOWNLEFT;
+            return Direction.DOWNLEFT;
         } else if ((angle > 150) && (angle <= 210)) {
-            return com.abalone.enums.Direction.LEFT;
+            return Direction.LEFT;
         } else if ((angle > 210) && (angle <= 270)) {
-            return com.abalone.enums.Direction.UPLEFT;
+            return Direction.UPLEFT;
         } else if ((angle > 270) && (angle <= 330)) {
-            return com.abalone.enums.Direction.UPRIGHT;
+            return Direction.UPRIGHT;
         } else {
             return null; // Catch any unexpected cases
         }
@@ -166,6 +167,14 @@ public class GUI {
                 dest = nextCell;
             }
             turn(dest);
+        } else {
+            int x = button.getId().charAt(2) - '0';
+            int y = button.getId().charAt(4) - '0';
+            marbles.add(gameBoard.getCellAt(x, y));
+            Move move = new Move(marbles, marbles.get(0).getNeighborInDirection(direction), player);
+            if (move.isValid()) {
+                executeTheTurn(move);
+            }
         }
     }
 

@@ -413,12 +413,12 @@ public class GUI {
                             cellPushed(cell);
                         } else {
                             marbles.remove(cell);
-                            if (inlineWithJump(marbles.get(0), marbles.get(1))) {
-                                cellPushed(cell);
-                            } else {
+                            // if (inlineWithJump(marbles.get(0), marbles.get(1))) {
+                            //     cellPushed(cell);
+                            // } else {
                                 updateCellGUI(cell);
                                 showTemporaryMessage("The marble is not an inline neighbor.");
-                            }
+                            // }
                         }
                     }
                 } else {

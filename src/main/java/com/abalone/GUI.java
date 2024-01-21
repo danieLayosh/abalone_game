@@ -177,7 +177,7 @@ public class GUI {
                 MoveType moveType = move.getMoveType();
                 System.out.println(dest.formatCoordinate());
                 if (moveType == MoveType.SIDESTEP) {
-                    System.out.println("cant do a sideStep with draging.");
+                    System.out.println("Cant do a sideStep with draging.");
                 } else {
                     turn(dest);
                 }

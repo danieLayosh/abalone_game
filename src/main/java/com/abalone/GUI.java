@@ -22,10 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 
 public class GUI {
     private Stage stage;
@@ -35,6 +31,7 @@ public class GUI {
     private IntegerProperty blue_score;
     private IntegerProperty red_score;
     private Stack<Move> LastTwoMove;
+    private double startX, startY;
 
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
@@ -88,6 +85,7 @@ public class GUI {
                 if (cellButton != null) {
                     cell.setBt(cellButton);
                     updateCellGUI(cell);
+                    addDragFunctionality(cell.getBt());
 
                     // Event handler for mouse entering and exiting the button area
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
@@ -96,19 +94,78 @@ public class GUI {
                     cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
                     // cellButton.setOnAction(event -> computerPlay()); // computer vs computer
 
-                    // Create a KeyCodeCombination for Ctrl+Z
-                    KeyCombination ctrlZ = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
-                    stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-                        if (ctrlZ.match(event)) {
-                            // Perform your action here, for example:
-                            undoMove(); // if you want to trigger the undoMove method
-                        }
-                    });
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Error linking cell to button: " + e.getMessage());
                 // Handle exception or log error
             }
+        }
+    }
+
+    private void addDragFunctionality(Button button) {
+        button.setOnMousePressed(event -> {
+            startX = event.getSceneX();
+            startY = event.getSceneY();
+        });
+
+        button.setOnMouseReleased(event -> {
+            double endX = event.getSceneX();
+            double endY = event.getSceneY();
+            Direction direction = determineDirection(startX, startY, endX, endY);
+            if (direction != null) {
+                handleDragDirection(button, direction);
+            }
+            startX = startY = 0;
+        });
+    }
+
+    private Direction determineDirection(double startX, double startY, double endX, double endY) {
+        double deltaX = endX - startX;
+        double deltaY = endY - startY;
+        double threshold = 10.0; // Adjust as needed
+
+        if (Math.hypot(deltaX, deltaY) < threshold) {
+            return null; // No significant movement
+        }
+
+        // Normalize the deltas to determine the primary direction of movement
+        double angle = Math.toDegrees(Math.atan2(deltaY, deltaX));
+
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        // Determine direction based on angle
+        if ((angle > 330) || (angle <= 30)) {
+            return com.abalone.enums.Direction.RIGHT;
+        } else if ((angle > 30) && (angle <= 90)) {
+            return com.abalone.enums.Direction.DOWNRIGHT;
+        } else if ((angle > 90) && (angle <= 150)) {
+            return com.abalone.enums.Direction.DOWNLEFT;
+        } else if ((angle > 150) && (angle <= 210)) {
+            return com.abalone.enums.Direction.LEFT;
+        } else if ((angle > 210) && (angle <= 270)) {
+            return com.abalone.enums.Direction.UPLEFT;
+        } else if ((angle > 270) && (angle <= 330)) {
+            return com.abalone.enums.Direction.UPRIGHT;
+        } else {
+            return null; // Catch any unexpected cases
+        }
+    }
+
+    private void handleDragDirection(Button button, Direction direction) {
+        System.out.println(direction);
+        if (!marbles.isEmpty()) {
+            Cell edgeCellInDirection = marbles.get(0);
+            Cell nextCell = edgeCellInDirection.getNeighborInDirection(direction);
+            while (nextCell != null && nextCell.getState() == player) {
+                nextCell = nextCell.getNeighborInDirection(direction);
+            }
+            Cell dest = null;
+            if (nextCell.getState() != player) {
+                dest = nextCell;
+            }
+            turn(dest);
         }
     }
 

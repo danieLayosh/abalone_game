@@ -187,9 +187,10 @@ public class Computer {
         move.undoMove();// undo the move to get it back before checking another move.
 
         // if (player == 2) {
-            return gravityCenterScore + pushedOffScore + marblesGroupScore ;
+        return gravityCenterScore + pushedOffScore + marblesGroupScore;
         // } else {
-        //     return gravityCenterScore + pushedOffScore + marblesGroupScore + keepPackedScore/2;
+        // return gravityCenterScore + pushedOffScore + marblesGroupScore +
+        // keepPackedScore/2;
         // }
     }
 
@@ -203,10 +204,10 @@ public class Computer {
         }
 
         // for (Cell marble : opponentsMarbles) {
-        //     for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
-        //         if (neighborCell.getState() == marble.getState())
-        //             counter--;
-        //     }
+        // for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
+        // if (neighborCell.getState() == marble.getState())
+        // counter--;
+        // }
         // }
 
         return counter;
@@ -217,11 +218,17 @@ public class Computer {
         double MydistanceScore = 0;
         for (Cell cell : myMarbles) {
             MydistanceScore += cell.getScore();// sum player's marbles score, according to the distance from the center.
+            // if (cell.getIsborder()) {
+            //     MydistanceScore -= 1;
+            // }
         }
 
         double opponentsDistanceScore = 0;
         for (Cell cell : opponentsMarbles) {
             opponentsDistanceScore += cell.getScore();
+            // if (cell.getIsborder()) {
+            //     opponentsDistanceScore -= 1;
+            // }
         }
 
         return MydistanceScore - opponentsDistanceScore;

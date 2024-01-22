@@ -385,6 +385,7 @@ public class GUI {
 
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
+        gameBoard.printBoardScore();
     }
 
     public void turn(Cell cell) {

@@ -98,7 +98,7 @@
                   <HBox fx:id="blackHBox" prefHeight="42.0" prefWidth="131.0" />
                </children>
             </VBox>
-            <Label fx:id="playerTurn" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: BLACK;" text="White Turn" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
+            <Label fx:id="playerTurn" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" style="-fx-background-color: BLACK;" text="White Turn" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="Calibri Bold" size="65.0" />
                </font>
@@ -106,7 +106,7 @@
                   <Insets left="200.0" />
                </HBox.margin>
                <effect>
-                  <Glow />
+                  <Glow level="1.0" />
                </effect>
             </Label>
          </children>

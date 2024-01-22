@@ -164,10 +164,6 @@ public class Computer {
         System.out.println("Bests moves: " + bestMoves.size());
         System.out.println(" ");
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
-        bestMove.executeMove();
-        updateMarblesList();
-        System.out.println("The best move  keep Packed Score(): " + keepPacked());
-        bestMove.undoMove();
         System.out.println(" ");
     }
 

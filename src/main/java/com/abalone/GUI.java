@@ -9,9 +9,14 @@ import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -20,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Popup;
@@ -62,6 +68,9 @@ public class GUI {
 
     @FXML
     private Button undoBt;
+
+    @FXML
+    private AnchorPane AnchorPaneID;
 
     @FXML
     private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
@@ -467,7 +476,7 @@ public class GUI {
 
             move.executeMove();
 
-            updateBoard(move);// For testing turn off
+            animateMarbleMovement(move.getMarbles().get(0), move.getDestCell());
 
             LastTwoMove.add(move);// For the undo move button
 
@@ -631,6 +640,42 @@ public class GUI {
 
         restartGame();
         // Additional logic to restart or close the game
+    }
+
+    private void animateMarbleMovement(Cell startCell, Cell endCell) {
+        Button startButton = startCell.getBt();
+        Button endButton = endCell.getBt();
+
+        ImageView marbleView = new ImageView(((ImageView) startButton.getGraphic()).getImage());
+        marbleView.setFitWidth(startButton.getGraphic().getLayoutBounds().getWidth());
+        marbleView.setFitHeight(startButton.getGraphic().getLayoutBounds().getHeight());
+
+        // Translate button coordinates up the hierarchy to the AnchorPane
+        Point2D startPointInAnchorPane = startButton.localToScene(startButton.getLayoutBounds().getWidth() / 2,
+                startButton.getLayoutBounds().getHeight() / 2);
+        Point2D endPointInAnchorPane = endButton.localToScene(endButton.getLayoutBounds().getWidth() / 2,
+                endButton.getLayoutBounds().getHeight() / 2);
+
+        // Translate scene coordinates back to AnchorPane local coordinates
+        Point2D startPoint = AnchorPaneID.sceneToLocal(startPointInAnchorPane);
+        Point2D endPoint = AnchorPaneID.sceneToLocal(endPointInAnchorPane);
+
+        // Position the ImageView on the board
+        marbleView.setX(startPoint.getX() - marbleView.getFitWidth() / 2);
+        marbleView.setY(startPoint.getY() - marbleView.getFitHeight() / 2);
+        AnchorPaneID.getChildren().add(marbleView);
+
+        // Create and play the animation
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(2), marbleView);
+        transition.setToX(endPoint.getX() - startPoint.getX());
+        transition.setToY(endPoint.getY() - startPoint.getY());
+        transition.setOnFinished(event -> {
+            AnchorPaneID.getChildren().remove(marbleView);
+            endButton.setGraphic(startButton.getGraphic());
+            startCell.setState(0);
+            updateCellGUI(startCell);
+        });
+        transition.play();
     }
 
 }

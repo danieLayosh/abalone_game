@@ -539,7 +539,8 @@ public class Move {
     public ArrayList<Cell> getMarblesUsedListSorted() {
         ArrayList<Cell> marblesUsedList = new ArrayList<>();
         for (Map.Entry<Cell, Integer> entry : marblesUsed.entrySet()) {
-            marblesUsedList.add(entry.getKey());
+            if (entry.getKey().getState() != entry.getValue())
+                marblesUsedList.add(entry.getKey());
         }
         Collections.sort(marblesUsedList, new Comparator<Cell>() {
             @Override

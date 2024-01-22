@@ -476,6 +476,7 @@ public class GUI {
             }
 
             move.executeMove();
+
             if (move.getMoveType() == MoveType.SINGLE) {
                 animateMarbleMovement(move);
             } else {

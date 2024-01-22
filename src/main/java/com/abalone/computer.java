@@ -164,6 +164,10 @@ public class Computer {
         System.out.println("Bests moves: " + bestMoves.size());
         System.out.println(" ");
         System.out.println("The best move is: " + bestMove.toString() + " The score is: " + bestEvaluation);
+        bestMove.executeMove();
+        updateMarblesList();
+        System.out.println("The best move  keep Packed Score(): " + keepPacked());
+        bestMove.undoMove();
         System.out.println(" ");
     }
 
@@ -183,9 +187,9 @@ public class Computer {
         move.undoMove();// undo the move to get it back before checking another move.
 
         // if (player == 2) {
-        return gravityCenterScore + pushedOffScore + marblesGroupScore;
+            return gravityCenterScore + pushedOffScore + marblesGroupScore ;
         // } else {
-        // return gravityCenterScore + pushedOffScore + marblesGroupScore;
+        //     return gravityCenterScore + pushedOffScore + marblesGroupScore + keepPackedScore/2;
         // }
     }
 
@@ -198,12 +202,12 @@ public class Computer {
             }
         }
 
-        for (Cell marble : opponentsMarbles) {
-            for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
-                if (neighborCell.getState() == marble.getState())
-                    counter--;
-            }
-        }
+        // for (Cell marble : opponentsMarbles) {
+        //     for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
+        //         if (neighborCell.getState() == marble.getState())
+        //             counter--;
+        //     }
+        // }
 
         return counter;
     }

@@ -246,7 +246,7 @@ public class GUI {
             // Adjust the score and update display
             if (move.getPlayer() == 1) {
                 white_score.set(white_score.get() - 1);
-                updateScoreDisplay(white_score.get(), whiteHBox, "/blackAndWhite/black_ball.png");
+                updateScoreDisplay(white_score.get(), whiteHBox, ("/blackAndWhite/black_ball.png"));
             } else {
                 black_score.set(black_score.get() - 1);
                 updateScoreDisplay(black_score.get(), blackHBox, "/blackAndWhite/white_ball.png");
@@ -480,10 +480,10 @@ public class GUI {
             if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                 if (player == 1) {
                     white_score.set(white_score.get() + 1);
-                    updateScoreDisplay(white_score.get(), whiteHBox, "abalone2.gif");
+                    updateScoreDisplay(white_score.get(), whiteHBox, "/blackAndWhite/black_ball.png");
                 } else {
                     black_score.set(black_score.get() + 1);
-                    updateScoreDisplay(black_score.get(), blackHBox, "abalone1.gif");
+                    updateScoreDisplay(black_score.get(), blackHBox, "/blackAndWhite/white_ball.png");
                 }
 
                 if (white_score.get() == 6 || black_score.get() == 6) {
@@ -501,7 +501,7 @@ public class GUI {
     private void updateScoreDisplay(int score, HBox hbox, String imageFile) {
         hbox.getChildren().clear(); // Clear existing images
         for (int i = 0; i < score; i++) {
-            ImageView imageView = new ImageView(new Image(imageFile));
+            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageFile)));
             imageView.setFitHeight(35); // Set height
             imageView.setPreserveRatio(true);
             hbox.getChildren().add(imageView); // Add new image for each point in score
@@ -634,6 +634,8 @@ public class GUI {
         alert.setHeaderText("Game ended due to repetitive loop - TIE");
         alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
         alert.showAndWait();
+
+        restartGame();
         // Additional logic to restart or close the game
     }
 

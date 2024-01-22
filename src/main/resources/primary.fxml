@@ -18,7 +18,7 @@
 
 <VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abalone.GUI">
    <children>
-      <HBox alignment="CENTER_LEFT" style="-fx-border-color: black;">
+      <HBox alignment="CENTER" style="-fx-border-color: black;">
          <children>
             <VBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="211.0" style="-fx-border-color: black; -fx-background-color: green;">
                <children>
@@ -92,13 +92,13 @@
                   </HBox>
                </children>
             </VBox>
-            <VBox prefHeight="82.0" prefWidth="131.0">
+            <VBox prefHeight="82.0" prefWidth="205.0">
                <children>
-                  <HBox fx:id="whiteHBox" prefHeight="42.0" prefWidth="131.0" />
+                  <HBox fx:id="whiteHBox" prefHeight="42.0" />
                   <HBox fx:id="blackHBox" prefHeight="42.0" prefWidth="131.0" />
                </children>
             </VBox>
-            <Label fx:id="playerTurn" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="82.0" prefWidth="323.0" style="-fx-background-color: BLACK;" text="White Turn" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
+            <Label fx:id="playerTurn" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: BLACK;" text="White Turn" textAlignment="JUSTIFY" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="Calibri Bold" size="65.0" />
                </font>

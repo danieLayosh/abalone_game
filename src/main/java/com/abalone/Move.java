@@ -341,6 +341,8 @@ public class Move {
             System.out.println("Attempted to execute an invalid move.");
             return;
         }
+
+        // Clear marblesUsed
         marblesUsed.clear();
         // Handle different types of moves
         switch (moveType) {
@@ -517,6 +519,7 @@ public class Move {
     }
 
     public void undoMove() {
+
         // Iterate through each entry in the marblesUsed map
         for (Map.Entry<Cell, Integer> entry : marblesUsed.entrySet()) {
             Cell cell = entry.getKey();
@@ -526,8 +529,6 @@ public class Move {
             cell.setState(originalState);
         }
 
-        // Clear marblesUsed after undoing the move to prepare for the next move
-        marblesUsed.clear();
     }
 
     public Direction getMarblesDirection() {

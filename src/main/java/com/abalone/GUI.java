@@ -95,8 +95,8 @@ public class GUI {
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
-                    // cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
-                    cellButton.setOnAction(event -> computerPlay()); // computer vs computer
+                    cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
+                    // cellButton.setOnAction(event -> computerPlay()); // computer vs computer
 
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -237,8 +237,11 @@ public class GUI {
 
             computerMove.undoMove();
             playerMove.undoMove();
+
+            updateBoard(computerMove);
+            updateBoard(playerMove);
         }
-        updateBoard();
+
     }
 
     private void handleScoreUpdate(Move move) {
@@ -362,21 +365,16 @@ public class GUI {
         ImageView imageView = new ImageView(image);
 
         imageView.setEffect(colorAdjust);
-
         imageView.setFitWidth(35);
         imageView.setPreserveRatio(true);
         cell.getBt().setGraphic(imageView);
 
     }
 
-    public void updateBoard() {
-        for (Cell cell : gameBoard.getCells()) {
+    public void updateBoard(Move move) {
+        for (Cell cell : move.getMarblesUsed().keySet()) {
             updateCellGUI(cell);
         }
-
-        // for (Cell cell : move.getMarblesUsed().keySet()) {
-        // updateCellGUI(cell);
-        // }
     }
 
     private void computerPlay() {
@@ -414,18 +412,16 @@ public class GUI {
                             cellPushed(cell);
                         } else {
                             marbles.remove(cell);
-                            // if (inlineWithJump(marbles.get(0), marbles.get(1))) {
-                            // cellPushed(cell);
-                            // } else {
                             updateCellGUI(cell);
                             showTemporaryMessage("The marble is not an inline neighbor.");
-                            // }
                         }
                     }
                 } else {
                     showTemporaryMessage("To much marbles, Choose again please.");
+                    for (Cell marble : marbles) {
+                        updateCellGUI(marble);
+                    }
                     marbles.clear();
-                    updateBoard();
                     marbles.add(cell);
                     cellPushed(cell);
                 }
@@ -459,9 +455,6 @@ public class GUI {
         return false;
     }
 
-    /**
-     * @param cell
-     */
     private void executeTheTurn(Move move) {
         if (move != null && move.isValid()) {
 
@@ -474,7 +467,7 @@ public class GUI {
 
             move.executeMove();
 
-            updateBoard();// For testing turn off
+            updateBoard(move);// For testing turn off
 
             LastTwoMove.add(move);// For the undo move button
 

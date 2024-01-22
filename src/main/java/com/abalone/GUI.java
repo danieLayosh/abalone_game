@@ -345,22 +345,23 @@ public class GUI {
     }
 
     public void updateCellGUI(Cell cell) {
-        // Image image = new Image("abalone0.gif");
         Image image = new Image(getClass().getResourceAsStream("/blackAndWhite/hole.png"));
+        ColorAdjust colorAdjust = new ColorAdjust();
 
         switch (cell.getState()) {
             case 1:
-                // image = new Image("abalone1.gif");
                 image = new Image(getClass().getResourceAsStream("/blackAndWhite/white_ball.png"));
                 break;
             case 2:
-                // image = new Image("abalone2.gif");
+                colorAdjust.setBrightness(-0.3); // Adjust this value between -1 and 0 to control darkness
                 image = new Image(getClass().getResourceAsStream("/blackAndWhite/black_ball.png"));
                 break;
             default:
                 break;
         }
         ImageView imageView = new ImageView(image);
+
+        imageView.setEffect(colorAdjust);
 
         imageView.setFitWidth(35);
         imageView.setPreserveRatio(true);
@@ -414,10 +415,10 @@ public class GUI {
                         } else {
                             marbles.remove(cell);
                             // if (inlineWithJump(marbles.get(0), marbles.get(1))) {
-                            //     cellPushed(cell);
+                            // cellPushed(cell);
                             // } else {
-                                updateCellGUI(cell);
-                                showTemporaryMessage("The marble is not an inline neighbor.");
+                            updateCellGUI(cell);
+                            showTemporaryMessage("The marble is not an inline neighbor.");
                             // }
                         }
                     }

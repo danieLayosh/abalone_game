@@ -9,6 +9,7 @@ import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -475,8 +476,11 @@ public class GUI {
             }
 
             move.executeMove();
-
-            animateMarbleMovement(move.getMarbles().get(0), move.getDestCell());
+            if (move.getMoveType() == MoveType.SINGLE) {
+                animateMarbleMovement(move);
+            } else {
+                updateBoard(move);
+            }
 
             LastTwoMove.add(move);// For the undo move button
 
@@ -642,11 +646,21 @@ public class GUI {
         // Additional logic to restart or close the game
     }
 
-    private void animateMarbleMovement(Cell startCell, Cell endCell) {
+    private void animateMarbleMovement(Move move) {
+
+        Cell startCell = move.getMarbles().get(0);
+        Cell endCell = move.getDestCell();
+
         Button startButton = startCell.getBt();
         Button endButton = endCell.getBt();
 
+        int prev_state = startCell.getState();
+        startCell.setState(move.getMarblesUsed().get(startCell));
+        updateCellGUI(startCell);
+
         ImageView marbleView = new ImageView(((ImageView) startButton.getGraphic()).getImage());
+        startCell.setState(prev_state);
+
         marbleView.setFitWidth(startButton.getGraphic().getLayoutBounds().getWidth());
         marbleView.setFitHeight(startButton.getGraphic().getLayoutBounds().getHeight());
 
@@ -666,16 +680,19 @@ public class GUI {
         AnchorPaneID.getChildren().add(marbleView);
 
         // Create and play the animation
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(2), marbleView);
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(2),
+                marbleView);
         transition.setToX(endPoint.getX() - startPoint.getX());
         transition.setToY(endPoint.getY() - startPoint.getY());
         transition.setOnFinished(event -> {
             AnchorPaneID.getChildren().remove(marbleView);
             endButton.setGraphic(startButton.getGraphic());
-            startCell.setState(0);
             updateCellGUI(startCell);
+            updateCellGUI(endCell);
         });
+        updateCellGUI(startCell);
         transition.play();
+
     }
 
 }

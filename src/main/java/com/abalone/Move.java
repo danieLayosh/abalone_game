@@ -1,5 +1,6 @@
 package com.abalone;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -535,4 +536,21 @@ public class Move {
         return marblesDirection;
     }
 
+    public ArrayList<Cell> getMarblesUsedListSorted() {
+        ArrayList<Cell> marblesUsedList = new ArrayList<>();
+        for (Map.Entry<Cell, Integer> entry : marblesUsed.entrySet()) {
+            marblesUsedList.add(entry.getKey());
+        }
+        Collections.sort(marblesUsedList, new Comparator<Cell>() {
+            @Override
+            public int compare(Cell c1, Cell c2) {
+                if (c1.getX() != c2.getX()) {
+                    return Integer.compare(c1.getX(), c2.getX());
+                } else {
+                    return Integer.compare(c1.getY(), c2.getY());
+                }
+            }
+        });
+        return marblesUsedList;
+    }
 }

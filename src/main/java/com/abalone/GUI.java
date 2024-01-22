@@ -95,8 +95,8 @@ public class GUI {
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
-                    cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
-                    // cellButton.setOnAction(event -> computerPlay()); // computer vs computer
+                    // cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
+                    cellButton.setOnAction(event -> computerPlay()); // computer vs computer
 
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -385,7 +385,6 @@ public class GUI {
 
         executeTheTurn(move);
         System.out.println("Computer Move executed.");
-        gameBoard.printBoardScore();
     }
 
     public void turn(Cell cell) {

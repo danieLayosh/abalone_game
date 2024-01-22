@@ -188,10 +188,9 @@ public class Computer {
 
         // if (player == 2) {
         return gravityCenterScore + pushedOffScore + marblesGroupScore;
-        // } else {
-        // return gravityCenterScore + pushedOffScore + marblesGroupScore +
-        // keepPackedScore/2;
-        // }
+    //     } else {
+    //     return gravityCenterScore + pushedOffScore + keepPackedScore;
+    //     }
     }
 
     private double keepPacked() {

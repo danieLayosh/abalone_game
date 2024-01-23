@@ -815,7 +815,7 @@ public class GUI {
         endCell.setState(0);
         updateCellGUI(endCell);
         endCell.setState(state);
-        
+
         parallelTransition.getChildren().add(transition);
     }
 

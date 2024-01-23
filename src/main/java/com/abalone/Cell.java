@@ -76,6 +76,10 @@ public class Cell {
     }
 
     public Cell getNeighborInDirection(Direction dir) {
+        if (neighborsMap == null) {
+            return null;
+        }
+
         for (Map.Entry<Cell, Direction> entry : neighborsMap.entrySet()) {
             if (entry.getValue() == dir) {
                 return entry.getKey();

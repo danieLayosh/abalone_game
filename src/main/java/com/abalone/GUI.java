@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
@@ -568,16 +570,21 @@ public class GUI {
 
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
-        if (player == 2) {
+        if (player == 2 && !isAnimationRunning) {
             computerPlay();
-            playerTurn.setText("Black Turn");
-            playerTurn.setTextFill(Color.BLACK);
-            playerTurn.setStyle("-fx-background-color: #FFFFFF;");
         }
+        updatePlayerTurnUI();
+    }
+
+    private void updatePlayerTurnUI() {
         if (player == 1) {
             playerTurn.setText("White Turn");
             playerTurn.setTextFill(Color.WHITE);
             playerTurn.setStyle("-fx-background-color: #000000;");
+        } else if (player == 2) {
+            playerTurn.setText("Black Turn");
+            playerTurn.setTextFill(Color.BLACK);
+            playerTurn.setStyle("-fx-background-color: #FFFFFF;");
         }
     }
 
@@ -640,19 +647,28 @@ public class GUI {
         // Additional logic to restart or close the game
     }
 
+    private boolean isAnimationRunning = false;
+
     private void animateMove(Move move) {
-        // Cell startCell = move.getMarbles().get(0);
-        // Cell endCell = move.getDestCell();
+        isAnimationRunning = true;
 
         move.undoMove();
 
-        Cell destPlayerNegibor = move.getDestCell()
-                .getNeighborInDirection(Move.oppositeDirection(move.getDirectionToDest()));
+        Direction direction = move.getDirectionToDest();
+        Direction oppositeDirection = Move.oppositeDirection(direction);
+
+        Cell destPlayerNegibor = null;
+        if (direction != null)
+            destPlayerNegibor = move.getDestCell().getNeighborInDirection(oppositeDirection);
+
         Cell FirstDestCell = move.getDestCell();
-        Cell secondDestCell = FirstDestCell.getNeighborInDirection(move.getDirectionToDest());
-        Cell emptyCellAfterSecondDestCell = secondDestCell.getNeighborInDirection(move.getDirectionToDest());
+        Cell secondDestCell = FirstDestCell.getNeighborInDirection(direction);
+        Cell emptyCellAfterSecondDestCell = null;
+        if (secondDestCell != null)
+            emptyCellAfterSecondDestCell = secondDestCell.getNeighborInDirection(direction);
 
         ArrayList<Cell> marbles = new ArrayList<>();
+
         if (FirstDestCell.getState() != 0) {
             if (secondDestCell != null && secondDestCell.getState() == ((player == 1) ? 2 : 1)) {
                 if (emptyCellAfterSecondDestCell != null) { // meanning its not out of the board
@@ -661,21 +677,26 @@ public class GUI {
                 marbles.add(secondDestCell);
             }
         }
+
         marbles.add(FirstDestCell);
         marbles.add(destPlayerNegibor);
-        Cell playerNextMarble = destPlayerNegibor
-                .getNeighborInDirection(Move.oppositeDirection(move.getDirectionToDest()));
-        if (playerNextMarble != null && playerNextMarble.getState() == player
-                && move.getMarbles().contains(playerNextMarble)) {
-            marbles.add(playerNextMarble);
-        }
-        playerNextMarble = playerNextMarble
-                .getNeighborInDirection(Move.oppositeDirection(move.getDirectionToDest()));
-        if (playerNextMarble != null && playerNextMarble.getState() == player
-                && move.getMarbles().contains(playerNextMarble)) {
-            marbles.add(playerNextMarble);
-        }
 
+        Cell playerNextMarble = null;
+        if (oppositeDirection != null && destPlayerNegibor != null) {
+            playerNextMarble = destPlayerNegibor.getNeighborInDirection(oppositeDirection);
+
+            if (playerNextMarble != null && playerNextMarble.getState() == player
+                    && move.getMarbles().contains(playerNextMarble)) {
+                marbles.add(playerNextMarble);
+            }
+
+            if (playerNextMarble != null)
+                playerNextMarble = playerNextMarble.getNeighborInDirection(oppositeDirection);
+            if (playerNextMarble != null && playerNextMarble.getState() == player
+                    && move.getMarbles().contains(playerNextMarble)) {
+                marbles.add(playerNextMarble);
+            }
+        }
         move.executeMove();
 
         for (Cell cell : marbles) {
@@ -685,7 +706,6 @@ public class GUI {
         ParallelTransition parallelTransition = new ParallelTransition();
         if (marbles.size() == 2) {
             animateMarbleMovement(marbles.get(1), move.getDestCell(), parallelTransition);
-
         } else {
 
             int i = 1;
@@ -701,8 +721,17 @@ public class GUI {
 
         parallelTransition.setOnFinished(event -> {
             updateBoard(move);
+            isAnimationRunning = false;
+            if (player == 2) {
+                computerPlay();
+                System.out.println("computerPlay");
+            }
         });
 
+        for (Cell cell : marbles) {
+            if (cell.getState() == 0)
+                updateCellGUI(cell);
+        }
         parallelTransition.play();
     }
 
@@ -737,7 +766,7 @@ public class GUI {
         AnchorPaneID.getChildren().add(marbleView);
 
         // Create and play the animation
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(2),
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5),
                 marbleView);
         transition.setToX(endPoint.getX() - startPoint.getX());
         transition.setToY(endPoint.getY() - startPoint.getY());

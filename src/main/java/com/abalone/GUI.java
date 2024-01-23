@@ -35,6 +35,7 @@ import javafx.util.Duration;
 
 public class GUI {
     private Stage stage;
+    private int gameMode;
     private GameBoard gameBoard = new GameBoard();;
     private int player;
     private List<Cell> marbles;
@@ -43,6 +44,7 @@ public class GUI {
     private Stack<Move> LastTwoMove;
     private double startX, startY;
     private List<Move> moveHistory = new ArrayList<>();
+    private boolean isAnimationRunning = false;
 
     public GUI() {
         this.marbles = new ArrayList<>(); // Initialize the list here
@@ -50,6 +52,7 @@ public class GUI {
         this.black_score = new SimpleIntegerProperty(0);
         this.white_score = new SimpleIntegerProperty(0);
         this.LastTwoMove = new Stack<>();
+        this.gameMode = 1;
     }
 
     @FXML
@@ -88,6 +91,24 @@ public class GUI {
         whitePoint.textProperty().bind(white_score.asString());
         blackPoint.textProperty().bind(black_score.asString());
         undoBt.setOnAction(event -> undoMove());
+        if (gameMode == 2) {
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService.execute(() -> {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (player == 2 && !isAnimationRunning) {
+                        computerPlay();
+                    }
+                }
+            });
+        } else {
+            if (gameMode == 1)
+                playerTurn.setVisible(false);
+        }
 
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
@@ -105,8 +126,11 @@ public class GUI {
                     cellButton.setOnMouseEntered(event -> hoverOn(cell));
                     cellButton.setOnMouseExited(event -> endHover(cell));
 
-                    cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
-                    // cellButton.setOnAction(event -> computerPlay()); // computer vs computer
+                    if (gameMode == 1)
+                        cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
+                    else if (gameMode == 2) {
+                        cellButton.setOnAction(event -> computerPlay()); // computer vs computer
+                    }
 
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -649,8 +673,6 @@ public class GUI {
         });
     }
 
-    private boolean isAnimationRunning = false;
-
     private void animateMove(Move move) {
         isAnimationRunning = true;
 
@@ -684,7 +706,7 @@ public class GUI {
                     marbles.add(emptyCellAfterSecondDestCell);
                 }
                 marbles.add(secondDestCell);
-            }else{
+            } else {
                 marbles.add(emptyCellAfterSecondDestCell);
             }
         }
@@ -777,7 +799,7 @@ public class GUI {
         AnchorPaneID.getChildren().add(marbleView);
 
         // Create and play the animation
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(1),
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.7),
                 marbleView);
         transition.setToX(endPoint.getX() - startPoint.getX());
         transition.setToY(endPoint.getY() - startPoint.getY());

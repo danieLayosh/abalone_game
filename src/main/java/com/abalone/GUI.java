@@ -732,9 +732,9 @@ public class GUI {
         }
         move.executeMove();
 
-        for (Cell cell : marbles) {
-            System.out.println(cell.formatCoordinate());
-        }
+        // for (Cell cell : marbles) {
+        // System.out.println(cell.formatCoordinate());
+        // }
 
         ParallelTransition parallelTransition = new ParallelTransition();
         if (marbles.size() == 2) {
@@ -807,6 +807,15 @@ public class GUI {
             AnchorPaneID.getChildren().remove(marbleView);
             endButton.setGraphic(startButton.getGraphic());
         });
+        int state = startCell.getState();
+        startCell.setState(0);
+        updateCellGUI(startCell);
+        startCell.setState(state);
+        state = endCell.getState();
+        endCell.setState(0);
+        updateCellGUI(endCell);
+        endCell.setState(state);
+        
         parallelTransition.getChildren().add(transition);
     }
 

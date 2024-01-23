@@ -13,6 +13,7 @@ import com.abalone.enums.MoveType;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -636,15 +637,16 @@ public class GUI {
     }
 
     private void endGameDueToLoop_TIE() {
-        // Handle the end game logic for a loop scenario
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Game Over");
-        alert.setHeaderText("Game ended due to repetitive loop - TIE");
-        alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
-        alert.showAndWait();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Game Over");
+            alert.setHeaderText("Game ended due to repetitive loop - TIE");
+            alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
+            alert.showAndWait();
 
-        restartGame();
-        // Additional logic to restart or close the game
+            restartGame();
+            // Additional logic to restart or close the game
+        });
     }
 
     private boolean isAnimationRunning = false;
@@ -664,8 +666,15 @@ public class GUI {
         Cell FirstDestCell = move.getDestCell();
         Cell secondDestCell = FirstDestCell.getNeighborInDirection(direction);
         Cell emptyCellAfterSecondDestCell = null;
-        if (secondDestCell != null)
+        if (secondDestCell != null && secondDestCell.getState() == ((player == 1) ? 2 : 1)) {
             emptyCellAfterSecondDestCell = secondDestCell.getNeighborInDirection(direction);
+        } else {
+            if (secondDestCell != null && secondDestCell.getState() == 0)
+                emptyCellAfterSecondDestCell = secondDestCell;
+            else {
+                emptyCellAfterSecondDestCell = null;
+            }
+        }
 
         ArrayList<Cell> marbles = new ArrayList<>();
 
@@ -675,6 +684,8 @@ public class GUI {
                     marbles.add(emptyCellAfterSecondDestCell);
                 }
                 marbles.add(secondDestCell);
+            }else{
+                marbles.add(emptyCellAfterSecondDestCell);
             }
         }
 
@@ -766,7 +777,7 @@ public class GUI {
         AnchorPaneID.getChildren().add(marbleView);
 
         // Create and play the animation
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.5),
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1),
                 marbleView);
         transition.setToX(endPoint.getX() - startPoint.getX());
         transition.setToY(endPoint.getY() - startPoint.getY());

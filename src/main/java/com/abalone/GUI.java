@@ -542,27 +542,29 @@ public class GUI {
     }
 
     private void endGame() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Game Over");
-        if (player == 1) {
-            alert.setHeaderText("THE WHITE PLAYER WON!!!!");
-        } else {
-            alert.setHeaderText("THE BLACK PLAYER WON!!!!");
-        }
-
-        alert.setContentText("Do you want to play another game?");
-
-        ButtonType buttonTypeYes = new ButtonType("Yes");
-        ButtonType buttonTypeNo = new ButtonType("No, exit");
-
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == buttonTypeYes) {
-                restartGame();
-            } else if (response == buttonTypeNo) {
-                System.exit(0); // or close the window
+        Platform.runLater(() -> {
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Game Over");
+            if (player == 2) {
+                alert.setHeaderText("THE WHITE PLAYER WON!!!!");
+            } else {
+                alert.setHeaderText("THE BLACK PLAYER WON!!!!");
             }
+
+            alert.setContentText("Do you want to play another game?");
+
+            ButtonType buttonTypeYes = new ButtonType("Yes");
+            ButtonType buttonTypeNo = new ButtonType("No, exit");
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+            alert.showAndWait().ifPresent(response -> {
+                if (response == buttonTypeYes) {
+                    restartGame();
+                } else if (response == buttonTypeNo) {
+                    System.exit(0); // or close the window
+                }
+            });
         });
     }
 
@@ -674,98 +676,111 @@ public class GUI {
     }
 
     private void animateMove(Move move) {
+        ParallelTransition parallelTransition = new ParallelTransition();
         isAnimationRunning = true;
 
-        move.undoMove();
-
-        Direction direction = move.getDirectionToDest();
-        Direction oppositeDirection = Move.oppositeDirection(direction);
-
-        Cell destPlayerNegibor = null;
-        if (direction != null)
-            destPlayerNegibor = move.getDestCell().getNeighborInDirection(oppositeDirection);
-
-        Cell FirstDestCell = move.getDestCell();
-        Cell secondDestCell = FirstDestCell.getNeighborInDirection(direction);
-        Cell emptyCellAfterSecondDestCell = null;
-        if (secondDestCell != null && secondDestCell.getState() == ((player == 1) ? 2 : 1)) {
-            emptyCellAfterSecondDestCell = secondDestCell.getNeighborInDirection(direction);
-        } else {
-            if (secondDestCell != null && secondDestCell.getState() == 0)
-                emptyCellAfterSecondDestCell = secondDestCell;
-            else {
-                emptyCellAfterSecondDestCell = null;
+        if (move.getMoveType() == MoveType.SIDESTEP) {
+            Direction direction = move.getDirectionToDest();
+            for (Cell cell : move.getMarbles()) {
+                Cell destinationCell = cell.getNeighborInDirection(direction);
+                animateMarbleMovement(cell, destinationCell, parallelTransition);
+                
             }
-        }
+        } else {
 
-        ArrayList<Cell> marbles = new ArrayList<>();
+            move.undoMove();
 
-        if (FirstDestCell.getState() != 0) {
+            Direction direction = move.getDirectionToDest();
+            Direction oppositeDirection = Move.oppositeDirection(direction);
+
+            Cell destPlayerNegibor = null;
+            if (direction != null)
+                destPlayerNegibor = move.getDestCell().getNeighborInDirection(oppositeDirection);
+
+            Cell FirstDestCell = move.getDestCell();
+            Cell secondDestCell = FirstDestCell.getNeighborInDirection(direction);
+            Cell emptyCellAfterSecondDestCell = null;
             if (secondDestCell != null && secondDestCell.getState() == ((player == 1) ? 2 : 1)) {
-                if (emptyCellAfterSecondDestCell != null) { // meanning its not out of the board
+                emptyCellAfterSecondDestCell = secondDestCell.getNeighborInDirection(direction);
+            } else {
+                if (secondDestCell != null && secondDestCell.getState() == 0)
+                    emptyCellAfterSecondDestCell = secondDestCell;
+                else {
+                    emptyCellAfterSecondDestCell = null;
+                }
+            }
+
+            ArrayList<Cell> marbles = new ArrayList<>();
+
+            if (FirstDestCell.getState() != 0) {
+                if (secondDestCell != null && secondDestCell.getState() == ((player == 1) ? 2 : 1)) {
+                    if (emptyCellAfterSecondDestCell != null) { // meanning its not out of the board
+                        marbles.add(emptyCellAfterSecondDestCell);
+                    }
+                    marbles.add(secondDestCell);
+                } else {
                     marbles.add(emptyCellAfterSecondDestCell);
                 }
-                marbles.add(secondDestCell);
+            }
+
+            marbles.add(FirstDestCell);
+            marbles.add(destPlayerNegibor);
+
+            Cell playerNextMarble = null;
+            if (oppositeDirection != null && destPlayerNegibor != null) {
+                playerNextMarble = destPlayerNegibor.getNeighborInDirection(oppositeDirection);
+
+                if (playerNextMarble != null && playerNextMarble.getState() == player
+                        && move.getMarbles().contains(playerNextMarble)) {
+                    marbles.add(playerNextMarble);
+                }
+
+                if (playerNextMarble != null)
+                    playerNextMarble = playerNextMarble.getNeighborInDirection(oppositeDirection);
+                if (playerNextMarble != null && playerNextMarble.getState() == player
+                        && move.getMarbles().contains(playerNextMarble)) {
+                    marbles.add(playerNextMarble);
+                }
+            }
+            move.executeMove();
+
+            // for (Cell cell : marbles) {
+            // System.out.println(cell.formatCoordinate());
+            // }
+
+            if (marbles.size() == 2) {
+                animateMarbleMovement(marbles.get(1), move.getDestCell(), parallelTransition);
             } else {
-                marbles.add(emptyCellAfterSecondDestCell);
-            }
-        }
 
-        marbles.add(FirstDestCell);
-        marbles.add(destPlayerNegibor);
-
-        Cell playerNextMarble = null;
-        if (oppositeDirection != null && destPlayerNegibor != null) {
-            playerNextMarble = destPlayerNegibor.getNeighborInDirection(oppositeDirection);
-
-            if (playerNextMarble != null && playerNextMarble.getState() == player
-                    && move.getMarbles().contains(playerNextMarble)) {
-                marbles.add(playerNextMarble);
-            }
-
-            if (playerNextMarble != null)
-                playerNextMarble = playerNextMarble.getNeighborInDirection(oppositeDirection);
-            if (playerNextMarble != null && playerNextMarble.getState() == player
-                    && move.getMarbles().contains(playerNextMarble)) {
-                marbles.add(playerNextMarble);
-            }
-        }
-        move.executeMove();
-
-        // for (Cell cell : marbles) {
-        // System.out.println(cell.formatCoordinate());
-        // }
-
-        ParallelTransition parallelTransition = new ParallelTransition();
-        if (marbles.size() == 2) {
-            animateMarbleMovement(marbles.get(1), move.getDestCell(), parallelTransition);
-        } else {
-
-            int i = 1;
-            for (Cell cell : marbles) {
-                if (i < marbles.size()) {
-                    Cell startCell = marbles.get(i);
-                    Cell endCell = cell;
-                    animateMarbleMovement(startCell, endCell, parallelTransition);
-                    i++;
+                int i = 1;
+                for (Cell cell : marbles) {
+                    if (i < marbles.size()) {
+                        Cell startCell = marbles.get(i);
+                        Cell endCell = cell;
+                        if (endCell != null)
+                            animateMarbleMovement(startCell, endCell, parallelTransition);
+                        i++;
+                    }
                 }
             }
         }
+            parallelTransition.setOnFinished(event -> {
+                updateBoard(move);
+                isAnimationRunning = false;
+                if (player == 2) {
+                    computerPlay();
+                    System.out.println("computerPlay");
+                }
+            });
 
-        parallelTransition.setOnFinished(event -> {
-            updateBoard(move);
-            isAnimationRunning = false;
-            if (player == 2) {
-                computerPlay();
-                System.out.println("computerPlay");
+            for (Cell cell : marbles) {
+                if (cell != null)
+                    if (cell.getState() == 0)
+                        updateCellGUI(cell);
             }
-        });
+            parallelTransition.play();
 
-        for (Cell cell : marbles) {
-            if (cell.getState() == 0)
-                updateCellGUI(cell);
-        }
-        parallelTransition.play();
+        
     }
 
     private void animateMarbleMovement(Cell startCell, Cell endCell, ParallelTransition parallelTransition) {

@@ -9,6 +9,7 @@ import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -473,11 +474,7 @@ public class GUI {
 
             move.executeMove();
 
-            if (move.getMoveType() == MoveType.SINGLE) {
-                animateMarbleMovement(move);
-            } else {
-                updateBoard(move);
-            }
+            animateMove(move);
 
             LastTwoMove.add(move);// For the undo move button
 
@@ -643,20 +640,83 @@ public class GUI {
         // Additional logic to restart or close the game
     }
 
-    private void animateMarbleMovement(Move move) {
+    private void animateMove(Move move) {
+        // Cell startCell = move.getMarbles().get(0);
+        // Cell endCell = move.getDestCell();
 
-        Cell startCell = move.getMarbles().get(0);
-        Cell endCell = move.getDestCell();
+        move.undoMove();
+
+        Cell destPlayerNegibor = move.getDestCell()
+                .getNeighborInDirection(Move.oppositeDirection(move.getDirectionToDest()));
+        Cell FirstDestCell = move.getDestCell();
+        Cell secondDestCell = FirstDestCell.getNeighborInDirection(move.getDirectionToDest());
+        Cell emptyCellAfterSecondDestCell = secondDestCell.getNeighborInDirection(move.getDirectionToDest());
+
+        ArrayList<Cell> marbles = new ArrayList<>();
+        if (FirstDestCell.getState() != 0) {
+            if (secondDestCell != null && secondDestCell.getState() == ((player == 1) ? 2 : 1)) {
+                if (emptyCellAfterSecondDestCell != null) { // meanning its not out of the board
+                    marbles.add(emptyCellAfterSecondDestCell);
+                }
+                marbles.add(secondDestCell);
+            }
+        }
+        marbles.add(FirstDestCell);
+        marbles.add(destPlayerNegibor);
+        Cell playerNextMarble = destPlayerNegibor
+                .getNeighborInDirection(Move.oppositeDirection(move.getDirectionToDest()));
+        if (playerNextMarble != null && playerNextMarble.getState() == player
+                && move.getMarbles().contains(playerNextMarble)) {
+            marbles.add(playerNextMarble);
+        }
+        playerNextMarble = playerNextMarble
+                .getNeighborInDirection(Move.oppositeDirection(move.getDirectionToDest()));
+        if (playerNextMarble != null && playerNextMarble.getState() == player
+                && move.getMarbles().contains(playerNextMarble)) {
+            marbles.add(playerNextMarble);
+        }
+
+        move.executeMove();
+
+        for (Cell cell : marbles) {
+            System.out.println(cell.formatCoordinate());
+        }
+
+        ParallelTransition parallelTransition = new ParallelTransition();
+        if (marbles.size() == 2) {
+            animateMarbleMovement(marbles.get(1), move.getDestCell(), parallelTransition);
+
+        } else {
+
+            int i = 1;
+            for (Cell cell : marbles) {
+                if (i < marbles.size()) {
+                    Cell startCell = marbles.get(i);
+                    Cell endCell = cell;
+                    animateMarbleMovement(startCell, endCell, parallelTransition);
+                    i++;
+                }
+            }
+        }
+
+        parallelTransition.setOnFinished(event -> {
+            updateBoard(move);
+        });
+
+        parallelTransition.play();
+    }
+
+    private void animateMarbleMovement(Cell startCell, Cell endCell, ParallelTransition parallelTransition) {
 
         Button startButton = startCell.getBt();
         Button endButton = endCell.getBt();
 
-        int prev_state = startCell.getState();
-        startCell.setState(move.getMarblesUsed().get(startCell));
-        updateCellGUI(startCell);
+        // int prev_state = startCell.getState();
+        // startCell.setState(move.getMarblesUsed().get(startCell));
+        // updateCellGUI(startCell);
 
         ImageView marbleView = new ImageView(((ImageView) startButton.getGraphic()).getImage());
-        startCell.setState(prev_state);
+        // startCell.setState(prev_state);
 
         marbleView.setFitWidth(startButton.getGraphic().getLayoutBounds().getWidth());
         marbleView.setFitHeight(startButton.getGraphic().getLayoutBounds().getHeight());
@@ -684,12 +744,8 @@ public class GUI {
         transition.setOnFinished(event -> {
             AnchorPaneID.getChildren().remove(marbleView);
             endButton.setGraphic(startButton.getGraphic());
-            updateCellGUI(startCell);
-            updateCellGUI(endCell);
         });
-        updateCellGUI(startCell);
-        transition.play();
-
+        parallelTransition.getChildren().add(transition);
     }
 
 }

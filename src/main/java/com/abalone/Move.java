@@ -539,10 +539,17 @@ public class Move {
     public ArrayList<Cell> getMarblesUsedListSorted() {
         ArrayList<Cell> marblesUsedList = new ArrayList<>();
         for (Map.Entry<Cell, Integer> entry : marblesUsed.entrySet()) {
-            if (entry.getKey().getState() != entry.getValue())
-                marblesUsedList.add(entry.getKey());
+            marblesUsedList.add(entry.getKey());
         }
-        Collections.sort(marblesUsedList, new Comparator<Cell>() {
+
+        ArrayList<Cell> marblesAfterRemove = new ArrayList<>();
+        for (Cell cell : marblesUsedList) {
+            if (marblesUsed.get(cell) != cell.getState()) {
+                marblesAfterRemove.add(cell);
+            }
+        }
+
+        Collections.sort(marblesAfterRemove, new Comparator<Cell>() {
             @Override
             public int compare(Cell c1, Cell c2) {
                 if (c1.getX() != c2.getX()) {
@@ -552,6 +559,8 @@ public class Move {
                 }
             }
         });
-        return marblesUsedList;
+
+
+        return marblesAfterRemove;
     }
 }

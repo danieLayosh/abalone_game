@@ -497,12 +497,12 @@ public class GUI {
     private void executeTheTurn(Move move) {
         if (move != null && move.isValid()) {
 
-            moveHistory.add(move);
-            if (isLoopingSequenceDetected()) {
-                endGameDueToLoop_TIE();
-                // restartGame(); // For testing
-                return;
-            }
+            // moveHistory.add(move);
+            // if (isLoopingSequenceDetected()) {
+            //     endGameDueToLoop_TIE();
+            //     // restartGame(); // For testing
+            //     return;
+            // }
 
             move.executeMove();
 

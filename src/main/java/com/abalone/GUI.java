@@ -36,7 +36,7 @@ import javafx.util.Duration;
 public class GUI {
     private Stage stage;
     private int gameMode;
-    private GameBoard gameBoard = new GameBoard();;
+    private GameBoard gameBoard;
     private int player;
     private List<Cell> marbles;
     private IntegerProperty black_score;
@@ -47,12 +47,13 @@ public class GUI {
     private boolean isAnimationRunning = false;
 
     public GUI() {
+        this.gameBoard = new GameBoard();
         this.marbles = new ArrayList<>(); // Initialize the list here
-        this.player = 1;
         this.black_score = new SimpleIntegerProperty(0);
         this.white_score = new SimpleIntegerProperty(0);
         this.LastTwoMove = new Stack<>();
-        this.gameMode = 2;
+        this.gameMode = 1;
+        this.player = 1;
     }
 
     @FXML
@@ -106,8 +107,12 @@ public class GUI {
                 }
             });
         } else {
-            if (gameMode == 1)
-                playerTurn.setVisible(false);
+            if (gameMode == 1){
+                playerTurn.setText(null);
+                playerTurn.setStyle("-fx-background-color: black;");
+                // playerTurn.setVisible(false);
+
+            }
         }
 
         // Iterate over all cells in the game board and link them to buttons
@@ -684,7 +689,7 @@ public class GUI {
             for (Cell cell : move.getMarbles()) {
                 Cell destinationCell = cell.getNeighborInDirection(direction);
                 animateMarbleMovement(cell, destinationCell, parallelTransition);
-                
+
             }
         } else {
 
@@ -764,23 +769,22 @@ public class GUI {
                 }
             }
         }
-            parallelTransition.setOnFinished(event -> {
-                updateBoard(move);
-                isAnimationRunning = false;
-                if (player == 2) {
-                    computerPlay();
-                    System.out.println("computerPlay");
-                }
-            });
-
-            for (Cell cell : marbles) {
-                if (cell != null)
-                    if (cell.getState() == 0)
-                        updateCellGUI(cell);
+        parallelTransition.setOnFinished(event -> {
+            updateBoard(move);
+            isAnimationRunning = false;
+            if (player == 2) {
+                computerPlay();
+                System.out.println("computerPlay");
             }
-            parallelTransition.play();
+        });
 
-        
+        for (Cell cell : marbles) {
+            if (cell != null)
+                if (cell.getState() == 0)
+                    updateCellGUI(cell);
+        }
+        parallelTransition.play();
+
     }
 
     private void animateMarbleMovement(Cell startCell, Cell endCell, ParallelTransition parallelTransition) {

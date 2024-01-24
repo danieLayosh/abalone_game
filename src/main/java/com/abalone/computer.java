@@ -180,13 +180,29 @@ public class Computer {
 
         double marblesGroupScore = evaluateGroupScore();
 
+        double marblesInDangerScore = marblesInDanger();
+
         move.undoMove();// undo the move to get it back before checking another move.
 
         // if (player == 2) {
-        return gravityCenterScore + pushedOffScore + marblesGroupScore;
+        return gravityCenterScore + pushedOffScore + marblesGroupScore + marblesInDangerScore;
         // } else {
         // return gravityCenterScore + pushedOffScore + keepPackedScore;
         // }
+    }
+
+    private double marblesInDanger() {
+        Double score = 0.0;
+        for (Cell cell : myMarbles) {
+            if (cell.getIsborder()) {
+                // System.out.println(cell.formatCoordinate() + " this cell is border");
+                if (canBePushed(cell)) {
+                    System.out.println(cell.formatCoordinate() + " in great danger");
+                    score -= 100;
+                }
+            }
+        }
+        return score;
     }
 
     private double keepPacked() {
@@ -214,7 +230,7 @@ public class Computer {
         for (Cell cell : myMarbles) {
             MydistanceScore += cell.getScore();// sum player's marbles score, according to the distance from the center.
             // if (cell.getIsborder()) {
-            //     MydistanceScore -= 1;
+            // MydistanceScore -= 10;
             // }
         }
 
@@ -222,7 +238,7 @@ public class Computer {
         for (Cell cell : opponentsMarbles) {
             opponentsDistanceScore += cell.getScore();
             // if (cell.getIsborder()) {
-            //     opponentsDistanceScore -= 1;
+            // opponentsDistanceScore -= 10;
             // }
         }
 
@@ -269,6 +285,32 @@ public class Computer {
             Direction direction = cell.getDirectionOfNeighbor(neighbor);
             if (cell.getNeighborInDirection(Move.oppositeDirection(direction)) == null) {
                 return isConsecutiveOpponent(neighbor, direction, opponentState);
+            }
+        } else {
+            int opponentNeighborCount = 0;
+            Cell opponentNeighbor = neighbor.getNeighborInDirection(cell.getDirectionOfNeighbor(neighbor));
+            if (opponentNeighbor == null) {
+                return false;
+            }
+            if (neighbor.getState() == player && opponentNeighbor.getState() == opponentState) {
+                opponentNeighborCount++;
+                opponentNeighbor = neighbor.getNeighborInDirection(cell.getDirectionOfNeighbor(neighbor));
+                if (opponentNeighbor == null) {
+                    return false;
+                }
+                if (opponentNeighbor.getState() == opponentState) {
+                    opponentNeighborCount++;
+                    opponentNeighbor = neighbor.getNeighborInDirection(cell.getDirectionOfNeighbor(neighbor));
+                    if (opponentNeighbor == null) {
+                        return false;
+                    }
+                    if (opponentNeighbor.getState() == opponentState) {
+                        opponentNeighborCount++;
+                    }
+                }
+            }
+            if (opponentNeighborCount == 3 && cell.getIsborder()) {
+                return true;
             }
         }
         return false;

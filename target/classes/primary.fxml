@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="680.0" prefWidth="840.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abalone.GUI">
+   <children>
+      <HBox style="-fx-border-color: red; -fx-background-color: white;">
+         <children>
+            <VBox alignment="CENTER_LEFT" prefHeight="84.0" prefWidth="219.0" style="-fx-border-color: black; -fx-background-color: green;">
+               <children>
+                  <HBox prefHeight="41.0" prefWidth="215.0" style="-fx-border-color: red;">
+                     <children>
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="204.0" text="White's points: " textFill="WHITE">
+                           <font>
+                              <Font name="System Bold Italic" size="26.0" />
+                           </font>
+                           <effect>
+                              <Lighting>
+                                 <bumpInput>
+                                    <Shadow />
+                                 </bumpInput>
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="whitePoint" prefWidth="20.0" text="0" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold Italic" size="26.0" />
+                           </font>
+                           <effect>
+                              <Lighting>
+                                 <bumpInput>
+                                    <Shadow />
+                                 </bumpInput>
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="225.0" style="-fx-border-color: red;">
+                     <children>
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="211.0" text="Black's points: ">
+                           <font>
+                              <Font name="System Bold Italic" size="26.0" />
+                           </font>
+                           <effect>
+                              <Lighting>
+                                 <bumpInput>
+                                    <Shadow />
+                                 </bumpInput>
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
+                        </Label>
+                        <Label fx:id="blackPoint" text="0">
+                           <font>
+                              <Font name="System Bold Italic" size="26.0" />
+                           </font>
+                           <effect>
+                              <Lighting>
+                                 <bumpInput>
+                                    <Shadow />
+                                 </bumpInput>
+                                 <light>
+                                    <Light.Distant />
+                                 </light>
+                              </Lighting>
+                           </effect>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
+               <children>
+                  <HBox fx:id="whiteHBox" maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="250.0" style="-fx-border-color: green;" />
+                  <HBox fx:id="blackHBox" maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="250.0" style="-fx-border-color: green;" />
+               </children>
+            </VBox>
+            <Label fx:id="playerTurn" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="84.0" prefWidth="370.0" style="-fx-background-color: BLACK;" text="White Turn" textFill="WHITE" wrapText="true">
+               <font>
+                  <Font name="Calibri Bold" size="65.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+               <effect>
+                  <Glow level="1.0" />
+               </effect>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+         </children>
+      </HBox>
+      <AnchorPane fx:id="AnchorPaneID" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="832.0" style="-fx-background-color: black;">
+         <children>
+            <Group layoutX="122.0" layoutY="12.0">
+               <children>
+                  <ImageView blendMode="SRC_ATOP" fitHeight="568.0" fitWidth="609.0">
+                     <image>
+                        <Image url="@board_background.gif" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                     <effect>
+                        <Glow />
+                     </effect>
+                  </ImageView>
+                  <Group layoutX="61.0" layoutY="84.0">
+                     <children>
+                        <Button fx:id="bt0_0" alignment="CENTER" layoutX="100.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt0_1" layoutX="150.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt0_2" layoutX="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt0_3" layoutX="250.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt0_4" layoutX="300.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt1_0" layoutX="75.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt1_1" layoutX="125.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt1_2" layoutX="175.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt1_3" layoutX="225.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt1_4" layoutX="275.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt1_5" layoutX="325.0" layoutY="40.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt2_0" layoutX="50.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt2_1" layoutX="100.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt2_2" layoutX="150.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt2_3" layoutX="200.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt2_4" layoutX="250.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt2_5" layoutX="300.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt2_6" layoutX="350.0" layoutY="80.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_0" layoutX="25.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_1" layoutX="75.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_2" layoutX="125.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_3" layoutX="175.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_4" layoutX="225.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_5" layoutX="275.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_6" layoutX="325.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt3_7" layoutX="375.0" layoutY="120.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_1" layoutX="50.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_2" layoutX="100.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_3" layoutX="150.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_4" layoutX="200.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_5" layoutX="250.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_6" layoutX="300.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_7" layoutX="350.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt4_8" layoutX="400.0" layoutY="160.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt8_4" layoutX="300.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt8_3" layoutX="250.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt8_2" layoutX="200.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt8_1" layoutX="150.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt8_0" layoutX="100.0" layoutY="320.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt7_5" layoutX="325.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt7_4" layoutX="275.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt7_3" layoutX="225.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt7_2" layoutX="175.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt7_1" layoutX="125.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt7_0" layoutX="75.0" layoutY="280.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt6_6" layoutX="350.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt6_5" layoutX="300.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt6_4" layoutX="250.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt6_3" layoutX="200.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt6_2" layoutX="150.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt6_1" layoutX="100.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt6_0" layoutX="50.0" layoutY="240.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_7" layoutX="375.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_6" layoutX="325.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_5" layoutX="275.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_4" layoutX="225.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_3" layoutX="175.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_2" layoutX="125.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_1" layoutX="75.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button fx:id="bt5_0" layoutX="25.0" layoutY="200.0" mnemonicParsing="false" stylesheets="@/button.css">
+                           <graphic>
+                              <ImageView>
+                                 <image>
+               </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </Group>
+               </children>
+            </Group>
+            <Button fx:id="undoBt" layoutX="14.0" layoutY="21.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="107.0" style="-fx-background-color: GREEN;" text="UNDO MOVE" textFill="#f1ff70">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

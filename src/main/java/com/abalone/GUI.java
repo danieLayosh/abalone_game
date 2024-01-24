@@ -52,7 +52,7 @@ public class GUI {
         this.black_score = new SimpleIntegerProperty(0);
         this.white_score = new SimpleIntegerProperty(0);
         this.LastTwoMove = new Stack<>();
-        this.gameMode = 1;
+        this.gameMode = 2;
     }
 
     @FXML

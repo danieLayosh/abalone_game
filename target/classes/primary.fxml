@@ -16,15 +16,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abalone.GUI">
+<VBox alignment="TOP_CENTER" prefHeight="680.0" prefWidth="840.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.abalone.GUI">
    <children>
-      <HBox alignment="CENTER" style="-fx-border-color: black;">
+      <HBox style="-fx-border-color: red; -fx-background-color: white;">
          <children>
-            <VBox alignment="CENTER_LEFT" prefHeight="82.0" prefWidth="211.0" style="-fx-border-color: black; -fx-background-color: green;">
+            <VBox alignment="CENTER_LEFT" prefHeight="84.0" prefWidth="219.0" style="-fx-border-color: black; -fx-background-color: green;">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black;">
+                  <HBox prefHeight="41.0" prefWidth="215.0" style="-fx-border-color: red;">
                      <children>
-                        <Label text="White's points: " textFill="WHITE">
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="204.0" text="White's points: " textFill="WHITE">
                            <font>
                               <Font name="System Bold Italic" size="26.0" />
                            </font>
@@ -38,8 +38,11 @@
                                  </light>
                               </Lighting>
                            </effect>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
                         </Label>
-                        <Label fx:id="whitePoint" textFill="WHITE">
+                        <Label fx:id="whitePoint" prefWidth="20.0" text="0" textFill="WHITE">
                            <font>
                               <Font name="System Bold Italic" size="26.0" />
                            </font>
@@ -53,12 +56,18 @@
                                  </light>
                               </Lighting>
                            </effect>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
                         </Label>
                      </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: black;">
+                  <HBox prefHeight="100.0" prefWidth="225.0" style="-fx-border-color: red;">
                      <children>
-                        <Label text="Black's points: ">
+                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="211.0" text="Black's points: ">
                            <font>
                               <Font name="System Bold Italic" size="26.0" />
                            </font>
@@ -73,7 +82,7 @@
                               </Lighting>
                            </effect>
                         </Label>
-                        <Label fx:id="blackPoint">
+                        <Label fx:id="blackPoint" text="0">
                            <font>
                               <Font name="System Bold Italic" size="26.0" />
                            </font>
@@ -87,37 +96,43 @@
                                  </light>
                               </Lighting>
                            </effect>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
                         </Label>
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <VBox prefHeight="82.0" prefWidth="205.0">
+            <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: black;">
                <children>
-                  <HBox fx:id="whiteHBox" prefHeight="42.0" />
-                  <HBox fx:id="blackHBox" prefHeight="42.0" prefWidth="131.0" />
+                  <HBox fx:id="whiteHBox" maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="250.0" style="-fx-border-color: green;" />
+                  <HBox fx:id="blackHBox" maxWidth="1.7976931348623157E308" prefHeight="42.0" prefWidth="250.0" style="-fx-border-color: green;" />
                </children>
             </VBox>
-            <Label fx:id="playerTurn" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" style="-fx-background-color: BLACK;" text="White Turn" textFill="WHITE" wrapText="true">
+            <Label fx:id="playerTurn" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="84.0" prefWidth="370.0" style="-fx-background-color: BLACK;" text="White Turn" textFill="WHITE" wrapText="true">
                <font>
                   <Font name="Calibri Bold" size="65.0" />
                </font>
                <HBox.margin>
-                  <Insets left="200.0" />
+                  <Insets />
                </HBox.margin>
                <effect>
                   <Glow level="1.0" />
                </effect>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </Label>
          </children>
       </HBox>
-      <AnchorPane fx:id="AnchorPaneID" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="832.0">
+      <AnchorPane fx:id="AnchorPaneID" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="832.0" style="-fx-background-color: black;">
          <children>
             <Group layoutX="122.0" layoutY="12.0">
                <children>
                   <ImageView blendMode="SRC_ATOP" fitHeight="568.0" fitWidth="609.0">
                      <image>
-                        <Image url="@/board_background.gif" />
+                        <Image url="@board_background.gif" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="DEFAULT" />

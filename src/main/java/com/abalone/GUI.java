@@ -497,12 +497,12 @@ public class GUI {
     private void executeTheTurn(Move move) {
         if (move != null && move.isValid()) {
 
-            // moveHistory.add(move);
-            // if (isLoopingSequenceDetected()) {
-            //     endGameDueToLoop_TIE();
-            //     // restartGame(); // For testing
-            //     return;
-            // }
+            moveHistory.add(move);
+            if (isLoopingSequenceDetected()) {
+                endGameDueToLoop_TIE();
+                // restartGame(); // For testing
+                return;
+            }
 
             move.executeMove();
 
@@ -791,10 +791,6 @@ public class GUI {
 
         Button startButton = startCell.getBt();
         Button endButton = endCell.getBt();
-
-        // int prev_state = startCell.getState();
-        // startCell.setState(move.getMarblesUsed().get(startCell));
-        // updateCellGUI(startCell);
 
         ImageView marbleView = new ImageView(((ImageView) startButton.getGraphic()).getImage());
         // startCell.setState(prev_state);

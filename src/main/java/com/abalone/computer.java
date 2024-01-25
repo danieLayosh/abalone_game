@@ -197,7 +197,7 @@ public class Computer {
             if (cell.getIsborder()) {
                 // System.out.println(cell.formatCoordinate() + " this cell is border");
                 if (canBePushed(cell)) {
-                    System.out.println(cell.formatCoordinate() + " in great danger");
+                    // System.out.println(cell.formatCoordinate() + " in great danger");
                     score -= 100;
                 }
             }

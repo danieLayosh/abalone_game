@@ -18,6 +18,7 @@ public class Computer {
     private List<Cell> opponentsCellsToMoveTo;
     private ArrayList<Move> moves;
     private ArrayList<Move> movesOppo;
+    private final int BIG_SCORE = 50;
 
     public Computer(GameBoard gameBoard, int player) {
         this.gameBoard = gameBoard;
@@ -195,10 +196,8 @@ public class Computer {
         Double score = 0.0;
         for (Cell cell : myMarbles) {
             if (cell.getIsborder()) {
-                // System.out.println(cell.formatCoordinate() + " this cell is border");
                 if (canBePushed(cell)) {
-                    // System.out.println(cell.formatCoordinate() + " in great danger");
-                    score -= 100;
+                    score -= BIG_SCORE;
                 }
             }
         }
@@ -214,12 +213,12 @@ public class Computer {
             }
         }
 
-        // for (Cell marble : opponentsMarbles) {
-        // for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
-        // if (neighborCell.getState() == marble.getState())
-        // counter--;
-        // }
-        // }
+        for (Cell marble : opponentsMarbles) {
+            for (Cell neighborCell : marble.getNeighborsMap().keySet()) {
+                if (neighborCell.getState() == marble.getState())
+                    counter--;
+            }
+        }
 
         return counter;
     }
@@ -229,17 +228,11 @@ public class Computer {
         double MydistanceScore = 0;
         for (Cell cell : myMarbles) {
             MydistanceScore += cell.getScore();// sum player's marbles score, according to the distance from the center.
-            // if (cell.getIsborder()) {
-            // MydistanceScore -= 10;
-            // }
         }
 
         double opponentsDistanceScore = 0;
         for (Cell cell : opponentsMarbles) {
             opponentsDistanceScore += cell.getScore();
-            // if (cell.getIsborder()) {
-            // opponentsDistanceScore -= 10;
-            // }
         }
 
         return MydistanceScore - opponentsDistanceScore;
@@ -254,7 +247,7 @@ public class Computer {
 
             // Check if this move results in a win
             if (14 - opponentsMarbles.size() == 5) { // Check if pushing this marble results in six marbles being out
-                pushCounter = 100; // Assign a high score for a winning move
+                pushCounter = BIG_SCORE; // Assign a high score for a winning move
             } else if (canBePushed(move.getDestCell())) {
                 // If it's not a winning move, but the player's marble can be pushed in return
                 if (myMarbles.size() - opponentsMarbles.size() == 0) {

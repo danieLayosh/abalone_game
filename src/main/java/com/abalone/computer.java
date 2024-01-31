@@ -18,7 +18,7 @@ public class Computer {
     private List<Cell> opponentsCellsToMoveTo;
     private ArrayList<Move> moves;
     private ArrayList<Move> movesOppo;
-    private final int BIG_SCORE = 50;
+    private final int BIG_SCORE = 100;
 
     public Computer(GameBoard gameBoard, int player) {
         this.gameBoard = gameBoard;

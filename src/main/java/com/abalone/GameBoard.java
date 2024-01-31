@@ -247,7 +247,25 @@ public class GameBoard {
         }
     }
 
-    public String formatCoordinate(int x, int y) {
+    public void testAndPrintNeighborFinding() {
+        int[][] testCoordinates = new int[][] { { 0, 0 }, { 4, 4 }, { 8, 4 }, { 2, 3 }, { 6, 3 }, { 1, 3 } };
+
+        for (int[] coord : testCoordinates) {
+            Cell testCell = getCellAt(coord[0], coord[1]);
+            if (testCell != null) {
+                Map<Cell, Direction> neighborsWithDirection = testCell.getNeighborsMap();
+                System.out.println("Neighbors of Cell " + formatCoordinate(coord[0], coord[1]) + ":");
+                for (Map.Entry<Cell, Direction> entry : neighborsWithDirection.entrySet()) {
+                    Cell neighbor = entry.getKey();
+                    Direction direction = entry.getValue();
+                    System.out.println(" Neighbor at " + formatCoordinate(neighbor.getX(), neighbor.getY())
+                            + " in direction " + direction);
+                }
+            }
+        }
+    }
+
+    private String formatCoordinate(int x, int y) {
         return "(" + x + "," + y + ")";
     }
 

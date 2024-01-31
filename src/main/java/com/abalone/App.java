@@ -17,29 +17,35 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("primary", stage), 840, 680 );
         stage.setScene(scene);
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
+    static void setRoot(String fxml, Stage stage) throws IOException {
+        scene.setRoot(loadFXML(fxml, stage));
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+    private static Parent loadFXML(String fxml, Stage stage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("/" + fxml + ".fxml"));
+        loader.setControllerFactory(param -> {
+            if (param == GUI.class) {
+                GUI controller = new GUI();
+                controller.setStage(stage); // Set the stage here
+                return controller;
+            }
+            // Default behavior for controller creation:
+            try {
+                return param.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                throw new RuntimeException(e); // Handle this exception
+            }
+        });
+        return loader.load();
     }
 
     public static void main(String[] args) {
-        // launch();
-        GameBoard gameBoard = new GameBoard();
-        gameBoard.printBoard();
-        gameBoard.printBoardWithCoordinates();
-        // gameBoard.testAndPrintNeighborFinding();
-        gameBoard.checkMoveClass();
-        gameBoard.checkMoveClass2();
-
+        launch(args);
     }
 
 }

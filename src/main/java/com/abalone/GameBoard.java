@@ -1,18 +1,19 @@
 package com.abalone;
 
-import java.util.Arrays;
+// import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+// import java.util.List;
 import java.util.Map;
 
 import com.abalone.enums.Direction;
-import com.abalone.enums.MoveType;
+// import com.abalone.enums.MoveType;
 
 public class GameBoard {
-    // Adjacency list to represent the board, each cell has a list of neighbors
+    // Adjacency map to represent the board, each cell has a list of neighbors
     private Map<Cell, Map<Cell, Direction>> board;
 
-    private final int MAX_ROW_LENGTH = 9; // Maximum number of cells in a row
+    public final static int MAX_ROW_LENGTH = 9; // Maximum number of cells in a row
 
     // 2D Arrays to represent the six possible directions (neighbors) in a hexagonal
     // grid for the lower, upper and middle rows
@@ -50,6 +51,31 @@ public class GameBoard {
             Map<Cell, Direction> neighborsWithDirection = findNeighbors(cell);
             // board.put(cell, neighborsWithDirection);
             cell.setNeighborsMap(neighborsWithDirection);
+        }
+        // sets cells scores
+        cellsScore();
+    }
+
+    private void cellsScore() {
+        Direction dir[] = { Direction.DOWNLEFT, Direction.LEFT, Direction.UPLEFT, Direction.UPRIGHT, Direction.RIGHT,
+                Direction.DOWNRIGHT };
+
+        double score = 4;
+        Cell currnt = getCellAt(4, 4);
+        currnt.setScore(score);
+        score--;
+        Cell temp = currnt;
+        for (int i = 1; i <= 4; i++) {
+            temp = temp.getNeighborInDirection(Direction.RIGHT);
+            for (int d = 0; d < 6; d++) {
+                for (int h = 0; h < i; h++) {
+                    temp = temp.getNeighborInDirection(dir[d]);
+                    temp.setScore(score);
+                    // if (i > 1 && h != i - 1)
+                    //     temp.setScore(score - 1);
+                }
+            }
+            score -= 2;
         }
     }
 
@@ -122,6 +148,38 @@ public class GameBoard {
         return 0;
     }
 
+    public static String getCellId(int x, int y) {
+        return "bt" + x + "_" + y;
+    }
+
+    public Collection<Cell> getCells() {
+        return board.keySet();
+    }
+
+    public Map<Cell, Map<Cell, Direction>> getBoard() {
+        return board;
+    }
+
+    public void printBoardScore() {
+        // Iterate through each row
+        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
+            // Print leading spaces for hexagonal alignment
+            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
+                System.out.print(" ");
+            }
+
+            // Print cells in the row
+            for (int y = 0; y < getRowLength(x); y++) {
+                Cell cell = getCellAt(x, y);
+                // System.out.print(cell.getState() + " ");
+                System.out.print("[" + cell.getScore() + "]");
+            }
+
+            // Move to the next line after printing each row
+            System.out.println();
+        }
+    }
+
     public void printBoard() {
         // Iterate through each row
         for (int x = 0; x < MAX_ROW_LENGTH; x++) {
@@ -141,7 +199,26 @@ public class GameBoard {
         }
     }
 
-    private int getRowLength(int x) {
+    public void printBoardBorders() {
+        // Iterate through each row
+        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
+            // Print leading spaces for hexagonal alignment
+            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
+                System.out.print(" ");
+            }
+
+            // Print cells in the row
+            for (int y = 0; y < getRowLength(x); y++) {
+                Cell cell = getCellAt(x, y);
+                System.out.print(((cell.getIsborder() == true) ? 1 : 0) + " ");
+            }
+
+            // Move to the next line after printing each row
+            System.out.println();
+        }
+    }
+
+    public static int getRowLength(int x) {
         if (x < 4) {
             return 5 + x; // Rows 0 to 3 increase in length
         } else if (x < 5) {
@@ -192,22 +269,18 @@ public class GameBoard {
         Cell cell1 = getCellAt(8, 4);
         Cell cell2 = getCellAt(7, 5);
         Cell cell3 = getCellAt(6, 6);
-        Cell cell4 = getCellAt(5, 7);
-
         cell3.setState(2);
-        cell4.setState(2);
-
         Cell dest = getCellAt(6, 6); // Destination
-
-        List<Cell> marbles = Arrays.asList(cell1, cell2);
+        
+        List<Cell> marbles = Arrays.asList(cell1, cell2 );
         Move move = new Move(marbles, dest, 1); // Player 2 making a move
-
+    
         try {
             if (move.isValid()) {
                 System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
-                MoveType moveType = move.getMoveType();
+                MoveType moveType = move.getMoveType() ;
                 System.out.println("The MoveType is: " + moveType);
-
+    
                 // If you wish to see the effect of the move, execute it
                 move.executeMove();
                 System.out.println("Move executed.");
@@ -217,52 +290,15 @@ public class GameBoard {
         } catch (IllegalStateException e) {
             System.out.println("Move is invalid: " + e.getMessage());
         }
-
+    
         System.out.println("Marbles selected for the move:");
         for (Cell cell : marbles) {
             System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");
         }
         System.out.println("\nThe destination cell is: " + formatCoordinate(dest.getX(), dest.getY()));
-
+    
         // Optionally, print the board state after the move
         printBoard();
-
-    }
-
-    public void checkMoveClass2() {
-        Cell cell1 = getCellAt(6, 6);
-        Cell cell2 = getCellAt(7, 5);
-
-        Cell dest = getCellAt(5, 7); // Destination
-
-        List<Cell> marbles = Arrays.asList(cell1, cell2);
-        Move move = new Move(marbles, dest, 1); // Player 2 making a move
-
-        try {
-            if (move.isValid()) {
-                System.out.println("Move to " + move.getDirectionToDest() + " direction is valid.");
-                MoveType moveType = move.getMoveType();
-                System.out.println("The MoveType is: " + moveType);
-
-                // If you wish to see the effect of the move, execute it
-                move.executeMove();
-                System.out.println("Move executed.");
-            } else {
-                System.out.println("Move is invalid.");
-            }
-        } catch (IllegalStateException e) {
-            System.out.println("Move is invalid: " + e.getMessage());
-        }
-
-        System.out.println("Marbles selected for the move:");
-        for (Cell cell : marbles) {
-            System.out.print(formatCoordinate(cell.getX(), cell.getY()) + " ");
-        }
-        System.out.println("\nThe destination cell is: " + formatCoordinate(dest.getX(), dest.getY()));
-
-        // Optionally, print the board state after the move
-        printBoard();
-
     }
 
     private String formatCoordinate(int x, int y) {

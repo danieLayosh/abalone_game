@@ -1,4 +1,4 @@
-module com.example {
+module com.abalone {
     requires transitive javafx.controls;
     requires transitive javafx.fxml;
     requires transitive javafx.graphics;

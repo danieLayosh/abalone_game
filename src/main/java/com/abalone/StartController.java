@@ -2,6 +2,11 @@ package com.abalone;
 
 import java.io.IOException;
 
+// import javafx.scene.web.WebView;
+// import javafx.scene.web.WebEngine;
+// import javafx.scene.layout.StackPane;
+// import javafx.stage.Modality;
+
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,9 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class StartController {

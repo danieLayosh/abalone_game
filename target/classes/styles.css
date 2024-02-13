@@ -1,0 +1,58 @@
+.scroll-bar {
+    -fx-background-color: #f2f2f2;
+    -fx-background-radius: 10;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #2196F3;
+    -fx-background-radius: 10;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #e0e0e0;
+    -fx-background-radius: 10;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+.tooltip {
+    -fx-font-size: 12pt;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: black;
+    -fx-border-color: #2196F3;
+    -fx-border-width: 1;
+}
+
+.context-menu {
+    -fx-background-color: #f2f2f2;
+}
+
+.menu-item {
+    -fx-text-fill: #333333;
+}
+
+/*
+.scroll-bar:vertical .track{
+    -fx-background-color: red;
+}
+*/
+/*
+.scroll-bar:vertical .thumb {
+    -fx-background-color: white; 
+}
+*/
+/*
+.scroll-bar:vertical .increment-arrow,
+.scroll-bar:vertical .decrement-arrow {
+    -fx-background-color: red; 
+}*/
+/*
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: red; 
+}
+*/

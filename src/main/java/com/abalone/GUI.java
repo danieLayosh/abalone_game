@@ -18,6 +18,7 @@ import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -30,6 +31,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,6 +56,7 @@ public class GUI {
     private double startX, startY;
     private List<Move> moveHistory = new ArrayList<>();
     private boolean isAnimationRunning = false;
+    private SimpleDoubleProperty animationSpeed;
 
     private Timeline gameTimer;
     private Duration timeLimit = Duration.hours(2); // 2 hours limit
@@ -69,6 +72,7 @@ public class GUI {
         this.gameMode = -1;
         this.player = -1;
         this.startPlayer = -1;
+        this.animationSpeed = new SimpleDoubleProperty(0.7);
     }
 
     @FXML
@@ -96,6 +100,9 @@ public class GUI {
     private Label timerLable;
 
     @FXML
+    private ScrollBar scrollBar;
+
+    @FXML
     private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
             bt1_0, bt1_1, bt1_2, bt1_3, bt1_4, bt1_5,
             bt2_0, bt2_1, bt2_2, bt2_3, bt2_4, bt2_5, bt2_6,
@@ -110,6 +117,7 @@ public class GUI {
         whitePoint.textProperty().bind(white_score.asString());
         blackPoint.textProperty().bind(black_score.asString());
         timerLable.textProperty().bind(timeString);
+        scrollBar.valueProperty().bindBidirectional(animationSpeed);
 
         // undoBt.setOnAction(event -> undoMove());
         undoBt.setText("RESTART");
@@ -157,10 +165,10 @@ public class GUI {
         int elapsedHours = elapsedTimeInSeconds.get() / 3600;
         int elapsedMinutes = (elapsedTimeInSeconds.get() % 3600) / 60;
         int elapsedSeconds = elapsedTimeInSeconds.get() % 60;
-    
+
         // Update the time string to reflect the new time
         timeString.set(String.format("%02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds));
-        
+
         // Convert total elapsed time in seconds to Duration for comparison
         Duration duration = Duration.seconds(elapsedTimeInSeconds.get());
         if (duration.greaterThanOrEqualTo(timeLimit)) {
@@ -636,6 +644,7 @@ public class GUI {
 
     private void restartGame() {
         gameTimer.stop();
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/start.fxml"));
         try {
             Parent root = loader.load();
@@ -882,7 +891,7 @@ public class GUI {
         AnchorPaneID.getChildren().add(marbleView);
 
         // Create and play the animation
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(0.7),
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(animationSpeed.get()),
                 marbleView);
         transition.setToX(endPoint.getX() - startPoint.getX());
         transition.setToY(endPoint.getY() - startPoint.getY());

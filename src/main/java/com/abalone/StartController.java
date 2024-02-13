@@ -2,6 +2,7 @@ package com.abalone;
 
 import java.io.IOException;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class StartController {
@@ -57,6 +60,7 @@ public class StartController {
         whitePlayer.selectToggle(whiteHuman);
         blackPlayer.selectToggle(blackComputer);
         starts.selectToggle(whiteStart);
+
     }
 
     @FXML
@@ -108,7 +112,6 @@ public class StartController {
             guiController.setStartingPlayerType(startingPlayerType);
 
             guiController.initializeGame();
-            // guiController.gameModeSettings();
 
             // Setting up the scene and stage
             Scene scene = new Scene(root);
@@ -118,12 +121,9 @@ public class StartController {
             gameStage.setTitle("Game");
             gameStage.show();
 
-            // Optional: close the current (start) stage, if desired
             this.stage.close();
-
         } catch (IOException e) {
             e.printStackTrace();
-            // Consider displaying an error message to the user
         }
 
     }
@@ -131,4 +131,45 @@ public class StartController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    // public void showRulesVideo() {
+    //     // URL or file path to your video
+    //         String videoUrl = "path_to_your_video.mp4"; // Adjust this to the path of your video file or URL
+
+    //         // Create a Media object
+    //         Media media = new Media(videoUrl);
+
+    //         // Create a MediaPlayer object
+    //         MediaPlayer mediaPlayer = new MediaPlayer(media);
+
+    //         // Create a MediaView and set the MediaPlayer
+    //         MediaView mediaView = new MediaView(mediaPlayer);
+
+    //         // Make sure the video fits within the window
+    //         mediaView.setFitWidth(800); // Set to desired width
+    //         mediaView.setFitHeight(450); // Set to desired height
+    //         mediaView.setPreserveRatio(true);
+
+    //     // Create a new Stage (window)
+    //     Stage videoStage = new Stage();
+    //     videoStage.initModality(Modality.APPLICATION_MODAL); // Block input events to other windows
+    //     videoStage.setTitle("Game Rules");
+
+    //     // Create a layout and add the MediaView to it
+    //     StackPane layout = new StackPane();
+    //     layout.getChildren().add(mediaView);
+
+    //     // Create a scene and set it on the stage
+    //     Scene scene = new Scene(layout, 800, 450); // Match MediaView size
+    //     videoStage.setScene(scene);
+
+    //     // Show the stage
+    //     videoStage.show();
+
+    //     // Start playing the video
+    //     mediaPlayer.play();
+
+    //     // Optional: Stop the video when the window is closed
+    //     videoStage.setOnCloseRequest(event -> mediaPlayer.stop());
+    // }
 }

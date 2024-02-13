@@ -1,5 +1,6 @@
 package com.abalone;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +17,14 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -51,6 +54,11 @@ public class GUI {
     private double startX, startY;
     private List<Move> moveHistory = new ArrayList<>();
     private boolean isAnimationRunning = false;
+
+    private Timeline gameTimer;
+    private Duration timeLimit = Duration.hours(2); // 2 hours limit
+    private SimpleStringProperty timeString = new SimpleStringProperty("00:00:00");
+    private IntegerProperty elapsedTimeInSeconds = new SimpleIntegerProperty(0); // Track elapsed time in seconds
 
     public GUI() {
         this.gameBoard = new GameBoard();
@@ -85,7 +93,7 @@ public class GUI {
     private AnchorPane AnchorPaneID;
 
     @FXML
-    private Button cpVScp;
+    private Label timerLable;
 
     @FXML
     private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
@@ -101,7 +109,11 @@ public class GUI {
     public void initializeGame() {
         whitePoint.textProperty().bind(white_score.asString());
         blackPoint.textProperty().bind(black_score.asString());
-        undoBt.setOnAction(event -> undoMove());
+        timerLable.textProperty().bind(timeString);
+
+        // undoBt.setOnAction(event -> undoMove());
+        undoBt.setText("RESTART");
+        undoBt.setOnAction(event -> restartGame());
 
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
@@ -127,22 +139,38 @@ public class GUI {
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Error linking cell to button: " + e.getMessage());
-                // Handle exception or log error
             }
         }
-
+        // Setup and start the game timer
+        setupGameTimer();
         gameModeSettings();
     }
 
-    public void gameModeSettings() {
-        System.out.println("Game Mode: " + gameMode);
-        System.out.println("Player: " + player);
-        System.out.println("Start Player: " + startPlayer);
-        if (startingPlayerType == 1) {
-            System.out.println("Starting Player Type: Human");
-        } else if (startingPlayerType == 2) {
-            System.out.println("Starting Player Type: Computer");
+    private void setupGameTimer() {
+        gameTimer = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateGameTime()));
+        gameTimer.setCycleCount(Timeline.INDEFINITE);
+        gameTimer.playFromStart();
+    }
+
+    private void updateGameTime() {
+        elapsedTimeInSeconds.set(elapsedTimeInSeconds.get() + 1); // Increment elapsed time
+        int elapsedHours = elapsedTimeInSeconds.get() / 3600;
+        int elapsedMinutes = (elapsedTimeInSeconds.get() % 3600) / 60;
+        int elapsedSeconds = elapsedTimeInSeconds.get() % 60;
+    
+        // Update the time string to reflect the new time
+        timeString.set(String.format("%02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds));
+        
+        // Convert total elapsed time in seconds to Duration for comparison
+        Duration duration = Duration.seconds(elapsedTimeInSeconds.get());
+        if (duration.greaterThanOrEqualTo(timeLimit)) {
+            gameTimer.stop();
+            endGame();
         }
+    }
+
+    public void gameModeSettings() {
+        updatePlayerTurnUI();
 
         // computer vs computer
         if (gameMode == 2) {
@@ -173,12 +201,11 @@ public class GUI {
                 System.out.println("Human vs Computer");
                 playerTurn.setText(null);
                 playerTurn.setStyle("-fx-background-color: black;");
-                // playerTurn.setVisible(false);
+                playerTurn.setVisible(true);
             } else {
                 // human vs human
                 if (gameMode == 3) {
                     System.out.println("Human vs Human");
-
                 }
             }
         }
@@ -580,6 +607,7 @@ public class GUI {
     }
 
     private void endGame() {
+        gameTimer.stop();
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Game Over");
@@ -607,20 +635,24 @@ public class GUI {
     }
 
     private void restartGame() {
-        this.player = 2;
-        this.black_score = new SimpleIntegerProperty(0);
-        this.white_score = new SimpleIntegerProperty(0);
-        this.gameBoard = new GameBoard();
-        this.marbles.clear();
-        this.whiteHBox.getChildren().clear();
-        this.blackHBox.getChildren().clear();
-        this.LastTwoMove.clear();
-        this.moveHistory.clear();
-        this.blackHBox.getChildren().clear();
-        this.whiteHBox.getChildren().clear();
-        this.blackPoint.textProperty().bind(black_score.asString());
-        this.whitePoint.textProperty().bind(white_score.asString());
-        initializeGame();
+        gameTimer.stop();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/start.fxml"));
+        try {
+            Parent root = loader.load();
+            StartController startController = loader.getController();
+            Scene scene = new Scene(root, 840, 680);
+            Stage startStage = new Stage();
+            startController.setStage(startStage);
+            startStage.setScene(scene);
+            startStage.setTitle("Game");
+            startStage.show();
+            System.out.println("Game restarted.");
+            this.stage.close();
+        } catch (IOException e) {
+            System.out.println("Error loading start.fxml");
+            e.printStackTrace();
+        }
+
     }
 
     private void changePlayer() {
@@ -685,7 +717,7 @@ public class GUI {
 
     private boolean isLoopingSequenceDetected() {
         int historySize = moveHistory.size();
-        if (historySize < 6) { // Minimum size for a loop, can be adjusted
+        if (historySize < 10) { // Minimum size for a loop, can be adjusted
             return false;
         }
 

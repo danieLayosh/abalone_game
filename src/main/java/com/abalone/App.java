@@ -15,7 +15,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary", stage), 840, 680 );
+        scene = new Scene(loadFXML("start", stage), 840, 680 );
         stage.setScene(scene);
         stage.show();
     }
@@ -27,8 +27,8 @@ public class App extends Application {
     private static Parent loadFXML(String fxml, Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("/" + fxml + ".fxml"));
         loader.setControllerFactory(param -> {
-            if (param == GUI.class) {
-                GUI controller = new GUI();
+            if (param == StartController.class) {
+                StartController controller = new StartController();
                 controller.setStage(stage); // Set the stage here
                 return controller;
             }

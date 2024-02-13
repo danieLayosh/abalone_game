@@ -186,9 +186,9 @@ public class Computer {
         move.undoMove();// undo the move to get it back before checking another move.
 
         // if (player == 2) {
-        return gravityCenterScore + pushedOffScore + marblesGroupScore + marblesInDangerScore;
+            return gravityCenterScore + pushedOffScore + marblesGroupScore + marblesInDangerScore;
         // } else {
-        // return gravityCenterScore + pushedOffScore + keepPackedScore;
+        //     return gravityCenterScore + pushedOffScore + keepPackedScore;
         // }
     }
 

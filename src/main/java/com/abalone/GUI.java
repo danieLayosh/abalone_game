@@ -11,10 +11,14 @@ import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -38,6 +42,8 @@ public class GUI {
     private int gameMode;
     private GameBoard gameBoard;
     private int player;
+    private int startPlayer;
+    private int startingPlayerType;
     private List<Cell> marbles;
     private IntegerProperty black_score;
     private IntegerProperty white_score;
@@ -52,8 +58,9 @@ public class GUI {
         this.black_score = new SimpleIntegerProperty(0);
         this.white_score = new SimpleIntegerProperty(0);
         this.LastTwoMove = new Stack<>();
-        this.gameMode = 1;
-        this.player = 1;
+        this.gameMode = -1;
+        this.player = -1;
+        this.startPlayer = -1;
     }
 
     @FXML
@@ -78,6 +85,9 @@ public class GUI {
     private AnchorPane AnchorPaneID;
 
     @FXML
+    private Button cpVScp;
+
+    @FXML
     private Button bt0_0, bt0_1, bt0_2, bt0_3, bt0_4,
             bt1_0, bt1_1, bt1_2, bt1_3, bt1_4, bt1_5,
             bt2_0, bt2_1, bt2_2, bt2_3, bt2_4, bt2_5, bt2_6,
@@ -88,32 +98,10 @@ public class GUI {
             bt7_0, bt7_1, bt7_2, bt7_3, bt7_4, bt7_5,
             bt8_0, bt8_1, bt8_2, bt8_3, bt8_4;
 
-    public void initialize() {
+    public void initializeGame() {
         whitePoint.textProperty().bind(white_score.asString());
         blackPoint.textProperty().bind(black_score.asString());
         undoBt.setOnAction(event -> undoMove());
-        if (gameMode == 2) {
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            executorService.execute(() -> {
-                while (true) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (player == 2 && !isAnimationRunning) {
-                        computerPlay();
-                    }
-                }
-            });
-        } else {
-            if (gameMode == 1){
-                playerTurn.setText(null);
-                playerTurn.setStyle("-fx-background-color: black;");
-                // playerTurn.setVisible(false);
-
-            }
-        }
 
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
@@ -127,13 +115,12 @@ public class GUI {
                     updateCellGUI(cell);
                     addDragFunctionality(cell.getBt());
 
-                    // Event handler for mouse entering and exiting the button area
-                    cellButton.setOnMouseEntered(event -> hoverOn(cell));
-                    cellButton.setOnMouseExited(event -> endHover(cell));
-
-                    if (gameMode == 1)
+                    if (gameMode != 2) {
                         cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
-                    else if (gameMode == 2) {
+                        // Event handler for mouse entering and exiting the button area
+                        cellButton.setOnMouseEntered(event -> hoverOn(cell));
+                        cellButton.setOnMouseExited(event -> endHover(cell));
+                    } else if (gameMode == 2) {
                         cellButton.setOnAction(event -> computerPlay()); // computer vs computer
                     }
 
@@ -141,6 +128,58 @@ public class GUI {
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 System.err.println("Error linking cell to button: " + e.getMessage());
                 // Handle exception or log error
+            }
+        }
+
+        gameModeSettings();
+    }
+
+    public void gameModeSettings() {
+        System.out.println("Game Mode: " + gameMode);
+        System.out.println("Player: " + player);
+        System.out.println("Start Player: " + startPlayer);
+        if (startingPlayerType == 1) {
+            System.out.println("Starting Player Type: Human");
+        } else if (startingPlayerType == 2) {
+            System.out.println("Starting Player Type: Computer");
+        }
+
+        // computer vs computer
+        if (gameMode == 2) {
+            System.out.println("Computer vs Computer");
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService.execute(() -> {
+                while (true) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (!isAnimationRunning) {
+                        Platform.runLater(() -> {
+                            computerPlay();
+                        });
+                    }
+                }
+            });
+
+        } else {
+            // human vs computer
+            if (gameMode == 1) {
+                if (startingPlayerType == 2) {
+                    System.out.println("player is 2, computer play first");
+                    computerPlay();
+                }
+                System.out.println("Human vs Computer");
+                playerTurn.setText(null);
+                playerTurn.setStyle("-fx-background-color: black;");
+                // playerTurn.setVisible(false);
+            } else {
+                // human vs human
+                if (gameMode == 3) {
+                    System.out.println("Human vs Human");
+
+                }
             }
         }
     }
@@ -500,7 +539,6 @@ public class GUI {
             moveHistory.add(move);
             if (isLoopingSequenceDetected()) {
                 endGameDueToLoop_TIE();
-                // restartGame(); // For testing
                 return;
             }
 
@@ -521,29 +559,24 @@ public class GUI {
 
                 if (white_score.get() == 6 || black_score.get() == 6) {
                     endGame();
-                    // endGameCPTesting(); // for testing
                 }
             }
 
             changePlayer();
             marbles.clear();
-            // computerVsComputerTesting();// for testing
         }
     }
 
     private void updateScoreDisplay(int score, HBox hbox, String imageFile) {
-        hbox.getChildren().clear(); // Clear existing images
-        for (int i = 0; i < score; i++) {
-            ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageFile)));
-            imageView.setFitHeight(35); // Set height
-            imageView.setPreserveRatio(true);
-            hbox.getChildren().add(imageView); // Add new image for each point in score
-        }
-    }
-
-    private void computerVsComputerTesting() {
-        computerPlay();// for the loop
-        endGameCPTesting();
+        Platform.runLater(() -> {
+            hbox.getChildren().clear(); // Clear existing images
+            for (int i = 0; i < score; i++) {
+                ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(imageFile)));
+                imageView.setFitHeight(35); // Set height
+                imageView.setPreserveRatio(true);
+                hbox.getChildren().add(imageView); // Add new image for each point in score
+            }
+        });
     }
 
     private void endGame() {
@@ -573,16 +606,6 @@ public class GUI {
         });
     }
 
-    private void endGameCPTesting() {
-        if (player == 1) {
-            System.out.println("THE WHITE PLAYER WON!!!!");
-        } else {
-            System.out.println("THE BLACK PLAYER WON!!!!");
-        }
-        restartGame();
-
-    }
-
     private void restartGame() {
         this.player = 2;
         this.black_score = new SimpleIntegerProperty(0);
@@ -597,27 +620,43 @@ public class GUI {
         this.whiteHBox.getChildren().clear();
         this.blackPoint.textProperty().bind(black_score.asString());
         this.whitePoint.textProperty().bind(white_score.asString());
-        initialize();
+        initializeGame();
     }
 
     private void changePlayer() {
         player = (player == 1 ? 2 : 1);
-        if (player == 2 && !isAnimationRunning) {
-            computerPlay();
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(100), // Check every 100 milliseconds
+                ae -> {
+                    if (!isAnimationRunning) {
+                        continueChangePlayer();
+                    }
+                }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    private void continueChangePlayer() {
+        if ((player == startPlayer && gameMode == 1 && startingPlayerType == 2)) {
+            if (gameMode == 2 && player == 2 || gameMode == 1) {
+                computerPlay();
+            }
         }
         updatePlayerTurnUI();
     }
 
     private void updatePlayerTurnUI() {
-        if (player == 1) {
-            playerTurn.setText("White Turn");
-            playerTurn.setTextFill(Color.WHITE);
-            playerTurn.setStyle("-fx-background-color: #000000;");
-        } else if (player == 2) {
-            playerTurn.setText("Black Turn");
-            playerTurn.setTextFill(Color.BLACK);
-            playerTurn.setStyle("-fx-background-color: #FFFFFF;");
-        }
+        Platform.runLater(() -> {
+            if (player == 1) {
+                playerTurn.setText("White Turn");
+                playerTurn.setTextFill(Color.WHITE);
+                playerTurn.setStyle("-fx-background-color: #000000;");
+            } else if (player == 2) {
+                playerTurn.setText("Black Turn");
+                playerTurn.setTextFill(Color.BLACK);
+                playerTurn.setStyle("-fx-background-color: #FFFFFF;");
+            }
+        });
     }
 
     private void cellPushed(Cell cell) {
@@ -749,10 +788,6 @@ public class GUI {
             }
             move.executeMove();
 
-            // for (Cell cell : marbles) {
-            // System.out.println(cell.formatCoordinate());
-            // }
-
             if (marbles.size() == 2) {
                 animateMarbleMovement(marbles.get(1), move.getDestCell(), parallelTransition);
             } else {
@@ -769,14 +804,6 @@ public class GUI {
                 }
             }
         }
-        parallelTransition.setOnFinished(event -> {
-            updateBoard(move);
-            isAnimationRunning = false;
-            if (player == 2) {
-                computerPlay();
-                System.out.println("computerPlay");
-            }
-        });
 
         for (Cell cell : marbles) {
             if (cell != null)
@@ -785,10 +812,19 @@ public class GUI {
         }
         parallelTransition.play();
 
+        parallelTransition.setOnFinished(event -> {
+            updateBoard(move);
+            isAnimationRunning = false;
+            if ((gameMode == 1 && player != startPlayer && startingPlayerType == 1) || (gameMode == 2)) {
+                System.out.println(gameMode + " " + player + " " + isAnimationRunning);
+                computerPlay();
+                System.out.println("computerPlay");
+            }
+        });
+
     }
 
     private void animateMarbleMovement(Cell startCell, Cell endCell, ParallelTransition parallelTransition) {
-
         Button startButton = startCell.getBt();
         Button endButton = endCell.getBt();
 
@@ -834,4 +870,16 @@ public class GUI {
         parallelTransition.getChildren().add(transition);
     }
 
+    public void setPlayer(int player) {
+        this.player = player;
+        this.startPlayer = player;
+    }
+
+    public void setStartingPlayerType(int startingPlayerType) {
+        this.startingPlayerType = startingPlayerType;
+    }
+
+    public void setGameMode(int gameMode) {
+        this.gameMode = gameMode;
+    }
 }

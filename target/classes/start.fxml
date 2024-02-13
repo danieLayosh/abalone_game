@@ -30,15 +30,15 @@
                         <Image url="@blackAndWhite/white_ball.png" />
                      </image>
                   </ImageView>
-                  <RadioButton fx:id="rdP1" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Player">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="Player1" />
-                     </toggleGroup>
+                  <RadioButton fx:id="whiteHuman" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Human">
                      <font>
                         <Font size="30.0" />
                      </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="whitePlayer" />
+                     </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="rdC1" mnemonicParsing="false" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Computer" toggleGroup="$Player1">
+                  <RadioButton fx:id="whiteComputer" mnemonicParsing="false" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Computer" toggleGroup="$whitePlayer">
                      <font>
                         <Font size="30.0" />
                      </font>
@@ -55,15 +55,15 @@
                         <Image url="@blackAndWhite/black_ball.png" />
                      </image>
                   </ImageView>
-                  <RadioButton fx:id="rdP2" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Player">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="Player2" />
-                     </toggleGroup>
+                  <RadioButton fx:id="blackHuman" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Human">
                      <font>
                         <Font size="30.0" />
                      </font>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="blackPlayer" />
+                     </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="rdC2" mnemonicParsing="false" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Computer" toggleGroup="$Player2">
+                  <RadioButton fx:id="blackComputer" mnemonicParsing="false" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Computer" toggleGroup="$blackPlayer">
                      <font>
                         <Font size="30.0" />
                      </font>
@@ -90,7 +90,7 @@
             </Label>
             <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
                <children>
-                  <RadioButton fx:id="rdStartWhite" alignment="CENTER_RIGHT" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="114.0" selected="true" style="-fx-border-color: black; -fx-background-color: #DDDDDD;" textAlignment="JUSTIFY">
+                  <RadioButton fx:id="whiteStart" alignment="CENTER_RIGHT" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="114.0" selected="true" style="-fx-border-color: black; -fx-background-color: #DDDDDD;" textAlignment="JUSTIFY">
                      <font>
                         <Font size="36.0" />
                      </font>
@@ -105,7 +105,7 @@
                         <ToggleGroup fx:id="starts" />
                      </toggleGroup>
                   </RadioButton>
-                  <RadioButton fx:id="rdStartBlack" alignment="CENTER_RIGHT" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="114.0" style="-fx-border-color: black; -fx-background-color: #DDDDDD;" toggleGroup="$starts">
+                  <RadioButton fx:id="blackStart" alignment="CENTER_RIGHT" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="70.0" prefWidth="114.0" style="-fx-border-color: black; -fx-background-color: #DDDDDD;" toggleGroup="$starts">
                      <font>
                         <Font size="36.0" />
                      </font>

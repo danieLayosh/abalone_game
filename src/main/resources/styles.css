@@ -34,25 +34,3 @@
 .menu-item {
     -fx-text-fill: #333333;
 }
-
-/*
-.scroll-bar:vertical .track{
-    -fx-background-color: red;
-}
-*/
-/*
-.scroll-bar:vertical .thumb {
-    -fx-background-color: white; 
-}
-*/
-/*
-.scroll-bar:vertical .increment-arrow,
-.scroll-bar:vertical .decrement-arrow {
-    -fx-background-color: red; 
-}*/
-/*
-.scroll-bar:vertical .increment-button,
-.scroll-bar:vertical .decrement-button {
-    -fx-background-color: red; 
-}
-*/

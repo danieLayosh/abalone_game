@@ -1,13 +1,9 @@
 package com.abalone;
 
 import java.io.IOException;
+import java.net.URL;
 
-// import javafx.scene.web.WebView;
-// import javafx.scene.web.WebEngine;
-// import javafx.scene.layout.StackPane;
-// import javafx.stage.Modality;
-
-
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +12,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 
 public class StartController {
@@ -24,6 +24,7 @@ public class StartController {
     private int startingPlayer;
     private int gameMode;
     private int startingPlayerType;
+    private boolean isVideoPlaying = false;
 
     @FXML
     private Button btStartNewGame;
@@ -58,16 +59,79 @@ public class StartController {
     @FXML
     private RadioButton blackStart;
 
+    @FXML
+    private Button infoBt;
+
     public void initialize() {
         mainVbox.setStyle("-fx-background-image: url('startingBackground.png');");
         whitePlayer.selectToggle(whiteHuman);
         blackPlayer.selectToggle(blackComputer);
         starts.selectToggle(whiteStart);
+        infoBt.setOnAction(event -> {
+            if (isVideoPlaying == false) {
+                Platform.runLater(() -> {
+                    showVideoOnStart();
+                });
+            } else {
+                System.out.println("Video is already playing");
+            }
+        });
+    }
 
+    private void showVideoOnStart() {
+        try {
+            // Obtain the URL to the resource
+            URL resourceUrl = getClass().getResource("/How To Play Abalone.mp4");
+            if (resourceUrl != null) {
+                // Convert the URL to a URI string
+                String videoUri = resourceUrl.toURI().toString();
+                Media media = new Media(videoUri);
+                MediaPlayer mediaPlayer = new MediaPlayer(media);
+                MediaView mediaView = new MediaView(mediaPlayer);
+
+                StackPane root = new StackPane();
+                root.getChildren().add(mediaView);
+
+                Scene videoScene = new Scene(root, 740, 480); // Adjust the size as needed
+                mediaView.setPreserveRatio(true);
+                mediaView.setFitHeight(gameMode == 3 ? 740 : 480);
+
+                mediaPlayer.setAutoPlay(true);
+                isVideoPlaying = true;
+
+                Stage videoStage = new Stage();
+                videoStage.setScene(videoScene);
+                videoStage.setTitle("Video");
+                videoStage.show();
+
+                // Optional: Close the video window when the video finishes
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    if (!videoStage.isShowing()) {
+                        videoStage.close();
+                        mediaPlayer.stop();
+                        isVideoPlaying = false;
+                    }
+                });
+
+                btStartNewGame.setOnAction(event -> {
+                    videoStage.close();
+                    mediaPlayer.stop();
+                    isVideoPlaying = false;
+                    startNewGame(event);
+                });
+
+            } else {
+                System.out.println("Resource URL is null. Check the path to your video file.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error loading video: " + e.getMessage());
+        }
     }
 
     @FXML
     void startNewGame(ActionEvent event) {
+
         // Determine the selection for Player 1
         boolean whiteIsHuman = whiteHuman.isSelected();
         boolean whiteIsComputer = whiteComputer.isSelected();
@@ -88,7 +152,8 @@ public class StartController {
 
         if (whiteIsHuman && blackIsHuman) {
             gameMode = 3;
-        } else if (whiteIsHuman && blackIsComputer || blackIsHuman && whiteIsComputer) {
+        } else if (whiteIsHuman && blackIsComputer || blackIsHuman &&
+                whiteIsComputer) {
             gameMode = 1;
         } else if (whiteIsComputer && blackIsComputer) {
             gameMode = 2;
@@ -128,51 +193,9 @@ public class StartController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-
-    // public void showRulesVideo() {
-    //     // URL or file path to your video
-    //         String videoUrl = "path_to_your_video.mp4"; // Adjust this to the path of your video file or URL
-
-    //         // Create a Media object
-    //         Media media = new Media(videoUrl);
-
-    //         // Create a MediaPlayer object
-    //         MediaPlayer mediaPlayer = new MediaPlayer(media);
-
-    //         // Create a MediaView and set the MediaPlayer
-    //         MediaView mediaView = new MediaView(mediaPlayer);
-
-    //         // Make sure the video fits within the window
-    //         mediaView.setFitWidth(800); // Set to desired width
-    //         mediaView.setFitHeight(450); // Set to desired height
-    //         mediaView.setPreserveRatio(true);
-
-    //     // Create a new Stage (window)
-    //     Stage videoStage = new Stage();
-    //     videoStage.initModality(Modality.APPLICATION_MODAL); // Block input events to other windows
-    //     videoStage.setTitle("Game Rules");
-
-    //     // Create a layout and add the MediaView to it
-    //     StackPane layout = new StackPane();
-    //     layout.getChildren().add(mediaView);
-
-    //     // Create a scene and set it on the stage
-    //     Scene scene = new Scene(layout, 800, 450); // Match MediaView size
-    //     videoStage.setScene(scene);
-
-    //     // Show the stage
-    //     videoStage.show();
-
-    //     // Start playing the video
-    //     mediaPlayer.play();
-
-    //     // Optional: Stop the video when the window is closed
-    //     videoStage.setOnCloseRequest(event -> mediaPlayer.stop());
-    // }
 }

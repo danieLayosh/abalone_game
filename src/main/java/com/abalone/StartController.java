@@ -7,9 +7,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.StackPane;
@@ -18,6 +20,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class StartController {
     private Stage stage;
@@ -89,28 +92,61 @@ public class StartController {
                 MediaPlayer mediaPlayer = new MediaPlayer(media);
                 MediaView mediaView = new MediaView(mediaPlayer);
 
+                mediaView.setPreserveRatio(true);
+                mediaView.setFitHeight(gameMode == 3 ? 740 : 480);
+                mediaPlayer.setAutoPlay(true);
+                isVideoPlaying = true;
+
                 StackPane root = new StackPane();
                 root.getChildren().add(mediaView);
 
                 Scene videoScene = new Scene(root, 740, 480); // Adjust the size as needed
-                mediaView.setPreserveRatio(true);
-                mediaView.setFitHeight(gameMode == 3 ? 740 : 480);
-
-                mediaPlayer.setAutoPlay(true);
-                isVideoPlaying = true;
 
                 Stage videoStage = new Stage();
                 videoStage.setScene(videoScene);
                 videoStage.setTitle("Video");
                 videoStage.show();
 
+                // Handle mouse click to toggle play and pause
+                mediaView.setOnMouseClicked(event -> {
+                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                        mediaPlayer.pause();
+                    } else {
+                        mediaPlayer.play();
+                    }
+                });
+
+                // Handle keyboard events for control
+                videoScene.setOnKeyPressed(event -> {
+                    switch (event.getCode()) {
+                        case SPACE:
+                            if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                                mediaPlayer.pause();
+                            } else {
+                                mediaPlayer.play();
+                            }
+                            break;
+                        case RIGHT:
+                            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(5)));
+                            break;
+                        case LEFT:
+                            mediaPlayer.seek(mediaPlayer.getCurrentTime().subtract(Duration.seconds(5)));
+                            break;
+                        case ESCAPE:
+                            videoStage.close();
+                            mediaPlayer.stop();
+                            isVideoPlaying = false;
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
                 // Optional: Close the video window when the video finishes
                 mediaPlayer.setOnEndOfMedia(() -> {
-                    if (!videoStage.isShowing()) {
-                        videoStage.close();
-                        mediaPlayer.stop();
-                        isVideoPlaying = false;
-                    }
+                    videoStage.close();
+                    mediaPlayer.stop();
+                    isVideoPlaying = false;
                 });
 
                 btStartNewGame.setOnAction(event -> {
@@ -118,6 +154,11 @@ public class StartController {
                     mediaPlayer.stop();
                     isVideoPlaying = false;
                     startNewGame(event);
+                });
+
+                videoStage.setOnCloseRequest(event -> {
+                    mediaPlayer.stop();
+                    isVideoPlaying = false;
                 });
 
             } else {

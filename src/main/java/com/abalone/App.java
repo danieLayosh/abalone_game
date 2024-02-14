@@ -1,6 +1,7 @@
 package com.abalone;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -39,11 +40,13 @@ public class App extends Application {
                 throw new RuntimeException(e); // Handle this exception
             }
         });
+
+        stage.setOnCloseRequest(e -> Platform.exit());
         return loader.load();
     }
 
     public static void main(String[] args) {
-        launch(args);
+        launch();
     }
 
 }

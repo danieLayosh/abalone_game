@@ -57,6 +57,7 @@ public class GUI {
     private List<Move> moveHistory = new ArrayList<>();
     private boolean isAnimationRunning = false;
     private SimpleDoubleProperty animationSpeed;
+    private ExecutorService executorService;
 
     private Timeline gameTimer;
     private Duration timeLimit = Duration.hours(2); // 2 hours limit
@@ -73,6 +74,7 @@ public class GUI {
         this.player = -1;
         this.startPlayer = -1;
         this.animationSpeed = new SimpleDoubleProperty(0.7);
+        this.executorService = Executors.newSingleThreadExecutor();
     }
 
     @FXML
@@ -173,7 +175,7 @@ public class GUI {
         Duration duration = Duration.seconds(elapsedTimeInSeconds.get());
         if (duration.greaterThanOrEqualTo(timeLimit)) {
             gameTimer.stop();
-            endGame();
+            endGame(0);
         }
     }
 
@@ -183,7 +185,7 @@ public class GUI {
         // computer vs computer
         if (gameMode == 2) {
             System.out.println("Computer vs Computer");
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService = Executors.newSingleThreadExecutor();
             executorService.execute(() -> {
                 while (true) {
                     try {
@@ -573,7 +575,7 @@ public class GUI {
 
             moveHistory.add(move);
             if (isLoopingSequenceDetected()) {
-                endGameDueToLoop_TIE();
+                endGame(1);
                 return;
             }
 
@@ -593,7 +595,7 @@ public class GUI {
                 }
 
                 if (white_score.get() == 6 || black_score.get() == 6) {
-                    endGame();
+                    endGame(0);
                 }
             }
 
@@ -614,15 +616,28 @@ public class GUI {
         });
     }
 
-    private void endGame() {
+    private void endGame(int whyEnded) {
         gameTimer.stop();
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Game Over");
-            if (player == 2) {
-                alert.setHeaderText("THE WHITE PLAYER WON!!!!");
+            if (whyEnded == 0) {
+                alert.setTitle("Game Over");
+                if (player == 2) {
+                    alert.setHeaderText("THE WHITE PLAYER WON!!!!");
+                } else {
+                    alert.setHeaderText("THE BLACK PLAYER WON!!!!");
+                }
             } else {
-                alert.setHeaderText("THE BLACK PLAYER WON!!!!");
+                alert.setTitle("Game Over");
+                alert.setHeaderText("Game ended due to repetitive loop - TIE");
+                alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
+
+                // If using ExecutorService
+                if (executorService != null && !executorService.isShutdown()) {
+                    executorService.shutdownNow();
+                }
+
+
             }
 
             alert.setContentText("Do you want to play another game?");
@@ -644,7 +659,7 @@ public class GUI {
 
     private void restartGame() {
         gameTimer.stop();
-        
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/start.fxml"));
         try {
             Parent root = loader.load();
@@ -747,18 +762,20 @@ public class GUI {
         return false;
     }
 
-    private void endGameDueToLoop_TIE() {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Game Over");
-            alert.setHeaderText("Game ended due to repetitive loop - TIE");
-            alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
-            alert.showAndWait();
+    // private void endGameDueToLoop_TIE() {
+    // gameTimer.stop();
+    // Platform.runLater(() -> {
+    // Alert alert = new Alert(AlertType.INFORMATION);
+    // alert.setTitle("Game Over");
+    // alert.setHeaderText("Game ended due to repetitive loop - TIE");
+    // alert.setContentText("The players have entered into a repetitive loop of
+    // moves. The game is over.");
+    // alert.showAndWait();
 
-            restartGame();
-            // Additional logic to restart or close the game
-        });
-    }
+    // restartGame();
+    // // Additional logic to restart or close the game
+    // });
+    // }
 
     private void animateMove(Move move) {
         ParallelTransition parallelTransition = new ParallelTransition();

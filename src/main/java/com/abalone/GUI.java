@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
@@ -58,6 +59,7 @@ public class GUI {
     private boolean isAnimationRunning = false;
     private SimpleDoubleProperty animationSpeed;
     private ExecutorService executorService;
+    private AtomicBoolean gameActive;
 
     private Timeline gameTimer;
     private Duration timeLimit = Duration.hours(2); // 2 hours limit
@@ -75,6 +77,7 @@ public class GUI {
         this.startPlayer = -1;
         this.animationSpeed = new SimpleDoubleProperty(0.7);
         this.executorService = Executors.newSingleThreadExecutor();
+        this.gameActive = new AtomicBoolean(false);
     }
 
     @FXML
@@ -184,10 +187,14 @@ public class GUI {
 
         // computer vs computer
         if (gameMode == 2) {
+            gameActive.set(true);
             System.out.println("Computer vs Computer");
             executorService = Executors.newSingleThreadExecutor();
             executorService.execute(() -> {
-                while (true) {
+                while (gameActive.get()) {
+                    if (gameActive.get() == false) {
+                        System.out.println("gameActive.get() == false");
+                    }
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -617,44 +624,58 @@ public class GUI {
     }
 
     private void endGame(int whyEnded) {
-        gameTimer.stop();
-        Platform.runLater(() -> {
-            Alert alert = new Alert(AlertType.CONFIRMATION);
-            if (whyEnded == 0) {
-                alert.setTitle("Game Over");
-                if (player == 2) {
-                    alert.setHeaderText("THE WHITE PLAYER WON!!!!");
+
+        if (gameActive.get() == true) {
+            System.out.println(Thread.currentThread().getName() + " - Game ended.");
+            gameActive.set(false);
+            System.out.println("Game ended.");
+            gameTimer.stop();
+            Platform.runLater(() -> {
+                Alert alert = new Alert(AlertType.CONFIRMATION);
+                if (whyEnded == 0) {
+                    alert.setTitle("Game Over");
+                    if (player == 2) {
+                        alert.setHeaderText("THE WHITE PLAYER WON!!!!");
+                    } else {
+                        alert.setHeaderText("THE BLACK PLAYER WON!!!!");
+                    }
                 } else {
-                    alert.setHeaderText("THE BLACK PLAYER WON!!!!");
+                    alert.setTitle("Game Over");
+                    alert.setHeaderText("Game ended due to repetitive loop - TIE");
+                    alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
+
+                    // // If using ExecutorService
+                    // if (executorService != null && !executorService.isShutdown()) {
+                    // executorService.shutdownNow();
+                    // }
+
                 }
-            } else {
-                alert.setTitle("Game Over");
-                alert.setHeaderText("Game ended due to repetitive loop - TIE");
-                alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
 
-                // If using ExecutorService
-                if (executorService != null && !executorService.isShutdown()) {
-                    executorService.shutdownNow();
-                }
+                alert.setContentText("Do you want to play another game?");
 
+                ButtonType buttonTypeYes = new ButtonType("Yes");
+                ButtonType buttonTypeNo = new ButtonType("No, exit");
 
-            }
+                alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
-            alert.setContentText("Do you want to play another game?");
-
-            ButtonType buttonTypeYes = new ButtonType("Yes");
-            ButtonType buttonTypeNo = new ButtonType("No, exit");
-
-            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-
-            alert.showAndWait().ifPresent(response -> {
-                if (response == buttonTypeYes) {
-                    restartGame();
-                } else if (response == buttonTypeNo) {
-                    System.exit(0); // or close the window
-                }
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == buttonTypeYes) {
+                        restartGame();
+                    } else if (response == buttonTypeNo) {
+                        System.exit(0); // or close the window
+                    }
+                });
             });
-        });
+        } else {
+            Platform.runLater(() -> {
+                try {
+                    Thread.sleep(100); // Small delay to allow ongoing animations to complete
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // Restore interrupted status
+                }
+                endGame(whyEnded);
+            });
+        }
     }
 
     private void restartGame() {

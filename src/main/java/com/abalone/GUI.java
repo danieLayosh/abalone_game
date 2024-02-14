@@ -126,7 +126,7 @@ public class GUI {
 
         // undoBt.setOnAction(event -> undoMove());
         undoBt.setText("RESTART");
-        undoBt.setOnAction(event -> restartGame());
+        undoBt.setOnAction(event -> endGame(0));
 
         // Iterate over all cells in the game board and link them to buttons
         for (Cell cell : gameBoard.getCells()) {
@@ -192,11 +192,8 @@ public class GUI {
             executorService = Executors.newSingleThreadExecutor();
             executorService.execute(() -> {
                 while (gameActive.get()) {
-                    if (gameActive.get() == false) {
-                        System.out.println("gameActive.get() == false");
-                    }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -212,7 +209,6 @@ public class GUI {
             // human vs computer
             if (gameMode == 1) {
                 if (startingPlayerType == 2) {
-                    System.out.println("player is 2, computer play first");
                     computerPlay();
                 }
                 System.out.println("Human vs Computer");
@@ -555,7 +551,7 @@ public class GUI {
                     executeTheTurn(move);
                     System.out.println("Player Move executed.");
                 } else
-                    System.out.println("Move is invalid.");
+                    showTemporaryMessage("Move is invalid.");
             } else {
                 marbles.clear();
                 showTemporaryMessage("Move is invalid.");
@@ -624,13 +620,12 @@ public class GUI {
     }
 
     private void endGame(int whyEnded) {
+        Platform.runLater(() -> {
+            if (gameActive.get() == true) {
 
-        if (gameActive.get() == true) {
-            System.out.println(Thread.currentThread().getName() + " - Game ended.");
-            gameActive.set(false);
-            System.out.println("Game ended.");
-            gameTimer.stop();
-            Platform.runLater(() -> {
+                gameActive.set(false);
+                gameTimer.stop();
+
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 if (whyEnded == 0) {
                     alert.setTitle("Game Over");
@@ -644,13 +639,12 @@ public class GUI {
                     alert.setHeaderText("Game ended due to repetitive loop - TIE");
                     alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
 
-                    // // If using ExecutorService
-                    // if (executorService != null && !executorService.isShutdown()) {
-                    // executorService.shutdownNow();
-                    // }
+                    // If using ExecutorService
+                    if (executorService != null && !executorService.isShutdown()) {
+                        executorService.shutdownNow();
+                    }
 
                 }
-
                 alert.setContentText("Do you want to play another game?");
 
                 ButtonType buttonTypeYes = new ButtonType("Yes");
@@ -665,17 +659,18 @@ public class GUI {
                         System.exit(0); // or close the window
                     }
                 });
-            });
-        } else {
-            Platform.runLater(() -> {
-                try {
-                    Thread.sleep(100); // Small delay to allow ongoing animations to complete
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt(); // Restore interrupted status
-                }
-                endGame(whyEnded);
-            });
-        }
+
+            } else {
+                Platform.runLater(() -> {
+                    try {
+                        Thread.sleep(100); // Small delay to allow ongoing animations to complete
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt(); // Restore interrupted status
+                    }
+                    endGame(whyEnded);
+                });
+            }
+        });
     }
 
     private void restartGame() {
@@ -691,13 +686,13 @@ public class GUI {
             startStage.setScene(scene);
             startStage.setTitle("Game");
             startStage.show();
-            System.out.println("Game restarted.");
+            showTemporaryMessage("Game restarted.");
+
             this.stage.close();
         } catch (IOException e) {
-            System.out.println("Error loading start.fxml");
+            showTemporaryMessage("Error loading start.fxml");
             e.printStackTrace();
         }
-
     }
 
     private void changePlayer() {
@@ -782,21 +777,6 @@ public class GUI {
         }
         return false;
     }
-
-    // private void endGameDueToLoop_TIE() {
-    // gameTimer.stop();
-    // Platform.runLater(() -> {
-    // Alert alert = new Alert(AlertType.INFORMATION);
-    // alert.setTitle("Game Over");
-    // alert.setHeaderText("Game ended due to repetitive loop - TIE");
-    // alert.setContentText("The players have entered into a repetitive loop of
-    // moves. The game is over.");
-    // alert.showAndWait();
-
-    // restartGame();
-    // // Additional logic to restart or close the game
-    // });
-    // }
 
     private void animateMove(Move move) {
         ParallelTransition parallelTransition = new ParallelTransition();
@@ -895,7 +875,6 @@ public class GUI {
             updateBoard(move);
             isAnimationRunning = false;
             if ((gameMode == 1 && player != startPlayer && startingPlayerType == 1) || (gameMode == 2)) {
-                System.out.println(gameMode + " " + player + " " + isAnimationRunning);
                 computerPlay();
                 System.out.println("computerPlay");
             }

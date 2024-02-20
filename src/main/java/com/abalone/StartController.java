@@ -12,6 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -64,7 +70,11 @@ public class StartController {
     private Button infoBt;
 
     public void initialize() {
-        mainVbox.setStyle("-fx-background-image: url('startingBackground.png');");
+        Image image = new Image(getClass().getResourceAsStream("/menu_window/startingBackground.png"));
+        BackgroundImage backgroundImage = new BackgroundImage(image,
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+                BackgroundSize.DEFAULT);
+        mainVbox.setBackground(new Background(backgroundImage));
         whitePlayer.selectToggle(whiteHuman);
         blackPlayer.selectToggle(blackComputer);
         starts.selectToggle(whiteStart);

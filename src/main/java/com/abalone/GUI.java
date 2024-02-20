@@ -124,6 +124,10 @@ public class GUI {
         timerLable.textProperty().bind(timeString);
         scrollBar.valueProperty().bindBidirectional(animationSpeed);
 
+        if (gameMode == 1) {
+            scrollBar.setMin(0.2);
+        }
+
         // undoBt.setOnAction(event -> undoMove());
         undoBt.setText("RESTART");
         undoBt.setOnAction(event -> restartGame());
@@ -184,26 +188,26 @@ public class GUI {
 
     public void gameModeSettings() {
         updatePlayerTurnUI();
+        gameActive.set(true);
 
         // computer vs computer
         if (gameMode == 2) {
-            gameActive.set(true);
-            System.out.println("Computer vs Computer");
             executorService = Executors.newSingleThreadExecutor();
             executorService.execute(() -> {
                 while (gameActive.get()) {
-                    if (gameActive.get() == false) {
-                        System.out.println("gameActive.get() == false");
-                    }
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (!isAnimationRunning) {
-                        Platform.runLater(() -> {
-                            computerPlay();
-                        });
+                    if (gameActive.get()) {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        if (!isAnimationRunning) {
+                            Platform.runLater(() -> {
+                                computerPlay();
+                            });
+                        }
+                    } else {
+                        System.out.println("Game ended!!!");
                     }
                 }
             });
@@ -211,18 +215,35 @@ public class GUI {
         } else {
             // human vs computer
             if (gameMode == 1) {
-                if (startingPlayerType == 2) {
-                    System.out.println("player is 2, computer play first");
-                    computerPlay();
-                }
-                System.out.println("Human vs Computer");
                 playerTurn.setText(null);
                 playerTurn.setStyle("-fx-background-color: black;");
                 playerTurn.setVisible(true);
+
+                executorService = Executors.newSingleThreadExecutor();
+                executorService.execute(() -> {
+                    while (gameActive.get()) {
+                        if ((player == startPlayer && startingPlayerType == 2)
+                                || (player != startPlayer && startingPlayerType == 1)) {
+                            try {
+                                Thread.sleep(200);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            // If an animation is not running, invoke the computerPlay method on the JavaFX
+                            // application thread.
+                            if (!isAnimationRunning) {
+                                Platform.runLater(() -> {
+                                    computerPlay();
+                                });
+                            }
+                        }
+                    }
+                });
+
             } else {
                 // human vs human
                 if (gameMode == 3) {
-                    System.out.println("Human vs Human");
+
                 }
             }
         }
@@ -280,7 +301,7 @@ public class GUI {
     }
 
     private void handleDragDirection(Button button, Direction direction) {
-        System.out.println(direction);
+        // System.out.println(direction);
         if (!marbles.isEmpty()) {
             Cell edgeCellInDirection = marbles.get(0);
             Cell nextCell = edgeCellInDirection.getNeighborInDirection(direction);
@@ -297,7 +318,7 @@ public class GUI {
                 Move move = new Move(marbles, dest, player);
                 move.isValid();
                 MoveType moveType = move.getMoveType();
-                System.out.println(dest.formatCoordinate());
+                // System.out.println(dest.formatCoordinate());
                 if (moveType == MoveType.SIDESTEP) {
                     showTemporaryMessage("Cant do a sideStep with draging.");
                 } else {
@@ -459,7 +480,6 @@ public class GUI {
     }
 
     private void endHover(Cell cell) {
-        // System.out.println("Mouse exited button");
         cell.getBt().setStyle("");
 
         // Clear directional indicators from all marbles
@@ -500,11 +520,15 @@ public class GUI {
     }
 
     private void computerPlay() {
-        Computer computer = new Computer(gameBoard, player);
-        Move move = computer.computerTurn();
+        if (gameActive.get()) {
+            Computer computer = new Computer(gameBoard, player);
+            Move move = computer.computerTurn();
 
-        executeTheTurn(move);
-        System.out.println("Computer Move executed.");
+            executeTheTurn(move);
+            System.out.println("Computer Move executed.");
+        } else {
+            System.out.println("Computer tried to calculte a move, but the game ended.");
+        }
     }
 
     public void turn(Cell cell) {
@@ -555,7 +579,7 @@ public class GUI {
                     executeTheTurn(move);
                     System.out.println("Player Move executed.");
                 } else
-                    System.out.println("Move is invalid.");
+                    showTemporaryMessage("Move is invalid.");
             } else {
                 marbles.clear();
                 showTemporaryMessage("Move is invalid.");
@@ -624,9 +648,7 @@ public class GUI {
     }
 
     private void endGame(int whyEnded) {
-
         if (gameActive.get() == true) {
-            System.out.println(Thread.currentThread().getName() + " - Game ended.");
             gameActive.set(false);
             System.out.println("Game ended.");
             gameTimer.stop();
@@ -643,11 +665,6 @@ public class GUI {
                     alert.setTitle("Game Over");
                     alert.setHeaderText("Game ended due to repetitive loop - TIE");
                     alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
-
-                    // // If using ExecutorService
-                    // if (executorService != null && !executorService.isShutdown()) {
-                    // executorService.shutdownNow();
-                    // }
 
                 }
 
@@ -679,21 +696,22 @@ public class GUI {
 
     private void restartGame() {
         gameTimer.stop();
+        gameActive.set(false);
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/start.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/menu.fxml"));
         try {
             Parent root = loader.load();
-            StartController startController = loader.getController();
+            MenuController menuController = loader.getController();
             Scene scene = new Scene(root, 840, 680);
-            Stage startStage = new Stage();
-            startController.setStage(startStage);
-            startStage.setScene(scene);
-            startStage.setTitle("Game");
-            startStage.show();
+            Stage menuStage = new Stage();
+            menuController.setStage(menuStage);
+            menuStage.setScene(scene);
+            menuStage.setTitle("Game");
+            menuStage.show();
             System.out.println("Game restarted.");
             this.stage.close();
         } catch (IOException e) {
-            System.out.println("Error loading start.fxml");
+            System.out.println("Error loading menu.fxml");
             e.printStackTrace();
         }
 
@@ -781,21 +799,6 @@ public class GUI {
         }
         return false;
     }
-
-    // private void endGameDueToLoop_TIE() {
-    // gameTimer.stop();
-    // Platform.runLater(() -> {
-    // Alert alert = new Alert(AlertType.INFORMATION);
-    // alert.setTitle("Game Over");
-    // alert.setHeaderText("Game ended due to repetitive loop - TIE");
-    // alert.setContentText("The players have entered into a repetitive loop of
-    // moves. The game is over.");
-    // alert.showAndWait();
-
-    // restartGame();
-    // // Additional logic to restart or close the game
-    // });
-    // }
 
     private void animateMove(Move move) {
         ParallelTransition parallelTransition = new ParallelTransition();
@@ -893,11 +896,11 @@ public class GUI {
         parallelTransition.setOnFinished(event -> {
             updateBoard(move);
             isAnimationRunning = false;
-            if ((gameMode == 1 && player != startPlayer && startingPlayerType == 1) || (gameMode == 2)) {
-                System.out.println(gameMode + " " + player + " " + isAnimationRunning);
-                computerPlay();
-                System.out.println("computerPlay");
-            }
+            // if ((gameMode == 1 && player != startPlayer && startingPlayerType == 1) ||
+            // (gameMode == 2)) {
+            // // computerPlay();//sleep
+            // // System.out.println("computerPlay");
+            // }
         });
 
     }

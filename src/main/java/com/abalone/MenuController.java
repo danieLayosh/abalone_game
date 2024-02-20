@@ -26,7 +26,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class StartController {
+public class MenuController {
     private Stage stage;
     private int startingPlayer;
     private int gameMode;
@@ -70,7 +70,7 @@ public class StartController {
     private Button infoBt;
 
     public void initialize() {
-        Image image = new Image(getClass().getResourceAsStream("/menu_window/startingBackground.png"));
+        Image image = new Image(getClass().getResourceAsStream("/menu_window/Background_Image.png"));
         BackgroundImage backgroundImage = new BackgroundImage(image,
                 BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                 BackgroundSize.DEFAULT);
@@ -92,7 +92,7 @@ public class StartController {
     private void showVideoOnStart() {
         try {
             // Obtain the URL to the resource
-            URL resourceUrl = getClass().getResource("/How To Play Abalone.mp4");
+            URL resourceUrl = getClass().getResource("/menu_window/How To Play Abalone.mp4");
             if (resourceUrl != null) {
                 // Convert the URL to a URI string
                 String videoUri = resourceUrl.toURI().toString();
@@ -219,7 +219,7 @@ public class StartController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/primary.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/game.fxml"));
             Parent root = loader.load();
 
             // Get the GUI controller and set the parameters

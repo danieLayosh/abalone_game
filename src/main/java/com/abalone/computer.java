@@ -1,5 +1,6 @@
 package com.abalone;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -136,6 +137,7 @@ public class Computer {
         Move bestMove = moves.get(0);
         ArrayList<Move> bestMoves = new ArrayList<>();
         bestMoves.add(bestMove);
+
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
             if (evaluation > bestEvaluation) {
@@ -155,6 +157,7 @@ public class Computer {
             randomIndex = random.nextInt(bestMoves.size());
         }
         bestMove = bestMoves.get(randomIndex);
+
         printMoveDetails(bestMove, bestMoves, bestEvaluation);
 
         return bestMove;
@@ -186,9 +189,9 @@ public class Computer {
         move.undoMove();// undo the move to get it back before checking another move.
 
         // if (player == 2) {
-            return gravityCenterScore + pushedOffScore + marblesGroupScore + marblesInDangerScore;
+        return gravityCenterScore + pushedOffScore + marblesGroupScore + marblesInDangerScore;
         // } else {
-        //     return gravityCenterScore + pushedOffScore + keepPackedScore;
+        // return gravityCenterScore + pushedOffScore + keepPackedScore;
         // }
     }
 

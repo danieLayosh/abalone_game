@@ -232,6 +232,14 @@ public class MenuController {
 
             // Setting up the scene and stage
             Scene scene = new Scene(root);
+            URL url = getClass().getResource("/styles.css");
+            if (url != null) {
+                String css = url.toExternalForm();
+                scene.getStylesheets().add(css);
+            } else {
+                System.out.println("Resource style.css not found.");
+            }
+
             Stage gameStage = new Stage();
             guiController.setStage(gameStage);
             gameStage.setScene(scene);

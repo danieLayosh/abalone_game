@@ -41,7 +41,7 @@
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@blackAndWhite/white_ball.png" />
+                        <Image url="@game_window/marbles/white_ball.png" />
                      </image>
                   </ImageView>
                   <RadioButton fx:id="whiteHuman" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Human">
@@ -66,7 +66,7 @@
                <children>
                   <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@blackAndWhite/black_ball.png" />
+                        <Image url="@game_window/marbles/black_ball.png" />
                      </image>
                   </ImageView>
                   <RadioButton fx:id="blackHuman" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" style="-fx-border-color: BLACK; -fx-background-color: #DDDDDD;" text="Human">
@@ -114,7 +114,7 @@
                      <graphic>
                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@blackAndWhite/white_ball.png" />
+                              <Image url="@game_window/marbles/white_ball.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -129,7 +129,7 @@
                      <graphic>
                         <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@blackAndWhite/black_ball.png" />
+                              <Image url="@game_window/marbles/black_ball.png" />
                            </image>
                         </ImageView>
                      </graphic>

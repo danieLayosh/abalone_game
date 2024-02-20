@@ -119,6 +119,7 @@ public class GUI {
             bt8_0, bt8_1, bt8_2, bt8_3, bt8_4;
 
     public void initializeGame() {
+        AnchorPaneID.getStyleClass().add("styles.css");
         whitePoint.textProperty().bind(white_score.asString());
         blackPoint.textProperty().bind(black_score.asString());
         timerLable.textProperty().bind(timeString);
@@ -143,6 +144,8 @@ public class GUI {
                     cell.setBt(cellButton);
                     updateCellGUI(cell);
                     addDragFunctionality(cell.getBt());
+
+                    cellButton.getStyleClass().add("custom-button");
 
                     if (gameMode != 2) {
                         cellButton.setOnAction(event -> turn(cell)); // Player VS Compuer
@@ -392,10 +395,10 @@ public class GUI {
             // Adjust the score and update display
             if (move.getPlayer() == 1) {
                 white_score.set(white_score.get() - 1);
-                updateScoreDisplay(white_score.get(), whiteHBox, ("/blackAndWhite/black_ball.png"));
+                updateScoreDisplay(white_score.get(), whiteHBox, ("/game_window/marbles/black_ball.png"));
             } else {
                 black_score.set(black_score.get() - 1);
-                updateScoreDisplay(black_score.get(), blackHBox, "/blackAndWhite/white_ball.png");
+                updateScoreDisplay(black_score.get(), blackHBox, "/game_window/marbles/white_ball.png");
             }
         }
     }
@@ -433,28 +436,28 @@ public class GUI {
             switch (direction) {
                 case LEFT:
                     image = new Image(
-                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_Left.png"));
+                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_Left.png"));
                     break;
                 case RIGHT:
                     image = new Image(
-                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_Right.png"));
+                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_Right.png"));
                     break;
                 case UPLEFT:
                     image = new Image(
-                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_UpLeft.png"));
+                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_UpLeft.png"));
                     break;
                 case UPRIGHT:
                     image = new Image(
-                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_UpRight.png"));
+                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_UpRight.png"));
                     break;
                 case DOWNLEFT:
                     image = new Image(
-                            getClass().getResourceAsStream("/blackAndWhite/arrows/" + playerColor + "_DownLeft.png"));
+                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_DownLeft.png"));
                     break;
                 case DOWNRIGHT:
                     image = new Image(
                             getClass()
-                                    .getResourceAsStream(("/blackAndWhite/arrows/" + playerColor + "_DownRight.png")));
+                                    .getResourceAsStream(("/game_window/marbles/arrows/" + playerColor + "_DownRight.png")));
                     break;
                 default:
                     break;
@@ -490,16 +493,16 @@ public class GUI {
     }
 
     public void updateCellGUI(Cell cell) {
-        Image image = new Image(getClass().getResourceAsStream("/blackAndWhite/hole.png"));
+        Image image = new Image(getClass().getResourceAsStream("/game_window/marbles/hole.png"));
         ColorAdjust colorAdjust = new ColorAdjust();
 
         switch (cell.getState()) {
             case 1:
-                image = new Image(getClass().getResourceAsStream("/blackAndWhite/white_ball.png"));
+                image = new Image(getClass().getResourceAsStream("/game_window/marbles/white_ball.png"));
                 break;
             case 2:
                 colorAdjust.setBrightness(-0.3); // Adjust this value between -1 and 0 to control darkness
-                image = new Image(getClass().getResourceAsStream("/blackAndWhite/black_ball.png"));
+                image = new Image(getClass().getResourceAsStream("/game_window/marbles/black_ball.png"));
                 break;
             default:
                 break;
@@ -619,10 +622,10 @@ public class GUI {
             if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
                 if (player == 1) {
                     white_score.set(white_score.get() + 1);
-                    updateScoreDisplay(white_score.get(), whiteHBox, "/blackAndWhite/black_ball.png");
+                    updateScoreDisplay(white_score.get(), whiteHBox, "/game_window/marbles/black_ball.png");
                 } else {
                     black_score.set(black_score.get() + 1);
-                    updateScoreDisplay(black_score.get(), blackHBox, "/blackAndWhite/white_ball.png");
+                    updateScoreDisplay(black_score.get(), blackHBox, "/game_window/marbles/white_ball.png");
                 }
 
                 if (white_score.get() == 6 || black_score.get() == 6) {
@@ -757,10 +760,10 @@ public class GUI {
         Image image = null;
         switch (cell.getState()) {
             case 1:
-                image = new Image(getClass().getResourceAsStream("/blackAndWhite/white_pushed.png"));
+                image = new Image(getClass().getResourceAsStream("/game_window/marbles/white_pushed.png"));
                 break;
             case 2:
-                image = new Image(getClass().getResourceAsStream("/blackAndWhite/black_pushed.png"));
+                image = new Image(getClass().getResourceAsStream("/game_window/marbles/black_pushed.png"));
                 break;
         }
         ImageView imageView = new ImageView(image);
@@ -896,11 +899,6 @@ public class GUI {
         parallelTransition.setOnFinished(event -> {
             updateBoard(move);
             isAnimationRunning = false;
-            // if ((gameMode == 1 && player != startPlayer && startingPlayerType == 1) ||
-            // (gameMode == 2)) {
-            // // computerPlay();//sleep
-            // // System.out.println("computerPlay");
-            // }
         });
 
     }

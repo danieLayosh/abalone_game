@@ -673,7 +673,7 @@ public class GUI {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt(); // Restore interrupted status
                 }
-                endGame(whyEnded);
+                // endGame(whyEnded);
             });
         }
     }

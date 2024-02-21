@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
+import com.abalone.stats.LastGameStats;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -192,6 +193,32 @@ public class GUI {
     public void gameModeSettings() {
         updatePlayerTurnUI();
         gameActive.set(true);
+
+        String startingPlayerTypeString = (startingPlayerType == 1) ? "human" : "computer";
+        String whiteType = "", blackType = "";
+        if (startPlayer == 1) {
+            whiteType = startingPlayerTypeString;
+        }
+        if (gameMode == 3) {
+            whiteType = "human";
+            blackType = "human";
+        } else {
+            if (gameMode == 2) {
+                blackType = "computer";
+                whiteType = "computer";
+            } else {
+                if (gameMode == 1) {
+                    if(startingPlayerType == 1) {
+                        whiteType = "human";
+                        blackType = "computer";
+                    } else {
+                        whiteType = "computer";
+                        blackType = "human";
+                    }
+                }
+            }
+        }
+        new LastGameStats(startPlayer, (startPlayer == 1) ? 2 : 1, whiteType, blackType);
 
         // computer vs computer
         if (gameMode == 2) {
@@ -440,24 +467,29 @@ public class GUI {
                     break;
                 case RIGHT:
                     image = new Image(
-                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_Right.png"));
+                            getClass()
+                                    .getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_Right.png"));
                     break;
                 case UPLEFT:
                     image = new Image(
-                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_UpLeft.png"));
+                            getClass()
+                                    .getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_UpLeft.png"));
                     break;
                 case UPRIGHT:
                     image = new Image(
-                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_UpRight.png"));
+                            getClass().getResourceAsStream(
+                                    "/game_window/marbles/arrows/" + playerColor + "_UpRight.png"));
                     break;
                 case DOWNLEFT:
                     image = new Image(
-                            getClass().getResourceAsStream("/game_window/marbles/arrows/" + playerColor + "_DownLeft.png"));
+                            getClass().getResourceAsStream(
+                                    "/game_window/marbles/arrows/" + playerColor + "_DownLeft.png"));
                     break;
                 case DOWNRIGHT:
                     image = new Image(
                             getClass()
-                                    .getResourceAsStream(("/game_window/marbles/arrows/" + playerColor + "_DownRight.png")));
+                                    .getResourceAsStream(
+                                            ("/game_window/marbles/arrows/" + playerColor + "_DownRight.png")));
                     break;
                 default:
                     break;

@@ -218,6 +218,8 @@ public class GUI {
                 }
             }
         }
+        System.out.println("Game Mode: " + gameMode + " Starting Player: " + startPlayer + " Starting Player Type: "
+                + startingPlayerTypeString + " White Type: " + whiteType + " Black Type: " + blackType);
         new LastGameStats(startPlayer, (startPlayer == 1) ? 2 : 1, whiteType, blackType);
 
         // computer vs computer
@@ -396,6 +398,7 @@ public class GUI {
         fadeOut.play();
     }
 
+    @SuppressWarnings("unused")
     private void undoMove() {
         Move computerMove = null, playerMove = null;
         if (!LastTwoMove.empty()) {

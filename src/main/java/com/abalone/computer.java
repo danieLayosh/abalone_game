@@ -179,6 +179,7 @@ public class Computer {
 
         double pushedOffScore = pushedOff(move);
 
+        @SuppressWarnings("unused")
         double keepPackedScore = keepPacked();
 
         double marblesGroupScore = evaluateGroupScore();

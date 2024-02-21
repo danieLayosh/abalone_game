@@ -1,0 +1,78 @@
+Game Statistics - Recorded on: 2024-02-22 00:30:15
+
+Game Statistics:
+White player: 1 - computer
+Black player: 2 - computer
+Winner: DRAW - No winner
+Game time: 00:00:07
+Total turns: 57
+white Turns Count = 29
+black Turns Count = 28
+White Player Statistics:
+Statistics for WHITE player:
+Equal moves between turns 0 and 1: 33 out of an average of 52 moves (63.46%)
+Equal moves between turns 1 and 2: 44 out of an average of 62 moves (71.54%)
+Equal moves between turns 2 and 3: 47 out of an average of 69 moves (68.12%)
+Equal moves between turns 3 and 4: 45 out of an average of 66 moves (68.18%)
+Equal moves between turns 4 and 5: 48 out of an average of 64 moves (75.59%)
+Equal moves between turns 5 and 6: 29 out of an average of 65 moves (44.96%)
+Equal moves between turns 6 and 7: 51 out of an average of 60 moves (85.00%)
+Equal moves between turns 7 and 8: 45 out of an average of 57 moves (78.95%)
+Equal moves between turns 8 and 9: 40 out of an average of 58 moves (69.57%)
+Equal moves between turns 9 and 10: 37 out of an average of 60 moves (62.18%)
+Equal moves between turns 10 and 11: 32 out of an average of 61 moves (52.89%)
+Equal moves between turns 11 and 12: 45 out of an average of 66 moves (68.18%)
+Equal moves between turns 12 and 13: 57 out of an average of 71 moves (80.85%)
+Equal moves between turns 13 and 14: 43 out of an average of 68 moves (63.24%)
+Equal moves between turns 14 and 15: 36 out of an average of 64 moves (56.69%)
+Equal moves between turns 15 and 16: 36 out of an average of 57 moves (63.16%)
+Equal moves between turns 16 and 17: 33 out of an average of 54 moves (61.68%)
+Equal moves between turns 17 and 18: 29 out of an average of 51 moves (57.43%)
+Equal moves between turns 18 and 19: 36 out of an average of 48 moves (75.00%)
+Equal moves between turns 19 and 20: 36 out of an average of 48 moves (75.00%)
+Equal moves between turns 20 and 21: 41 out of an average of 50 moves (82.83%)
+Equal moves between turns 21 and 22: 39 out of an average of 51 moves (77.23%)
+Equal moves between turns 22 and 23: 41 out of an average of 52 moves (79.61%)
+Equal moves between turns 23 and 24: 47 out of an average of 51 moves (93.07%)
+Equal moves between turns 24 and 25: 42 out of an average of 50 moves (84.85%)
+Equal moves between turns 25 and 26: 42 out of an average of 50 moves (84.85%)
+Equal moves between turns 26 and 27: 42 out of an average of 50 moves (84.85%)
+Equal moves between turns 27 and 28: 42 out of an average of 50 moves (84.85%)
+Average percentage of equal moves between adjacent turns: 71.92%
+The WHITE - computer: 29 best moves, from 28 moves
+WHITE score: 103 out of 100
+
+
+Black Player Statistics:
+Statistics for BLACK player:
+Equal moves between turns 0 and 1: 35 out of an average of 55 moves (64.22%)
+Equal moves between turns 1 and 2: 43 out of an average of 60 moves (72.27%)
+Equal moves between turns 2 and 3: 45 out of an average of 67 moves (67.67%)
+Equal moves between turns 3 and 4: 41 out of an average of 69 moves (59.42%)
+Equal moves between turns 4 and 5: 43 out of an average of 64 moves (67.19%)
+Equal moves between turns 5 and 6: 40 out of an average of 63 moves (64.00%)
+Equal moves between turns 6 and 7: 38 out of an average of 65 moves (58.46%)
+Equal moves between turns 7 and 8: 53 out of an average of 70 moves (76.26%)
+Equal moves between turns 8 and 9: 40 out of an average of 70 moves (57.55%)
+Equal moves between turns 9 and 10: 58 out of an average of 73 moves (79.45%)
+Equal moves between turns 10 and 11: 45 out of an average of 71 moves (63.83%)
+Equal moves between turns 11 and 12: 34 out of an average of 64 moves (53.54%)
+Equal moves between turns 12 and 13: 48 out of an average of 63 moves (76.80%)
+Equal moves between turns 13 and 14: 55 out of an average of 60 moves (91.67%)
+Equal moves between turns 14 and 15: 43 out of an average of 61 moves (71.07%)
+Equal moves between turns 15 and 16: 49 out of an average of 66 moves (74.24%)
+Equal moves between turns 16 and 17: 49 out of an average of 72 moves (68.53%)
+Equal moves between turns 17 and 18: 47 out of an average of 71 moves (66.67%)
+Equal moves between turns 18 and 19: 58 out of an average of 68 moves (85.29%)
+Equal moves between turns 19 and 20: 47 out of an average of 65 moves (72.31%)
+Equal moves between turns 20 and 21: 47 out of an average of 62 moves (76.42%)
+Equal moves between turns 21 and 22: 41 out of an average of 65 moves (63.08%)
+Equal moves between turns 22 and 23: 53 out of an average of 71 moves (74.65%)
+Equal moves between turns 23 and 24: 59 out of an average of 77 moves (77.12%)
+Equal moves between turns 24 and 25: 75 out of an average of 80 moves (94.34%)
+Equal moves between turns 25 and 26: 75 out of an average of 80 moves (94.34%)
+Equal moves between turns 26 and 27: 75 out of an average of 80 moves (94.34%)
+Average percentage of equal moves between adjacent turns: 72.77%
+The BLACK - computer: 28 best moves, from 28 moves
+BLACK score: 100 out of 100
+

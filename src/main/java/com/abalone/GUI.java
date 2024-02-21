@@ -2,6 +2,7 @@ package com.abalone;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -67,6 +68,8 @@ public class GUI {
     private SimpleStringProperty timeString = new SimpleStringProperty("00:00:00");
     private IntegerProperty elapsedTimeInSeconds = new SimpleIntegerProperty(0); // Track elapsed time in seconds
 
+    private static LastGameStats lastGameStats;
+
     public GUI() {
         this.gameBoard = new GameBoard();
         this.marbles = new ArrayList<>(); // Initialize the list here
@@ -79,6 +82,7 @@ public class GUI {
         this.animationSpeed = new SimpleDoubleProperty(0.7);
         this.executorService = Executors.newSingleThreadExecutor();
         this.gameActive = new AtomicBoolean(false);
+
     }
 
     @FXML
@@ -125,10 +129,7 @@ public class GUI {
         blackPoint.textProperty().bind(black_score.asString());
         timerLable.textProperty().bind(timeString);
         scrollBar.valueProperty().bindBidirectional(animationSpeed);
-
-        if (gameMode == 1) {
-            scrollBar.setMin(0.2);
-        }
+        scrollBar.setMin((gameMode == 1) ? 0.2 : 0.01);
 
         // undoBt.setOnAction(event -> undoMove());
         undoBt.setText("RESTART");
@@ -194,33 +195,33 @@ public class GUI {
         updatePlayerTurnUI();
         gameActive.set(true);
 
-        String startingPlayerTypeString = (startingPlayerType == 1) ? "human" : "computer";
         String whiteType = "", blackType = "";
-        if (startPlayer == 1) {
-            whiteType = startingPlayerTypeString;
-        }
         if (gameMode == 3) {
             whiteType = "human";
             blackType = "human";
-        } else {
-            if (gameMode == 2) {
-                blackType = "computer";
-                whiteType = "computer";
-            } else {
-                if (gameMode == 1) {
-                    if(startingPlayerType == 1) {
-                        whiteType = "human";
-                        blackType = "computer";
-                    } else {
-                        whiteType = "computer";
-                        blackType = "human";
-                    }
+        } else if (gameMode == 2) {
+            blackType = "computer";
+            whiteType = "computer";
+        } else if (gameMode == 1) {
+            if (startingPlayerType == 1) {
+                if (startPlayer == 1) {
+                    whiteType = "human";
+                    blackType = "computer";
+                } else {
+                    whiteType = "computer";
+                    blackType = "human";
                 }
+            } else if (startPlayer == 1) {
+                whiteType = "computer";
+                blackType = "human";
+            } else {
+                whiteType = "human";
+                blackType = "computer";
             }
+
         }
-        System.out.println("Game Mode: " + gameMode + " Starting Player: " + startPlayer + " Starting Player Type: "
-                + startingPlayerTypeString + " White Type: " + whiteType + " Black Type: " + blackType);
-        new LastGameStats(startPlayer, (startPlayer == 1) ? 2 : 1, whiteType, blackType);
+
+        lastGameStats = new LastGameStats(startPlayer, (startPlayer == 1) ? 2 : 1, whiteType, blackType);
 
         // computer vs computer
         if (gameMode == 2) {
@@ -436,24 +437,26 @@ public class GUI {
     private void hoverOn(Cell cell) {
         Move move = new Move(marbles, cell, player);
 
-        if (cell.getState() == player) {
-            if (marbles.isEmpty()) {
-                cell.getBt().setStyle(
-                        "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
-            } else {
-                marbles.add(cell);
-                if (move.areMarblesInlineAndAdjacent()) {
+        if (!isAnimationRunning) {
+            if (cell.getState() == player) {
+                if (marbles.isEmpty()) {
                     cell.getBt().setStyle(
                             "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
+                } else {
+                    marbles.add(cell);
+                    if (move.areMarblesInlineAndAdjacent()) {
+                        cell.getBt().setStyle(
+                                "-fx-border-width: 4px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
+                        showDirectionOnMarbles(move);
+                    }
+                    marbles.remove(cell);
+                }
+            } else {
+                if (move.isValid()) {
+                    cell.getBt().setStyle(
+                            " -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
                     showDirectionOnMarbles(move);
                 }
-                marbles.remove(cell);
-            }
-        } else {
-            if (move.isValid()) {
-                cell.getBt().setStyle(
-                        " -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,100), 6, 0, 0, 0); -fx-opacity: 0.75; -fx-cursor: hand;");
-                showDirectionOnMarbles(move);
             }
         }
     }
@@ -560,6 +563,8 @@ public class GUI {
     private void computerPlay() {
         if (gameActive.get()) {
             Computer computer = new Computer(gameBoard, player);
+            lastGameStats.addPlayerAllPossibleMoves(player, computer.getMoves());
+            lastGameStats.playerDidBestMove(player);
             Move move = computer.computerTurn();
 
             executeTheTurn(move);
@@ -614,6 +619,16 @@ public class GUI {
             if (cell.getState() == 0 || cell.getState() == (player == 1 ? 2 : 1) && !marbles.isEmpty()) {
                 Move move = new Move(marbles, cell, player);
                 if (move.isValid()) {
+
+                    // For the statistics
+                    Computer computerToCheckBestMoveForHuman = new Computer(gameBoard, player);
+                    lastGameStats.addPlayerAllPossibleMoves(player, computerToCheckBestMoveForHuman.getMoves());
+                    computerToCheckBestMoveForHuman.computerTurn();
+                    ArrayList<Move> bestPossibleMoves = computerToCheckBestMoveForHuman.getBestMoves();
+                    if (bestPossibleMoves.contains(move)) {
+                        lastGameStats.playerDidBestMove(player);
+                    }
+
                     executeTheTurn(move);
                     System.out.println("Player Move executed.");
                 } else
@@ -641,6 +656,8 @@ public class GUI {
 
     private void executeTheTurn(Move move) {
         if (move != null && move.isValid()) {
+
+            lastGameStats.addPlayerMove(player, move);
 
             moveHistory.add(move);
             if (isLoopingSequenceDetected()) {
@@ -688,23 +705,70 @@ public class GUI {
     private void endGame(int whyEnded) {
         if (gameActive.get() == true) {
             gameActive.set(false);
-            System.out.println("Game ended.");
+            showTemporaryMessage("Game ended.");
             gameTimer.stop();
+
+            lastGameStats.setGameTime(timeString.get());
+
             Platform.runLater(() -> {
                 Alert alert = new Alert(AlertType.CONFIRMATION);
                 if (whyEnded == 0) {
                     alert.setTitle("Game Over");
                     if (player == 2) {
                         alert.setHeaderText("THE WHITE PLAYER WON!!!!");
+                        lastGameStats.setWinner("WHITE");
                     } else {
                         alert.setHeaderText("THE BLACK PLAYER WON!!!!");
+                        lastGameStats.setWinner("BLACK");
                     }
+                } else if (whyEnded == -1) {
+                    lastGameStats.setWinner("The stage was closed, the game ended.");
+                    System.out.println(lastGameStats.toString());
+                    lastGameStats.calcGameStats();
+                    executorService.shutdownNow();
+                    System.exit(0); // or close the window
+
                 } else {
+                    lastGameStats.setWinner("DRAW - No winner");
                     alert.setTitle("Game Over");
                     alert.setHeaderText("Game ended due to repetitive loop - TIE");
                     alert.setContentText("The players have entered into a repetitive loop of moves. The game is over.");
-
                 }
+
+                lastGameStats.calcGameStats();
+
+                alert.setContentText("Do you want to see or download the game statistics?");
+
+                ButtonType buttonTypeSee = new ButtonType("See");
+                ButtonType buttonTypeDownload = new ButtonType("Download");
+                ButtonType buttonTypeNoStats = new ButtonType("No");
+
+                alert.getButtonTypes().setAll(buttonTypeSee, buttonTypeDownload, buttonTypeNoStats);
+
+                alert.showAndWait().ifPresent(response -> {
+                    if (response == buttonTypeSee) {
+                        Path path = lastGameStats.makeTempStatsFileAndShowIt();
+                        if (path != null) {
+                            try {
+                                System.out.println("The file was created at: " + path.toString());
+                                ProcessBuilder pb = new ProcessBuilder("Notepad.exe", path.toString());
+                                pb.start();
+                            } catch (IOException e) {
+                                System.out.println("Error opening the file with Notepad: " + e.getMessage());
+                            }
+                        } else {
+                            System.out.println("The file could not be created.");
+                        }
+                    } else if (response == buttonTypeDownload) {
+                        if (lastGameStats.downloadStatsFile()) {
+                            System.out.println("The file was downloaded.");
+                        } else {
+                            System.out.println("The file could not be downloaded.");
+                        }
+                    } else if (response == buttonTypeNoStats) {
+                        System.out.println("No stats were requested.");
+                    }
+                });
 
                 alert.setContentText("Do you want to play another game?");
 
@@ -735,6 +799,11 @@ public class GUI {
     private void restartGame() {
         gameTimer.stop();
         gameActive.set(false);
+
+        lastGameStats.setWinner("RESTART IN THE MIDDLE OF THE GAME");
+        lastGameStats.setGameTime(timeString.get());
+        System.out.println(lastGameStats.toString());
+        lastGameStats.calcGameStats();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/menu.fxml"));
         try {
@@ -813,6 +882,7 @@ public class GUI {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+        stage.setOnCloseRequest(event -> endGame(-1));
     }
 
     private boolean isLoopingSequenceDetected() {

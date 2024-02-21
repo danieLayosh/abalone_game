@@ -18,6 +18,7 @@ public class Computer {
     private List<Cell> opponentsCellsToMoveTo;
     private ArrayList<Move> moves;
     private ArrayList<Move> movesOppo;
+    private ArrayList<Move> bestMoves;
     private final int BIG_SCORE = 100;
 
     public Computer(GameBoard gameBoard, int player) {
@@ -31,6 +32,7 @@ public class Computer {
         this.movesOppo = new ArrayList<>();
         this.myMarbles = new ArrayList<>();
         this.opponentsMarbles = new ArrayList<>();
+        this.bestMoves = new ArrayList<>();
 
         getAllPotentialMovesForBoth();
     }
@@ -134,7 +136,7 @@ public class Computer {
 
         double bestEvaluation = Double.NEGATIVE_INFINITY;
         Move bestMove = moves.get(0);
-        ArrayList<Move> bestMoves = new ArrayList<>();
+        // ArrayList<Move> bestMoves = new ArrayList<>();
         bestMoves.add(bestMove);
 
         for (Move move : moves) {
@@ -246,7 +248,7 @@ public class Computer {
 
         if (move.getMoveType() == MoveType.OUT_OF_THE_BOARD) {
             // Initial score for pushing a marble out
-            pushCounter = 30;
+            pushCounter = BIG_SCORE; // was 30
 
             // Check if this move results in a win
             if (14 - opponentsMarbles.size() == 5) { // Check if pushing this marble results in six marbles being out
@@ -465,6 +467,14 @@ public class Computer {
         } else {
             return 13 - x; // Rows 5 to 8 decrease in length
         }
+    }
+
+    public ArrayList<Move> getMoves() {
+        return moves;
+    }
+
+    public ArrayList<Move> getBestMoves() {
+        return bestMoves;
     }
 
 }

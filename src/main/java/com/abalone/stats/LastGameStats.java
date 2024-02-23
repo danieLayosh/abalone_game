@@ -21,6 +21,7 @@ public class LastGameStats {
 
     private String winner; // "WHITE", "BLACK", "DRAW - No winner"
     private String gameTime; // time of the game in format "HH:MM:SS"
+    private int turnCalcSaved; // num turns calculation was saved
 
     private int totalTurns; // total moves in the game
     private int whiteTurnsCount; // moves made by white
@@ -56,6 +57,7 @@ public class LastGameStats {
         this.blackTurnsResults = new ArrayList<String>();
         this.whiteBestMoves = 0;
         this.blackBestMoves = 0;
+        this.turnCalcSaved = 0;
     }
 
     public void setWinner(String winner) {
@@ -229,6 +231,7 @@ public class LastGameStats {
                 writer.write("Total turns: " + totalTurns + "\n");
                 writer.write("white Turns Count = " + whiteTurnsCount + "\n");
                 writer.write("black Turns Count = " + blackTurnsCount + "\n");
+                writer.write("Turn calculation saved: " + turnCalcSaved + " times\n");
 
                 writer.write("White Player Statistics:\n");
                 for (String result : whiteTurnsResults) {
@@ -275,6 +278,7 @@ public class LastGameStats {
                 writer.write("Total turns: " + totalTurns + "\n");
                 writer.write("white Turns Count = " + whiteTurnsCount + "\n");
                 writer.write("black Turns Count = " + blackTurnsCount + "\n");
+                writer.write("Turn calculation saved: " + turnCalcSaved + " times\n");
 
                 writer.write("White Player Statistics:\n");
                 for (String result : whiteTurnsResults) {
@@ -294,4 +298,7 @@ public class LastGameStats {
         }
     }
 
+    public void setTurnCalcSaved(int turnCalcSaved) {
+        this.turnCalcSaved = turnCalcSaved;
+    }
 }

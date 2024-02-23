@@ -30,6 +30,11 @@ public class GameBoard {
         initializeBoard();
     }
 
+    // Constructor for GameBoard
+    public GameBoard(Map<Cell, Map<Cell, Direction>> board) {
+        this.board = board;
+    }
+
     // Initializes the board by creating cells and establishing their adjacencies
     private void initializeBoard() {
         // Iterate through all possible positions on the board
@@ -72,7 +77,7 @@ public class GameBoard {
                     temp = temp.getNeighborInDirection(dir[d]);
                     temp.setScore(score);
                     // if (i > 1 && h != i - 1)
-                    //     temp.setScore(score - 1);
+                    // temp.setScore(score - 1);
                 }
             }
             score -= 2;
@@ -160,113 +165,61 @@ public class GameBoard {
         return board;
     }
 
-    public void printBoardScore() {
-        // Iterate through each row
-        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
-            // Print leading spaces for hexagonal alignment
-            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
-                System.out.print(" ");
-            }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (!(obj instanceof GameBoard))
+            return false;
+        GameBoard other = (GameBoard) obj;
 
-            // Print cells in the row
-            for (int y = 0; y < getRowLength(x); y++) {
-                Cell cell = getCellAt(x, y);
-                // System.out.print(cell.getState() + " ");
-                System.out.print("[" + cell.getScore() + "]");
-            }
+        if (this.board.size() != other.board.size())
+            return false;
 
-            // Move to the next line after printing each row
-            System.out.println();
-        }
-    }
+        for (Cell cell : this.board.keySet()) {
+            Map<Cell, Direction> thisNeighbors = this.board.get(cell);
+            Map<Cell, Direction> otherNeighbors = other.board.get(cell);
 
-    public void printBoard() {
-        // Iterate through each row
-        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
-            // Print leading spaces for hexagonal alignment
-            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
-                System.out.print(" ");
-            }
-
-            // Print cells in the row
-            for (int y = 0; y < getRowLength(x); y++) {
-                Cell cell = getCellAt(x, y);
-                System.out.print(cell.getState() + " ");
-            }
-
-            // Move to the next line after printing each row
-            System.out.println();
-        }
-    }
-
-    public void printBoardBorders() {
-        // Iterate through each row
-        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
-            // Print leading spaces for hexagonal alignment
-            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
-                System.out.print(" ");
-            }
-
-            // Print cells in the row
-            for (int y = 0; y < getRowLength(x); y++) {
-                Cell cell = getCellAt(x, y);
-                System.out.print(((cell.getIsborder() == true) ? 1 : 0) + " ");
-            }
-
-            // Move to the next line after printing each row
-            System.out.println();
-        }
-    }
-
-    public static int getRowLength(int x) {
-        if (x < 4) {
-            return 5 + x; // Rows 0 to 3 increase in length
-        } else if (x < 5) {
-            return MAX_ROW_LENGTH; // Middle row has the maximum length
-        } else {
-            return 13 - x; // Rows 5 to 8 decrease in length
-        }
-    }
-
-    public void printBoardWithCoordinates() {
-        // Iterate through each row
-        for (int x = 0; x < MAX_ROW_LENGTH; x++) {
-            // Print leading spaces for hexagonal alignment
-            for (int space = 0; space < MAX_ROW_LENGTH - getRowLength(x); space++) {
-                System.out.print("   "); // Adjust the number of spaces based on your coordinate format
-            }
-
-            // Print cells in the row along with their coordinates
-            for (int y = 0; y < getRowLength(x); y++) {
-                String coordinate = String.format("(%d,%d)", x, y);
-                System.out.print(coordinate + " ");
-            }
-
-            // Move to the next line after printing each row
-            System.out.println();
-        }
-    }
-
-    public void testAndPrintNeighborFinding() {
-        int[][] testCoordinates = new int[][] { { 0, 0 }, { 4, 4 }, { 8, 4 }, { 2, 3 }, { 6, 3 }, { 1, 3 } };
-
-        for (int[] coord : testCoordinates) {
-            Cell testCell = getCellAt(coord[0], coord[1]);
-            if (testCell != null) {
-                Map<Cell, Direction> neighborsWithDirection = testCell.getNeighborsMap();
-                System.out.println("Neighbors of Cell " + formatCoordinate(coord[0], coord[1]) + ":");
-                for (Map.Entry<Cell, Direction> entry : neighborsWithDirection.entrySet()) {
-                    Cell neighbor = entry.getKey();
-                    Direction direction = entry.getValue();
-                    System.out.println(" Neighbor at " + formatCoordinate(neighbor.getX(), neighbor.getY())
-                            + " in direction " + direction);
-                }
+            if (otherNeighbors == null || !thisNeighbors.equals(otherNeighbors)) {
+                return false;
             }
         }
+
+        return true;
     }
 
-    private String formatCoordinate(int x, int y) {
-        return "(" + x + "," + y + ")";
+    // @Override
+    // public int hashCode() {
+    // int result = 1;
+    // for (Map.Entry<Cell, Map<Cell, Direction>> entry : board.entrySet()) {
+    // int cellHash = entry.getKey().hashCode(); // Correctly obtain hash code of
+    // the key
+    // int neighborsHash = entry.getValue().hashCode(); // Obtain hash code of the
+    // value (Map)
+    // result = 31 * result + cellHash + neighborsHash; // Combine hash codes
+    // appropriately
+    // }
+    // return result;
+    // }
+
+    @Override
+    public int hashCode() {
+        int result = 17; // Starting with a non-zero constant.
+        for (Map.Entry<Cell, Map<Cell, Direction>> entry : board.entrySet()) {
+            Cell cell = entry.getKey();
+            Map<Cell, Direction> neighbors = entry.getValue();
+            
+            int cellHash = cell.hashCode(); // Hash code of the cell itself, assuming Cell's hashCode includes its state.
+            int neighborsHash = neighbors.hashCode(); // Hash code of the neighbors map.
+            
+            // Optionally, directly include the cell's state in the hash code calculation for clarity.
+            int cellState = cell.getState(); // Assuming Cell has a getState() method returning its state.
+            
+            result = 31 * result + cellHash;
+            result = 31 * result + neighborsHash;
+            result = 31 * result + cellState; // Include the cell's state in the hash code calculation.
+        }
+        return result;
     }
 
 }

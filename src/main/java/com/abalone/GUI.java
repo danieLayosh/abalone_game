@@ -62,6 +62,7 @@ public class GUI {
     private SimpleDoubleProperty animationSpeed;
     private ExecutorService executorService;
     private AtomicBoolean gameActive;
+    private Computer computer;
 
     private Timeline gameTimer;
     private Duration timeLimit = Duration.hours(2); // 2 hours limit
@@ -82,7 +83,7 @@ public class GUI {
         this.animationSpeed = new SimpleDoubleProperty(0.7);
         this.executorService = Executors.newSingleThreadExecutor();
         this.gameActive = new AtomicBoolean(false);
-
+        this.computer = new Computer();
     }
 
     @FXML
@@ -562,10 +563,10 @@ public class GUI {
 
     private void computerPlay() {
         if (gameActive.get()) {
-            Computer computer = new Computer(gameBoard, player);
+            computer.ComputerPlay(gameBoard, player);
             lastGameStats.addPlayerAllPossibleMoves(player, computer.getMoves());
             lastGameStats.playerDidBestMove(player);
-            Move move = computer.computerTurn();
+            Move move = computer.getBestMove();
 
             executeTheTurn(move);
             System.out.println("Computer Move executed.");
@@ -621,10 +622,10 @@ public class GUI {
                 if (move.isValid()) {
 
                     // For the statistics
-                    Computer computerToCheckBestMoveForHuman = new Computer(gameBoard, player);
-                    lastGameStats.addPlayerAllPossibleMoves(player, computerToCheckBestMoveForHuman.getMoves());
-                    computerToCheckBestMoveForHuman.computerTurn();
-                    ArrayList<Move> bestPossibleMoves = computerToCheckBestMoveForHuman.getBestMoves();
+                    computer.ComputerPlay(gameBoard, player);
+                    lastGameStats.addPlayerAllPossibleMoves(player, computer.getMoves());
+                    // computerToCheckBestMoveForHuman.computerTurn();
+                    ArrayList<Move> bestPossibleMoves = computer.getBestMoves();
                     if (bestPossibleMoves.contains(move)) {
                         lastGameStats.playerDidBestMove(player);
                     }
@@ -709,6 +710,8 @@ public class GUI {
             gameTimer.stop();
 
             lastGameStats.setGameTime(timeString.get());
+            lastGameStats.setTurnCalcSaved(computer.getTurnCalcSaved());
+            System.out.println(computer.getTurnCalcSaved());
 
             Platform.runLater(() -> {
                 Alert alert = new Alert(AlertType.CONFIRMATION);

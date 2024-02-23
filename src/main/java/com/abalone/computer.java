@@ -1,6 +1,7 @@
 package com.abalone;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,18 @@ public class Computer {
     private ArrayList<Move> moves;
     private ArrayList<Move> movesOppo;
     private ArrayList<Move> bestMoves;
-    private final int BIG_SCORE = 100;
+    private Move bestMove;
+    private double bestEvaluation;
+    private static final int BIG_SCORE = 100;
+    private static HashMap<GameBoard, ArrayList<Move>> gameStateBestMove;
+    private int turnCalcSaved;
 
-    public Computer(GameBoard gameBoard, int player) {
+    public void ComputerPlay(GameBoard gameBoard, int player) {
         this.gameBoard = gameBoard;
         this.board = gameBoard.getBoard();
         this.player = player;
+
+        System.out.println("gameBoard: " + gameBoard.hashCode());
 
         this.myCellsToMoveTo = new ArrayList<>(board.keySet());
         this.opponentsCellsToMoveTo = new ArrayList<>(board.keySet());
@@ -35,8 +42,16 @@ public class Computer {
         this.myMarbles = new ArrayList<>();
         this.opponentsMarbles = new ArrayList<>();
         this.bestMoves = new ArrayList<>();
+        this.bestMove = null;
+        this.bestEvaluation = Double.NEGATIVE_INFINITY;
 
         getAllPotentialMovesForBoth();
+    }
+
+    public Computer() {
+        System.out.println("Computer class created");
+        gameStateBestMove = new HashMap<>();
+        turnCalcSaved = 0;
     }
 
     private void cellsToMoveTo() {
@@ -87,12 +102,28 @@ public class Computer {
      * Updates both players own marbles list and cellsToMoveTo lists and then
      * calculte all possibol moves for each one
      */
-    private void getAllPotentialMovesForBoth() {
+    private Move getAllPotentialMovesForBoth() {
         cellsToMoveTo(); // Filter cells to move to
         updateMarblesList(); // Update the list of your marbles
 
-        getAllPotentialMovesForPlayer(player, myMarbles, moves, myCellsToMoveTo);
-        getAllPotentialMovesForPlayer((player == 2 ? 1 : 2), opponentsMarbles, movesOppo, opponentsCellsToMoveTo);
+        if (doesGameBoardHasBestMoveAlready()) {
+            System.out.println("Game board has best move already");
+            turnCalcSaved++;
+            return chooseRandomMoveFromBestMovesList();
+        } else {
+            getAllPotentialMovesForPlayer(player, myMarbles, moves, myCellsToMoveTo);
+            getAllPotentialMovesForPlayer((player == 2 ? 1 : 2), opponentsMarbles, movesOppo, opponentsCellsToMoveTo);
+
+            return computerTurn();
+        }
+    }
+
+    private boolean doesGameBoardHasBestMoveAlready() {
+        if (gameStateBestMove.containsKey(gameBoard) && gameStateBestMove.get(gameBoard).get(0).getPlayer() == player) {
+            bestMoves = gameStateBestMove.get(gameBoard);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -140,45 +171,12 @@ public class Computer {
         playerMoves.addAll(tempMoves); // Add all unique moves from tempMoves
     }
 
-    // /**
-    // * Need to update his marbles and CellToMoveTo lists!!!!
-    // *
-    // * @param ply
-    // * Calcultes all moves for a player, updates his moves list
-    // */
-    // private void getAllPotentialMovesForPlayer(int ply) {
-    // List<Cell> marblesToConsider = (ply == player) ? myMarbles :
-    // opponentsMarbles;
-    // for (int i = 0; i < marblesToConsider.size(); i++) {
-    // for (int j = i; j < marblesToConsider.size(); j++) {
-    // for (int k = j; k < marblesToConsider.size(); k++) {
-    // List<Cell> marblesToMove = new ArrayList<>();
-    // marblesToMove.add(marblesToConsider.get(i));
-    // if (j != i)
-    // marblesToMove.add(marblesToConsider.get(j));
-    // if (k != j && k != i)
-    // marblesToMove.add(marblesToConsider.get(k));
-    // for (Cell destination : (ply == player) ? myCellsToMoveTo :
-    // opponentsCellsToMoveTo) {
-    // Move potentialMove = new Move(marblesToMove, destination, ply);
-    // if (potentialMove.isValid() && !((ply == player) ? moves :
-    // movesOppo).contains(potentialMove)) {
-    // ((ply == player) ? moves : movesOppo).add(potentialMove);
-    // }
-    // }
-    // }
-    // }
-    // }
-    // }
-
     public Move computerTurn() {
         if (moves.isEmpty()) {
             return null;
         }
 
-        double bestEvaluation = Double.NEGATIVE_INFINITY;
-        Move bestMove = moves.get(0);
-        // ArrayList<Move> bestMoves = new ArrayList<>();
+        bestMove = moves.get(0);
         bestMoves.add(bestMove);
 
         for (Move move : moves) {
@@ -192,7 +190,11 @@ public class Computer {
                 bestMoves.add(bestMove);
             }
         }
+        gameStateBestMove.put(gameBoard, bestMoves);
+        return chooseRandomMoveFromBestMovesList();
+    }
 
+    private Move chooseRandomMoveFromBestMovesList() {
         // Choose a random move from the list of possible moves
         Random random = new Random();
         int randomIndex = 0;
@@ -200,9 +202,7 @@ public class Computer {
             randomIndex = random.nextInt(bestMoves.size());
         }
         bestMove = bestMoves.get(randomIndex);
-
         printMoveDetails(bestMove, bestMoves, bestEvaluation);
-
         return bestMove;
     }
 
@@ -519,4 +519,11 @@ public class Computer {
         return bestMoves;
     }
 
+    public Move getBestMove() {
+        return bestMove;
+    }
+
+    public int getTurnCalcSaved() {
+        return turnCalcSaved;
+    }
 }

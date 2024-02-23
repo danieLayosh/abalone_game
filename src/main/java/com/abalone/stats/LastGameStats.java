@@ -129,16 +129,20 @@ public class LastGameStats {
             ArrayList<ArrayList<Move>> movesInEachTurn,
             ArrayList<String> turnsResults,
             int bestMoves) {
+        // If there are less than 2 turns, there's not enough data to calculate
+        // statistics
         if (movesInEachTurn.size() < 2) {
             turnsResults.add("Not enough data to calculate statistics.");
             return;
         }
 
+        // Calculate the percentage of equal moves between adjacent turns
         turnsResults.add("Statistics for " + playerColor + " player:");
 
         double totalPercent = 0;
         int comparisons = 0;
 
+        // Compare each turn with the next one
         for (int i = 0; i < movesInEachTurn.size() - 1; i++) {
             ArrayList<Move> currentList = movesInEachTurn.get(i);
             ArrayList<Move> nextList = movesInEachTurn.get(i + 1);

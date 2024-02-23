@@ -1,9 +1,11 @@
 package com.abalone;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.abalone.enums.Direction;
 import com.abalone.enums.MoveType;
@@ -89,45 +91,85 @@ public class Computer {
         cellsToMoveTo(); // Filter cells to move to
         updateMarblesList(); // Update the list of your marbles
 
-        getAllPotentialMovesForPlayer(player);
-        getAllPotentialMovesForPlayer(player == 2 ? 1 : 2);
+        getAllPotentialMovesForPlayer(player, myMarbles, moves, myCellsToMoveTo);
+        getAllPotentialMovesForPlayer((player == 2 ? 1 : 2), opponentsMarbles, movesOppo, opponentsCellsToMoveTo);
     }
 
     /**
-     * Need to update his marbles and CellToMoveTo lists!!!!
+     * Calculates all moves for a player and updates his moves list.
+     * This method also needs to ensure the marbles list and cellsToMoveTo list
+     * are up to date to accurately reflect the current game state.
      * 
-     * @param ply
-     *            Calcultes all moves for a player, updates his moves list
+     * @param ply           The player for whom to calculate moves.
+     * @param playerMarbles A reference to the list of marbles for the player.
+     *                      This list should be updated elsewhere in the code
+     *                      before calling this method to reflect the current
+     *                      marbles.
+     * @param playerMoves   The list of moves for the player which will be updated.
+     * @param CellsToMoveTo A reference to the list of potential cells to move to.
+     *                      This list should be updated elsewhere in the code
+     *                      before calling this method to reflect current possible
+     *                      destinations.
      */
-    private void getAllPotentialMovesForPlayer(int ply) {
-        List<Cell> marblesToConsider = (ply == player) ? myMarbles : opponentsMarbles;
+    private void getAllPotentialMovesForPlayer(int ply, List<Cell> playerMarbles, List<Move> playerMoves,
+            List<Cell> CellsToMoveTo) {
 
-        if (ply == player) {
-            moves.clear();
-        } else {
-            movesOppo.clear();
-        }
+        Set<Move> tempMoves = new HashSet<>(); // Temp Hash to store unique moves
 
-        for (int i = 0; i < marblesToConsider.size(); i++) {
-            for (int j = i; j < marblesToConsider.size(); j++) {
-                for (int k = j; k < marblesToConsider.size(); k++) {
+        for (int i = 0; i < playerMarbles.size(); i++) {
+            for (int j = i; j < playerMarbles.size(); j++) {
+                for (int k = j; k < playerMarbles.size(); k++) {
                     List<Cell> marblesToMove = new ArrayList<>();
-                    marblesToMove.add(marblesToConsider.get(i));
+                    marblesToMove.add(playerMarbles.get(i));
                     if (j != i)
-                        marblesToMove.add(marblesToConsider.get(j));
+                        marblesToMove.add(playerMarbles.get(j));
                     if (k != j && k != i)
-                        marblesToMove.add(marblesToConsider.get(k));
+                        marblesToMove.add(playerMarbles.get(k));
 
-                    for (Cell destination : (ply == player) ? myCellsToMoveTo : opponentsCellsToMoveTo) {
+                    for (Cell destination : CellsToMoveTo) {
                         Move potentialMove = new Move(marblesToMove, destination, ply);
-                        if (potentialMove.isValid() && !((ply == player) ? moves : movesOppo).contains(potentialMove)) {
-                            ((ply == player) ? moves : movesOppo).add(potentialMove);
+                        if (potentialMove.isValid()) {
+                            tempMoves.add(potentialMove);
                         }
                     }
                 }
             }
         }
+
+        playerMoves.clear(); // Clear the original list first
+        playerMoves.addAll(tempMoves); // Add all unique moves from tempMoves
     }
+
+    // /**
+    // * Need to update his marbles and CellToMoveTo lists!!!!
+    // *
+    // * @param ply
+    // * Calcultes all moves for a player, updates his moves list
+    // */
+    // private void getAllPotentialMovesForPlayer(int ply) {
+    // List<Cell> marblesToConsider = (ply == player) ? myMarbles :
+    // opponentsMarbles;
+    // for (int i = 0; i < marblesToConsider.size(); i++) {
+    // for (int j = i; j < marblesToConsider.size(); j++) {
+    // for (int k = j; k < marblesToConsider.size(); k++) {
+    // List<Cell> marblesToMove = new ArrayList<>();
+    // marblesToMove.add(marblesToConsider.get(i));
+    // if (j != i)
+    // marblesToMove.add(marblesToConsider.get(j));
+    // if (k != j && k != i)
+    // marblesToMove.add(marblesToConsider.get(k));
+    // for (Cell destination : (ply == player) ? myCellsToMoveTo :
+    // opponentsCellsToMoveTo) {
+    // Move potentialMove = new Move(marblesToMove, destination, ply);
+    // if (potentialMove.isValid() && !((ply == player) ? moves :
+    // movesOppo).contains(potentialMove)) {
+    // ((ply == player) ? moves : movesOppo).add(potentialMove);
+    // }
+    // }
+    // }
+    // }
+    // }
+    // }
 
     public Move computerTurn() {
         if (moves.isEmpty()) {

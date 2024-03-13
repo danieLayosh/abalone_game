@@ -33,8 +33,6 @@ public class Computer {
         this.board = gameBoard.getBoard();
         this.player = player;
 
-        System.out.println("gameBoard: " + gameBoard.hashCode());
-
         this.myCellsToMoveTo = new ArrayList<>(board.keySet());
         this.opponentsCellsToMoveTo = new ArrayList<>(board.keySet());
         this.moves = new ArrayList<>();
@@ -49,7 +47,6 @@ public class Computer {
     }
 
     public Computer() {
-        System.out.println("Computer class created");
         gameStateBestMove = new HashMap<>();
         turnCalcSaved = 0;
     }

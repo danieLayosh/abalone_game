@@ -115,6 +115,7 @@ public class Computer {
         }
     }
 
+    // Check if the board state has the best move already
     private boolean doesGameBoardHasBestMoveAlready() {
         if (gameStateBestMove.containsKey(gameBoard) && gameStateBestMove.get(gameBoard).get(0).getPlayer() == player) {
             bestMoves = gameStateBestMove.get(gameBoard);
@@ -168,6 +169,7 @@ public class Computer {
         playerMoves.addAll(tempMoves); // Add all unique moves from tempMoves
     }
 
+    // This method is called to get the best move for the computer
     public Move computerTurn() {
         if (moves.isEmpty()) {
             return null;
@@ -176,6 +178,7 @@ public class Computer {
         bestMove = moves.get(0);
         bestMoves.add(bestMove);
 
+        // Evaluate the board state for each move
         for (Move move : moves) {
             double evaluation = evaluatesBoardState(move);
             if (evaluation > bestEvaluation) {
@@ -191,6 +194,8 @@ public class Computer {
         return chooseRandomMoveFromBestMovesList();
     }
 
+    // This method is called to get the best move for the computer from the list of
+    // best moves
     private Move chooseRandomMoveFromBestMovesList() {
         // Choose a random move from the list of possible moves
         Random random = new Random();
@@ -211,31 +216,33 @@ public class Computer {
         System.out.println(" ");
     }
 
+    // This method is called to evaluate the board state for each move
     private double evaluatesBoardState(Move move) {
+        double evaluation = 0.0;
+
         move.executeMove();// executeMove to evalute the new board state.
 
         updateMarblesList(); // update the player marbles list.
 
-        double gravityCenterScore = gravityCenter();// evaluates score from the distances
+        double gravityCenterScore = gravityCenter(); // evaluates score from the distances
 
-        double pushedOffScore = pushedOff(move);
+        double pushedOffScore = pushedOff(move); // evaluates score from the pushed off marbles
 
         @SuppressWarnings("unused")
-        double keepPackedScore = keepPacked();
+        double keepPackedScore = keepPacked(); // evaluates score from the marbles packed together
 
-        double marblesGroupScore = evaluateGroupScore();
+        double marblesGroupScore = evaluateGroupScore(); // evaluates score from the marbles in the same group
 
-        double marblesInDangerScore = marblesInDanger();
+        double marblesInDangerScore = marblesInDanger(); // evaluates score from the marbles in danger
 
         move.undoMove();// undo the move to get it back before checking another move.
 
-        // if (player == 2) {
-        return gravityCenterScore + pushedOffScore + marblesGroupScore + marblesInDangerScore;
-        // } else {
-        // return gravityCenterScore + pushedOffScore + keepPackedScore;
-        // }
+        evaluation = gravityCenterScore + pushedOffScore + marblesGroupScore + marblesInDangerScore;
+
+        return evaluation;
     }
 
+    // evaluates score from the marbles in danger
     private double marblesInDanger() {
         Double score = 0.0;
         for (Cell cell : myMarbles) {
@@ -248,6 +255,7 @@ public class Computer {
         return score;
     }
 
+    // evaluates score from the marbles packed together
     private double keepPacked() {
         double counter = 0;
         for (Cell marble : myMarbles) {
@@ -267,6 +275,7 @@ public class Computer {
         return counter;
     }
 
+    // evaluates score from the distances
     private double gravityCenter() {
 
         double MydistanceScore = 0;
@@ -282,6 +291,7 @@ public class Computer {
         return MydistanceScore - opponentsDistanceScore;
     }
 
+    // evaluates score from the pushed off marbles
     private double pushedOff(Move move) {
         double pushCounter = 0.0;
 
@@ -307,6 +317,7 @@ public class Computer {
         return pushCounter;
     }
 
+    // Check if a cell can be pushed
     private boolean canBePushed(Cell cell) {
         for (Cell neighbor : cell.getNeighbors()) {
             if (canPushDirection(cell, neighbor)) {
@@ -316,6 +327,7 @@ public class Computer {
         return false;
     }
 
+    // Check if a cell can be pushed in a certain direction
     private boolean canPushDirection(Cell cell, Cell neighbor) {
         int opponentState = (player == 1) ? 2 : 1;
         if (neighbor.getState() == opponentState) {
@@ -353,6 +365,7 @@ public class Computer {
         return false;
     }
 
+    // Check if there are consecutive opponent cells in a certain direction
     private boolean isConsecutiveOpponent(Cell startCell, Direction direction, int opponentState) {
         Cell currentCell = startCell.getNeighborInDirection(direction);
         boolean foundOpponent = false;
@@ -365,6 +378,7 @@ public class Computer {
         return foundOpponent;
     }
 
+    // evaluates score from the marbles in the same group
     private double evaluateGroupScore() {
         double Score = 0.0;
 
@@ -380,6 +394,7 @@ public class Computer {
         return Score;
     }
 
+    // Evaluate group score Left To Right Rows
     private double LeftToRight() {
         double LeftToRightSore = 0.0;
         int playerInOrder, opponentInOrder;
@@ -426,6 +441,7 @@ public class Computer {
         return LeftToRightSore;
     }
 
+    // Evaluate group score Top Left To Bottom Right diagnols
     private double mainDiagnols() {
         double mainDiagnolScore = 0.0;
 
@@ -441,6 +457,7 @@ public class Computer {
         return mainDiagnolScore;
     }
 
+    // Evaluate group score Top Right To Bottom Left diagnols
     private double secondariesDiagnols() {
         double secondariesDiagnolsScore = 0.0;
 
@@ -456,6 +473,7 @@ public class Computer {
         return secondariesDiagnolsScore;
     }
 
+    // Evaluate the score of a diagnol
     private double evaluateDiagnol(Cell cell, Direction direction) {
         double evaluatedLeftToRightDiagnol = 0.0;
         int playerInOrder = 0;
@@ -498,6 +516,7 @@ public class Computer {
         return evaluatedLeftToRightDiagnol;
     }
 
+    // Get the length of a row
     private static int getRowLength(int x) {
         if (x < 4) {
             return 5 + x; // Rows 0 to 3 increase in length

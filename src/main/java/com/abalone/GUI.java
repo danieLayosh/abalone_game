@@ -47,43 +47,47 @@ import javafx.util.Duration;
 
 public class GUI {
     private Stage stage;
-    private int gameMode;
-    private GameBoard gameBoard;
-    private int player;
+    private int gameMode; 
+    private GameBoard gameBoard; 
+    private int player; 
     private int startPlayer;
     private int startingPlayerType;
-    private List<Cell> marbles;
-    private IntegerProperty black_score;
-    private IntegerProperty white_score;
-    private Stack<Move> LastTwoMove;
-    private double startX, startY;
-    private List<Move> moveHistory = new ArrayList<>();
-    private boolean isAnimationRunning = false;
+    private List<Cell> marbles; 
+    private IntegerProperty black_score; // black marbles score
+    private IntegerProperty white_score; // white marbles score
+    private Stack<Move> LastTwoMove; // stack of the two last moves
+    private double startX, startY; // coordi for the animations
+    private List<Move> moveHistory = new ArrayList<>(); // for ditacting loops in the game
+    private boolean isAnimationRunning; // flag for the animations
     private SimpleDoubleProperty animationSpeed;
     private ExecutorService executorService;
     private AtomicBoolean gameActive;
     private Computer computer;
 
-    private Timeline gameTimer;
-    private Duration timeLimit = Duration.hours(2); // 2 hours limit
-    private SimpleStringProperty timeString = new SimpleStringProperty("00:00:00");
-    private IntegerProperty elapsedTimeInSeconds = new SimpleIntegerProperty(0); // Track elapsed time in seconds
+    private Timeline gameTimer; // Timer for the game
+    private Duration timeLimit; // Time limit for the game
+    private SimpleStringProperty timeString; // Track elapsed time as a string
+    private IntegerProperty elapsedTimeInSeconds; // Track elapsed time in seconds
 
     private static LastGameStats lastGameStats;
 
     public GUI() {
         this.gameBoard = new GameBoard();
-        this.marbles = new ArrayList<>(); // Initialize the list here
+        this.marbles = new ArrayList<>();
         this.black_score = new SimpleIntegerProperty(0);
         this.white_score = new SimpleIntegerProperty(0);
         this.LastTwoMove = new Stack<>();
         this.gameMode = -1;
         this.player = -1;
         this.startPlayer = -1;
+        this.isAnimationRunning = false;
         this.animationSpeed = new SimpleDoubleProperty(0.7);
         this.executorService = Executors.newSingleThreadExecutor();
         this.gameActive = new AtomicBoolean(false);
         this.computer = new Computer();
+        this.timeLimit = Duration.hours(2); // 2 hours limit
+        this.timeString = new SimpleStringProperty("00:00:00");
+        this.elapsedTimeInSeconds = new SimpleIntegerProperty(0);
     }
 
     @FXML
@@ -277,7 +281,7 @@ public class GUI {
             } else {
                 // human vs human
                 if (gameMode == 3) {
-
+                    
                 }
             }
         }

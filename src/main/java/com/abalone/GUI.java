@@ -45,6 +45,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 public class GUI {
     private Stage stage;
     private int gameMode;

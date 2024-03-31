@@ -140,37 +140,6 @@ public class Computer {
         playerMoves.addAll(tempMoves); // Add all unique moves from tempMoves
     }
 
-    // /**
-    // * Need to update his marbles and CellToMoveTo lists!!!!
-    // *
-    // * @param ply
-    // * Calcultes all moves for a player, updates his moves list
-    // */
-    // private void getAllPotentialMovesForPlayer(int ply) {
-    // List<Cell> marblesToConsider = (ply == player) ? myMarbles :
-    // opponentsMarbles;
-    // for (int i = 0; i < marblesToConsider.size(); i++) {
-    // for (int j = i; j < marblesToConsider.size(); j++) {
-    // for (int k = j; k < marblesToConsider.size(); k++) {
-    // List<Cell> marblesToMove = new ArrayList<>();
-    // marblesToMove.add(marblesToConsider.get(i));
-    // if (j != i)
-    // marblesToMove.add(marblesToConsider.get(j));
-    // if (k != j && k != i)
-    // marblesToMove.add(marblesToConsider.get(k));
-    // for (Cell destination : (ply == player) ? myCellsToMoveTo :
-    // opponentsCellsToMoveTo) {
-    // Move potentialMove = new Move(marblesToMove, destination, ply);
-    // if (potentialMove.isValid() && !((ply == player) ? moves :
-    // movesOppo).contains(potentialMove)) {
-    // ((ply == player) ? moves : movesOppo).add(potentialMove);
-    // }
-    // }
-    // }
-    // }
-    // }
-    // }
-
     public Move computerTurn() {
         if (moves.isEmpty()) {
             return null;

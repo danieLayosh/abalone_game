@@ -83,7 +83,6 @@ public class GUI {
         this.animationSpeed = new SimpleDoubleProperty(0.7);
         this.executorService = Executors.newSingleThreadExecutor();
         this.gameActive = new AtomicBoolean(false);
-
     }
 
     @FXML

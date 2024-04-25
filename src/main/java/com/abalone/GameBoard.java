@@ -1,13 +1,10 @@
 package com.abalone;
 
-// import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-// import java.util.List;
 import java.util.Map;
 
 import com.abalone.enums.Direction;
-// import com.abalone.enums.MoveType;
 
 public class GameBoard {
     // Adjacency map to represent the board, each cell has a list of neighbors
@@ -160,6 +157,17 @@ public class GameBoard {
         return board;
     }
 
+    public static int getRowLength(int x) {
+        if (x < 4) {
+            return 5 + x; // Rows 0 to 3 increase in length
+        } else if (x < 5) {
+            return MAX_ROW_LENGTH; // Middle row has the maximum length
+        } else {
+            return 13 - x; // Rows 5 to 8 decrease in length
+        }
+    }
+
+/* 
     public void printBoardScore() {
         // Iterate through each row
         for (int x = 0; x < MAX_ROW_LENGTH; x++) {
@@ -218,16 +226,6 @@ public class GameBoard {
         }
     }
 
-    public static int getRowLength(int x) {
-        if (x < 4) {
-            return 5 + x; // Rows 0 to 3 increase in length
-        } else if (x < 5) {
-            return MAX_ROW_LENGTH; // Middle row has the maximum length
-        } else {
-            return 13 - x; // Rows 5 to 8 decrease in length
-        }
-    }
-
     public void printBoardWithCoordinates() {
         // Iterate through each row
         for (int x = 0; x < MAX_ROW_LENGTH; x++) {
@@ -268,5 +266,6 @@ public class GameBoard {
     private String formatCoordinate(int x, int y) {
         return "(" + x + "," + y + ")";
     }
+    */
 
 }

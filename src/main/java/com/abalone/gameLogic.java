@@ -1,24 +1,16 @@
 package com.abalone;
-
-import java.util.ArrayList;
+/* 
 import java.util.List;
-import java.util.Stack;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.abalone.stats.LastGameStats;
 
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.stage.Stage;
-import javafx.util.Duration;
+import javafx.util.Duration;*/
 
 public class gameLogic {
-    private GameBoard gameBoard;
+   /*  private GameBoard gameBoard;
     private Stage stage;
     private int gameMode;
     private int player;
@@ -50,6 +42,6 @@ public class gameLogic {
         this.timeLimit = timeLimit;
         this.timeString = timeString;
         this.elapsedTimeInSeconds = elapsedTimeInSeconds;
-    }
+    }*/
 
 }

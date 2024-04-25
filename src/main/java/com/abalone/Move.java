@@ -52,36 +52,32 @@ public class Move {
     public boolean isValid() {
         sortMarbles(); // Ensure marbles are sorted before validation
 
-        if (isNotSizeValid()) {
-            // System.out.println("Invalid number of marbles selected.");
+        /*if (isNotSizeValid()) {
             return false;
         }
 
         if (!marblesBelongToPlayer()) {
-            // System.out.println("One or more of the marbles do not belong to the
-            // player.");
             return false;
         }
 
         if (!areMarblesInlineAndAdjacent()) {
-            // System.out.println("The marbles are not in an inline formation and/or not
-            // adjacent.");
             return false;
         }
 
         if (determineMoveType(marbles, dest) == null) {
-            // System.out.println("Invalid move type for the selected marbles and
-            // destination.");
             return false;
         }
 
         if (!isPathValid()) {
-            // System.out.println("Invalid path, the selected marbles can not move in this
-            // direction.");
             return false;
-        }
+        }*/
+        return !isNotSizeValid() &&
+        marblesBelongToPlayer() &&
+        areMarblesInlineAndAdjacent() &&
+        determineMoveType(marbles, dest) != null &&
+        isPathValid();
 
-        return true;
+        //return true;
     }
 
     private boolean isNotSizeValid() {
@@ -464,7 +460,6 @@ public class Move {
     }
 
     private void executeSideStepMove() {
-
         Cell currentCell, nextCell;
         for (Cell marble : marbles) {
             marblesUsed.put(marble, marble.getState());// for the undo function
@@ -520,7 +515,6 @@ public class Move {
     }
 
     public void undoMove() {
-
         // Iterate through each entry in the marblesUsed map
         for (Map.Entry<Cell, Integer> entry : marblesUsed.entrySet()) {
             Cell cell = entry.getKey();

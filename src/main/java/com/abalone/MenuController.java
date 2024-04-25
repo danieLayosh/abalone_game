@@ -43,22 +43,22 @@ public class MenuController {
     private ToggleGroup whitePlayer;
 
     @FXML
+    private ToggleGroup blackPlayer;
+    
+    @FXML
+    private ToggleGroup starts;
+
+    @FXML
     private RadioButton whiteComputer;
 
     @FXML
     private RadioButton whiteHuman;
 
     @FXML
-    private ToggleGroup blackPlayer;
-
-    @FXML
     private RadioButton blackComputer;
 
     @FXML
     private RadioButton blackHuman;
-
-    @FXML
-    private ToggleGroup starts;
 
     @FXML
     private RadioButton whiteStart;

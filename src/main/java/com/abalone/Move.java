@@ -70,14 +70,16 @@ public class Move {
 
         if (!isPathValid()) {
             return false;
-        }*/
+        }
+        
+        return true;*/
+        
         return !isNotSizeValid() &&
         marblesBelongToPlayer() &&
         areMarblesInlineAndAdjacent() &&
         determineMoveType(marbles, dest) != null &&
         isPathValid();
 
-        //return true;
     }
 
     private boolean isNotSizeValid() {

@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>21</version> <!-- Ensure this version matches your JavaFX SDK version -->
+            <version>21.0.2</version> <!-- Ensure this version matches your JavaFX SDK version -->
         </dependency>
     </dependencies>
     <build>
